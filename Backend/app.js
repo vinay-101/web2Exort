@@ -10,7 +10,12 @@ const cors = require("cors");
 const path = require("path");
 const session = require("express-session");
 const { userRouter } = require("./routes/user.route");
-app.use(cors());
+
+app.use(cors({
+  origin: "http://localhost:5173", // React app origin
+  methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
+  credentials: true, // Allow credentials like cookies
+}));
 
 
 app.use(cookieParser());
@@ -30,7 +35,7 @@ app.use(
   session({
     resave: false,
     saveUninitialized: true,
-    secret: "SECRET",
+    secret: "SECRET-WEB2EXPORT",
   })
 );
 app.use("/users", userRouter);

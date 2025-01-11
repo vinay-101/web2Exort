@@ -1,5 +1,5 @@
-'use strict';
-const { Sequelize } = require('sequelize');
+"use strict";
+const { Sequelize } = require("sequelize");
 
 module.exports = {
   up: function (queryInterface, DataTypes) {
@@ -21,23 +21,24 @@ module.exports = {
       },
       phoneNumber: {
         type: DataTypes.STRING,
-        allowNull: true,
+        unique: true,
+        allowNull: false,
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
+      // isAdmin: {
+      //     type: DataTypes.BOOLEAN,
+      //     defaultValue: false,
+      // },
       isVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       loginOtp: {
         type: DataTypes.INTEGER,
-        defaultValue: 0
+        defaultValue: 0,
       },
       accountActivatedAt: {
         type: DataTypes.DATE,
@@ -46,7 +47,7 @@ module.exports = {
       forgetPasswordToken: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: null
+        defaultValue: null,
       },
       userStatus: {
         type: Sequelize.ENUM,
@@ -58,12 +59,38 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      roles:{
+      country: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      state: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      city: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      company: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      userType: {
         type: Sequelize.ENUM,
         allowNull: false,
-        values: ["admin", "superAdmin", 'user'],
-        defaultValue: "user",
-    },
+        values: ["Seller", "Buyer"],
+      },
+      roles: {
+        type: Sequelize.ENUM,
+        allowNull: false,
+        values: ["Admin", "Super-Admin", "User"],
+        defaultValue: "User",
+      },
+      terms: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
