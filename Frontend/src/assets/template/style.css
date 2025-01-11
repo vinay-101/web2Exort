@@ -71,6 +71,7 @@ body {
 	color:#4c4c4c;
 	font-weight:normal;
 	overflow-x:hidden;
+	text-transform: none;
 
 }
 h1, h2, h3, h4, h5, h6 {
@@ -3503,3 +3504,4 @@ a.value-decrease::before {
     overflow: visible;
     visibility: visible;
 }
+
