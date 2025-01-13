@@ -902,6 +902,7 @@ h1, h2, h3, h4, h5, h6 {
 	background-size:cover;
 	background-position:center center;
 	height:523px;
+	width: 100%;
 }
 .slick-slide:focus {
 	outline:0 !important;
@@ -1108,9 +1109,7 @@ h1, h2, h3, h4, h5, h6 {
 .banner-sm, .banner-md {
 	position:relative;
 }
-.banner-sm img {
-	width:100%;
-}
+
 .banner-info {
 	position:absolute;
 	top:0;
@@ -3570,3 +3569,8 @@ a{
 
 
 /* testimonial end */
+
+
+/* mobile custom start */
+
+/* mobile custom end */

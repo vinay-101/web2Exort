@@ -4,7 +4,7 @@ const SliderAreaDownProductOne = () => {
   return (
       <>
             {/*products-tab start Agriculture Product */}
-  <div className="products-tab-area mt-45 mt-sm-40">
+  <div className="products-tab-area mt-10 mt-sm-10">
     <div className="container-fluid">
       <div className="row">
         <div className="col-lg-3 col-md-3 pr-0">
