@@ -13,12 +13,6 @@ const App = () => {
       <div>
         <Toaster position="top-right" reverseOrder={false} />
 
-
-
-
-
-
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="login" element={<Login />} />

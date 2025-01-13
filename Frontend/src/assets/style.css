@@ -1238,7 +1238,6 @@ h1, h2, h3, h4, h5, h6 {
 /*----------------------------------------*/
 .product-nav-tabs {}
 .product-nav-tabs ul.nav-tabs {
-	margin-top: -12px;
 	border-bottom:1px solid #ebebeb;
 	display:block;
 }
@@ -1848,7 +1847,7 @@ h1, h2, h3, h4, h5, h6 {
 .brands-area {
 	border:1px solid #ebebeb;
 	padding:30px 0;
-	
+	text-align:center;
 }
 .brand-items {}
 .brand-item {
@@ -3513,60 +3512,3 @@ a.value-decrease::before {
 a{
 	text-transform: none;
 }
-
-/* testimonial start  */
-
-/* TestimonialSlider.css */
-
-  
-  .testimonial-card {
-	background: #fff;
-	border-radius: 15px;
-	padding: 20px 30px;
-	max-width: 600px;
-	text-align: center;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-	transition: transform 0.3s, box-shadow 0.3s;
-  }
-  
-  .testimonial-card:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
-  
-  .testimonial-text {
-	font-size: 1.1rem;
-	line-height: 1.6;
-	color: #495057;
-  }
-  
-  .testimonial-author {
-	font-size: 1rem;
-	font-weight: bold;
-	color: #007bff;
-	margin-top: 15px;
-  }
-  
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-	background-color: #007bff;
-	border-radius: 50%;
-	padding: 10px;
-  }
-  
-  .carousel-control-prev-icon:hover,
-  .carousel-control-next-icon:hover {
-	background-color: #0056b3;
-  }
-  
-  .carousel-indicators li {
-	background-color: #007bff;
-  }
-  
-  .carousel-indicators .active {
-	background-color: #0056b3;
-  }
-  
-
-
-/* testimonial end */
