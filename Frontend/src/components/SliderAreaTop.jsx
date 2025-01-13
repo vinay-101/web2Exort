@@ -21,7 +21,7 @@ const SliderAreaTop = () => {
 		<div className="container-fluid">
 			<div className="row">
 				<div className="col-xl-5 offset-xl-2">
-                <div className="main-slider mt-30 mt-sm-0">
+                <div className="main-slider ">
                 <Swiper
 					spaceBetween={30}
 					centeredSlides={true}
