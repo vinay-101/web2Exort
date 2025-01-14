@@ -1,0 +1,108 @@
+#app { height: 100% }
+html,
+body {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  background: #eee;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #ff0000;
+  margin: 0;
+  padding: 0;
+}
+
+.swiper {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.swiper-slide {
+  background-color: white;
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 300px;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+}
+
+#testimonialSlider{
+    margin: 40px 20px 20px 20px;
+    background-color: rgb(225, 234, 234);
+
+}
+#testimonialSlider h1{
+    margin:20px 0 -40px 0;
+    width: fit-content;
+    color: #1467c1;
+    font-weight: 700;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+}
+/* adtionalcustom  */
+/* Container styles */
+
+
+#testimonialSlider h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Feedback card styles */
+.feedback-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+}
+
+.feedback-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.feedback-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.feedback-text {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.feedback-rating {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #ff9800;
+}
+
+.feedback-date {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #testimonialSlider h1 {
+    font-size: 1.8rem;
+  }
+
+  .feedback-card {
+    padding: 15px;
+  }
+}

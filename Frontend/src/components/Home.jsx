@@ -6,12 +6,18 @@ import SliderAreaDownProductOne from './SliderAreaDownProductOne'
 import Testimonial from './Testimonial'
 import BrandPartner from './BrandPartner'
 import Footer from './Footer'
+import LeftSidebar from './LoginComponents/ProductPageLeftside'
+import RightContent from './LoginComponents/ProductPageRightside'
 
 const Home = () => {
   return (
 <>
-    <Navbar />
+      <Navbar />
       <SliderAreaTop />
+    {/* <div className="product-page-app-container">
+      <LeftSidebar />
+      <RightContent />
+    </div> */}
       <SliderAreaMiddleProduct />
       <SliderAreaDownProductOne />
       <Testimonial />

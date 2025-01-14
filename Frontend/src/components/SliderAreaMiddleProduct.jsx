@@ -4,7 +4,7 @@ const SliderAreaMiddleProduct = () => {
   return (
       <>
             {/*products-area start*/}
-  <div className="products-area mt-47 mt-sm-37">
+  <div className="products-area mt-20 mt-sm-15">
     <div className="container-fluid">
       <div className="row">
         <div className="col-xl-2 col-lg-3">

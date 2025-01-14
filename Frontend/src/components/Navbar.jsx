@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // Specific icons (solid, regular, and brands)
-import { faHome, faUser, faBars, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faUser, faBars, faRightToBracket, faSnowflake,faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 
@@ -167,7 +167,7 @@ const Navbar = () => {
               <div className="register-login">
                 <a href="#">Register</a>
                 <span>/</span>
-                <a href="#">Sign in</a>
+                <a href="#">Log in</a>
               </div>
             </div>
           </div>
@@ -356,7 +356,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <a href="#">
-                          <i className="fa fa-flash" />
+                          <i><FontAwesomeIcon icon={faGamepad} /></i>
                           Accessories
                         </a>
                       </li>
@@ -386,7 +386,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <a href="#">
-                          <i className="fa fa-clock-o" />
+                        <i><FontAwesomeIcon icon={faSnowflake} /></i>
                           Jwelery
                         </a>
                       </li>
@@ -403,7 +403,7 @@ const Navbar = () => {
             </div>
             <div className="col-xl-8 col-lg-5">
               <div className="search-box">
-                <select className=" d-flex align-items-center">
+                <select className=" d-flex align-items-center" style={{padding:'5px'}}>
                   <option>All Categories</option>
                   <option>For Buyer</option>
                   <option>For Seller</option>

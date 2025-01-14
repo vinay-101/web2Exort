@@ -19,8 +19,8 @@ const SliderAreaTop = () => {
       
           <div className="slider-area">
 		<div className="container-fluid">
-			<div className="row">
-				<div className="col-xl-5 offset-xl-2">
+			<div className="row ">
+				<div className="col-xl-5 offset-xl-2" style={{marginTop:'5px'}}>
                 <div className="main-slider ">
                 <Swiper
 					spaceBetween={30}
@@ -68,7 +68,7 @@ const SliderAreaTop = () => {
 					</div>
 						  </div>
 						  <div className="col-xl-2 px-0">
-  <div className="mt-10 d-flex flex-column">
+  <div className=" d-flex flex-column">
 
     <div className="col-lg-12 col-sm-12 pl-0">
       <div className="banner-sm hover-effect mt-20 w-full" >
@@ -113,7 +113,7 @@ const SliderAreaTop = () => {
 
 
 				<div className="col-xl-3">
-							  <div className='mt-20'>
+							  <div className=''>
 					<RequirementForm />
 								  
 					</div>

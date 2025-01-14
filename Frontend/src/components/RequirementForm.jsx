@@ -24,7 +24,7 @@ const InquiryForm = () => {
     <div
       style={{
         
-        margin: "30px auto",
+        margin: "20px auto",
         padding: "0px 30px",
         border: "1px solid #ddd",
         borderRadius: "8px",
