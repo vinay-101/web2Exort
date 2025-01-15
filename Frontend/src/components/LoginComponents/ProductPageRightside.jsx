@@ -8,7 +8,7 @@ import BulkAction from './BulkAction';
 const RightContent = () => {
 
 
-    const [activeTab, setActiveTab] = useState('addProduct');
+    const [activeTab, setActiveTab] = useState('allProducts');
 
     const renderContent = () => {
         switch (activeTab) {

@@ -1,0 +1,110 @@
+.productDetailPage-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.productDetailPage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.productDetailPage-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #0044cc;
+}
+
+.productDetailPage-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.productDetailPage-edit-btn,
+.productDetailPage-save-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+.productDetailPage-edit-btn {
+  background-color: #007bff;
+}
+
+.productDetailPage-save-btn {
+  background-color: #28a745;
+}
+
+.productDetailPage-section {
+  margin-bottom: 20px;
+}
+
+.productDetailPage-section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.productDetailPage-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.productDetailPage-images {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.productDetailPage-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.productDetailPage-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.productDetailPage-table td,
+.productDetailPage-table th {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.productDetailPage-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .productDetailPage-title {
+    font-size: 20px;
+  }
+
+  .productDetailPage-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
