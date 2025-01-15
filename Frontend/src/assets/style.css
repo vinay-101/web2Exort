@@ -1099,29 +1099,29 @@ h1, h2, h3, h4, h5, h6 {
 /*  5.2 Slider BG
 /*----------------------------------------*/
 .slider-single.bg-1 {
-	background-image:url(../../public/images/sliders/cargoShipSlider.jpg);
+	background-image:url(/images/sliders/cargoShipSlider.jpg);
 }
 .slider-single.bg-2 {
-	background-image:url(../../public/images/sliders/planSlider.png);
+	background-image:url(/images/sliders/planSlider.png);
 }
 .slider-single.bg-3 {
-	background-image:url(../../public/images/sliders/3.jpg);
+	background-image:url(/images/sliders/3.jpg);
 	height:515px;
 }
 .slider-single.bg-4 {
-	background-image:url(../../public/images/sliders/4.jpg);
+	background-image:url(/images/sliders/4.jpg);
 	height:515px;
 }
 .slider-single.bg-5 {
-	background-image:url(../../public/images/sliders/5.jpg);
+	background-image:url(/images/sliders/5.jpg);
 	height:630px;
 }
 .slider-single.bg-6 {
-	background-image:url(../../public/images/sliders/1.png);
+	background-image:url(/images/sliders/1.png);
 	height:700px;
 }
 .slider-single.bg-7 {
-	background-image:url(../../public/images/sliders/6.jpg);
+	background-image:url(/images/sliders/6.jpg);
 	height:630px;
 }
 /*----------------------------------------*/

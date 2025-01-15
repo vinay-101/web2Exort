@@ -19,4 +19,7 @@ userRouter.route("/forget/password/reset").post(user_controller.resetForgetPassw
 userRouter.route("/profile").get(requireAuth, user_controller.getProfile);  
 userRouter.route("/profile/update").patch(requireAuth, profileImages, user_controller.updateProfile);  // update profile
 
+// Enquries
+userRouter.route("/create/enquiry").post(user_controller.createEnquiry);  
+
 module.exports = {userRouter}

@@ -7,7 +7,7 @@ const User = require("../models/user/User");
 
 const requireAuth = (req, res, next) => {
     const authHeader = req.headers['authorization']
-    // const profileActive = req.headers['profile']
+   
     const token = authHeader && authHeader.split(' ')[1]
     if (token) {
         jwt.verify(token, process.env.SECRETKEY, async (err, user) => {
@@ -20,11 +20,11 @@ const requireAuth = (req, res, next) => {
                 req.user = user
                 // console.log("user",user);
                 if (req.user) {
-                    reqProfile = await User.findOne(
+                   let reqProfile = await User.findOne(
                         {
                             where: { id: user.id }
                         });
-                    req.profileActive = parseInt(reqProfile.id);
+                    req.userId = parseInt(reqProfile.id);
                     next();
                 } 
             }

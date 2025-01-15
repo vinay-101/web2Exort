@@ -433,7 +433,7 @@ const Navbar = () => {
           <div className="col-sm-4 col-6">
             <div className="logo">
               <a href="index.html">
-                <img src="../../public/images/company_logo.png" alt="logo" />
+                <img src="/images/company_logo.png" alt="logo" />
               </a>
             </div>
           </div>

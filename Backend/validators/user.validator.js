@@ -102,10 +102,21 @@ const updateProfileValidator = Joi.object({
     name: Joi.string().optional(),
 });
 
+
+const enquirySchema = Joi.object({
+  requirement: Joi.string().required(),
+  fullName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phoneNumber: Joi.string().required(),
+  companyName: Joi.string().required(),
+  userType: Joi.string().valid('Seller', 'Buyer').required(),
+});
+
 module.exports = {
     signupValidation, 
     completeProfileValidation,
     forgetPasswordValidation,
     changePasswordValidation,
     updateProfileValidator,
+    enquirySchema
 };

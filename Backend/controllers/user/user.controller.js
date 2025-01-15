@@ -11,9 +11,11 @@ const {
   changePasswordValidation,
   completeProfileValidation,
   updateProfileValidator,
+  enquirySchema,
 } = require("../../validators/user.validator");
 const { HttpStatus, CustomMessages } = require("../../helper/statusCode");
 const Response = require("../../helper/response");
+const Enquiry = require("../../models/user/Enquiry");
 
 const createJWT = (user) => {
   return jwt.sign(user, process.env.SECRETKEY, {
@@ -66,7 +68,7 @@ const signUpUser = async (req, res) => {
 
     return res
       .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `USER ${CustomMessages.MESSAGE.userRegistersuccessfully}`, { user }));
+      .send(new Response(true, `User ${CustomMessages.MESSAGE.userRegistersuccessfully}`, { user }));
   } catch (error) {
     return helpers.validationHandler(res, error);
   }
@@ -508,6 +510,26 @@ const updateProfile = async (req, res) => {
   }
 };
 
+
+const createEnquiry = async(req,res)=>{
+  try{
+    const validationResult = await enquirySchema.validateAsync(req.body);
+    const { requirement, fullname, email, phoneNumber, companyName, userType } = validationResult;
+
+    let enquiry = await Enquiry.create({requirement, fullname, email, phoneNumber, companyName, userType});
+
+    enquiry
+    ? res
+      .status(HttpStatus.UPDATED.code)
+      .send(new Response(true, `Enquiry ${HttpStatus.CREATED.message}`, enquiry))
+    : res
+      .status(HttpStatus.OK.code)
+      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
 module.exports = {
   signUpUser,
   userLogin,
@@ -518,4 +540,5 @@ module.exports = {
   resetForgetPassword,
   getProfile,
   updateProfile,
+  createEnquiry,
 };

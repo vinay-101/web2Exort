@@ -94,7 +94,11 @@ const User = sequelize.define(
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
-    }
+    },
+    // loggedInTime:{           // for later use
+    //   type:DataTypes.DATE,
+    //   allowNull:true
+    // }
   },
   {
     timestamps: true,

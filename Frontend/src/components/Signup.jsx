@@ -37,21 +37,19 @@ const Signup = () => {
   return (
     <>
       <div className="container d-flex justify-content-center align-items-center vh-100">
-        <div className="form-card p-4 shadow">
+        <div className="card p-4 shadow-lg rounded" style={{ maxWidth: '600px', width: '100%' }}>
           <div className="text-center mb-4">
-            <img src="logo.png" alt="Web2Export" className="logo mb-2" />
-            <h5>JOIN NOW FOR FREE</h5>
-            <p className="text-muted">
-              Create your free Web2Export account today
-            </p>
+            <img src="logo.png" alt="Web2Export" className="mb-3" style={{ width: '80px' }} />
+            <h5 className="font-weight-bold">JOIN NOW FOR FREE</h5>
+            <p className="text-muted">Create your free Web2Export account today</p>
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="row g-3">
+            <div className="row">
               {/* User Role Selection */}
-              <div className="col-12">
-                <h6 className="mb-3">I am a:</h6>
-                <div className="d-flex gap-3">
-                  <div className="form-check">
+              <div className="col-12 mb-3">
+                <h6 className="font-weight-bold">I am a:</h6>
+                <div className="d-flex">
+                  <div className="form-check mr-3">
                     <input
                       className="form-check-input"
                       type="radio"
@@ -79,28 +77,28 @@ const Signup = () => {
                   </div>
                 </div>
               </div>
-
+  
               {/* Form Fields */}
-              <div className="col-md-6">
+              <div className="col-md-6 mb-3">
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control rounded"
                   placeholder="Full name *"
                   name="name"
                   required
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 mb-3">
                 <input
                   type="email"
-                  className="form-control"
+                  className="form-control rounded"
                   placeholder="Email address *"
                   name="email"
                   required
                 />
               </div>
-              <div className="col-md-6">
-                <select className="form-select" name="country" required>
+              <div className="col-md-6 mb-3">
+                <select className="form-control rounded" name="country" required>
                   <option value="" disabled selected>
                     Country
                   </option>
@@ -109,8 +107,8 @@ const Signup = () => {
                   <option value="3">UK</option>
                 </select>
               </div>
-              <div className="col-md-6">
-                <select className="form-select" name="state" required>
+              <div className="col-md-6 mb-3">
+                <select className="form-control rounded" name="state" required>
                   <option value="" disabled selected>
                     State
                   </option>
@@ -119,8 +117,8 @@ const Signup = () => {
                   <option value="7">Delhi</option>
                 </select>
               </div>
-              <div className="col-md-12">
-                <select className="form-select" name="city" required>
+              <div className="col-md-12 mb-3">
+                <select className="form-control rounded" name="city" required>
                   <option value="" disabled selected>
                     Select City
                   </option>
@@ -129,46 +127,46 @@ const Signup = () => {
                   <option value="10">Delhi</option>
                 </select>
               </div>
-              <div className="col-md-12">
+              <div className="col-md-12 mb-3">
                 <div className="input-group">
-                  <span className="input-group-text">+91</span>
+                  <span className="input-group-text bg-light text-muted">+91</span>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control rounded"
                     placeholder="Phone number"
                     name="phoneNumber"
                     required
                   />
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 mb-3">
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control rounded"
                   placeholder="Company name *"
                   name="company"
                   required
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 mb-3">
                 <input
                   type="password"
-                  className="form-control"
+                  className="form-control rounded"
                   placeholder="Password *"
                   name="password"
                   required
                 />
               </div>
-              <div className="col-md-12">
+              <div className="col-md-12 mb-3">
                 <input
                   type="password"
-                  className="form-control"
+                  className="form-control rounded"
                   placeholder="Confirm password *"
                   name="confirmPassword"
                   required
                 />
               </div>
-              <div className="col-12">
+              <div className="col-12 mb-3">
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -179,22 +177,22 @@ const Signup = () => {
                   />
                   <label className="form-check-label" htmlFor="terms">
                     I agree with
-                    <a href="#" className="text-decoration-none mx-1">
+                    <a href="#" className="text-primary text-decoration-none mx-1">
                       terms and conditions
                     </a>
                   </label>
                 </div>
               </div>
               <div className="col-12">
-                <button type="submit" className="btn btn-primary w-100">
+                <button type="submit" className="btn btn-primary btn-block rounded">
                   Join Now
                 </button>
               </div>
             </div>
           </form>
-          <p className="text-center mt-3">
+          <p className="text-center mt-4">
             Already have an account?
-            <a href="#" className="text-decoration-none text-danger">
+            <a href="#" className="text-decoration-none text-primary ml-1">
               Login
             </a>
           </p>
@@ -202,6 +200,7 @@ const Signup = () => {
       </div>
     </>
   );
+  
 };
 
 export default Signup;
