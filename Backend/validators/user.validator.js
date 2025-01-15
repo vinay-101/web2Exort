@@ -105,7 +105,7 @@ const updateProfileValidator = Joi.object({
 
 const enquirySchema = Joi.object({
   requirement: Joi.string().required(),
-  fullName: Joi.string().required(),
+  fullname: Joi.string().required(),
   email: Joi.string().email().required(),
   phoneNumber: Joi.string().required(),
   companyName: Joi.string().required(),

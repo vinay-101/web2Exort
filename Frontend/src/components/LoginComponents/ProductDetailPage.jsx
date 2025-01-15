@@ -4,7 +4,7 @@ import '../../assets/css/ProductDetailPage.css';
 const ProductDetailPage = () => {
   const initialProduct = {
     name: 'Elegant Wooden Chair',
-    images: ['../../../public/images/company_logo.png', '../../../public/images/company_logo.png'],
+    images: ['/public/images/company_logo.png', '/public/images/company_logo.png'],
     brand: 'WoodCraft',
     modelNumber: 'WC12345',
     material: 'Premium Teakwood',
