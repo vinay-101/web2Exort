@@ -412,15 +412,7 @@ const Navbar = () => {
                 <button>Search</button>
               </div>
             </div>
-            {/* post requirement enquiry */}
-            <div className="col-xl-2 col-lg-3 d-flex justify-content-center">
-              <button
-                className="dreams-button bg-danger text-light border-0 py-2 px-4 rounded"
-                onclick="openDreamModal()"
-              >
-                Post Requirement
-              </button>
-            </div>
+           
           </div>
         </div>
       </div>

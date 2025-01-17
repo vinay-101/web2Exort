@@ -1,29 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
+import handleApiResponse from "../helpers/responseHandler";
+import userService from "../Services/userServices";
 
 const InquiryForm = () => {
-  const [formData, setFormData] = useState({
-    requirements: "",
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    userType: "Seller",
-  });
+  const handleSubmit = handleApiResponse(
+    async (e) => {
+      e.preventDefault();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    alert("Form submitted successfully!");
-  };
+      let formData = new FormData();
+      formData.append("requirement", e.target.requirement.value);
+      formData.append("fullname", e.target.fullname.value);
+      formData.append("email", e.target.email.value);
+      formData.append("phoneNumber", e.target.phoneNumber.value);
+      formData.append("companyName", e.target.companyName.value);
+      formData.append("userType", e.target.userType.value);
+      
+      // Reset the form 
+      e.target.reset();
+      return userService.createEnquiry(formData)
+    },
+    (data) => {
+      
+    },
+    (error) => {}
+  );
 
   return (
     <div
       style={{
-        
         margin: "20px auto",
         padding: "0px 30px",
         border: "1px solid #ddd",
@@ -31,59 +35,50 @@ const InquiryForm = () => {
         boxShadow: "0px 0px 8px rgba(0,0,0,0.1)",
       }}
     >
-      <h2 style={{ textAlign: "center", color: "1467c1", padding:" 10px 10px 0 10px ", margin:"0", }}>
+      <h2
+        style={{
+          textAlign: "center",
+          color: "1467c1",
+          padding: " 10px 10px 0 10px ",
+          margin: "0",
+        }}
+      >
         Post Your <span style={{ color: "#1467c1" }}>Need</span>
       </h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="requirements"
+          name="requirement"
           placeholder="Enter Requirement"
-          value={formData.requirements}
-          onChange={handleChange}
           style={inputStyle}
         />
         <input
           type="text"
-          name="name"
+          name="fullname"
           placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
           style={inputStyle}
         />
         <input
           type="email"
           name="email"
           placeholder="name@company.com"
-          value={formData.email}
-          onChange={handleChange}
           style={inputStyle}
         />
         <div style={{ display: "flex", alignItems: "center" }}>
-          
           <input
             type="tel"
-            name="phone"
+            name="phoneNumber"
             placeholder="Phone No"
-            value={formData.phone}
-            onChange={handleChange}
             style={{ ...inputStyle, flex: 1 }}
           />
         </div>
         <input
           type="text"
-          name="company"
+          name="companyName"
           placeholder="Company Name"
-          value={formData.company}
-          onChange={handleChange}
           style={inputStyle}
         />
-        <select
-          name="userType"
-          value={formData.userType}
-          onChange={handleChange}
-          style={dropdownStyle}
-        >
+        <select name="userType" style={dropdownStyle}>
           <option value="Seller">Seller</option>
           <option value="Buyer">Buyer</option>
           <option value="Other">Other</option>
@@ -108,7 +103,6 @@ const inputStyle = {
 
 const dropdownStyle = {
   ...inputStyle,
-  
 };
 
 const submitButtonStyle = {
@@ -119,12 +113,8 @@ const submitButtonStyle = {
   border: "none",
   borderRadius: "4px",
   fontSize: "16px",
-    cursor: "pointer",
-    margin: "10px 0px",
-    
-    
+  cursor: "pointer",
+  margin: "10px 0px",
 };
-
-
 
 export default InquiryForm;

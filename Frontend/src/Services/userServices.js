@@ -34,6 +34,9 @@ const userService = {
 
     // Delete a record by ID
     delete: (id) => axiosClient.delete(`/records/${id}`),
+
+    // Create Enquiry
+    createEnquiry: (data) => axiosClient.post('/users/create/enquiry', data),
 };
 
 export default userService;
