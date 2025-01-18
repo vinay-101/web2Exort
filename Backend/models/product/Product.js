@@ -67,11 +67,11 @@ const Product = sequelize.define(
       allowNull: false,
     },
     minQuantity: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     maxQuantity: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     price: {
@@ -112,7 +112,7 @@ const Product = sequelize.define(
       allowNull: false,
     },
     packageQuantity: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     packageUnit: {
@@ -133,6 +133,10 @@ const Product = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    status:{            // for approval of product
+      type:DataTypes.BOOLEAN,
+      defaultValue:false
+    }
   },
   {
     timestamps: true,

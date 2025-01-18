@@ -63,14 +63,7 @@ const productSchema = Joi.object({
   packageUnit: Joi.string().valid("Pieces", "Kgs", "Litters").required(),
   deliveryTime: Joi.string().required(),
   nearestPort: Joi.number().integer().required(),
-  specifications: Joi.array()
-    .items(
-      Joi.object({
-        key: Joi.string().required(),
-        value: Joi.string().required(),
-      })
-    )
-    .optional(), // Add specifications as an optional field
+  specifications: Joi.string().optional(), // Add specifications as an optional field
 });
 
 
@@ -130,14 +123,7 @@ const productUpdateSchema = Joi.object({
   packageUnit: Joi.string().valid("Pieces", "Kgs", "Litters").optional(),
   deliveryTime: Joi.string().optional(),
   nearestPort: Joi.number().integer().optional(),
-  specifications: Joi.array()
-    .items(
-      Joi.object({
-        key: Joi.string().required(),
-        value: Joi.string().required(),
-      })
-    )
-    .optional(),
+  specifications: Joi.string().optional()
 });
 
 module.exports = productUpdateSchema;

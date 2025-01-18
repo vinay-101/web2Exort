@@ -1,15 +1,19 @@
 const { Op, Sequelize } = require("sequelize");
 const helpers = require("../../helper/function");
 const Product = require("../../models/product/Product");
-const { productSchema, productUpdateSchema } = require("../../validators/product.validator");
+const {
+  productSchema,
+  productUpdateSchema,
+} = require("../../validators/product.validator");
 const { HttpStatus, CustomMessages } = require("../../helper/statusCode");
 const ProductImage = require("../../models/product/ProductImage");
 const ProductSpecification = require("../../models/product/ProductSpecifiation");
+const Response = require("../../helper/response");
 
 const createProduct = async (req, res) => {
   try {
     const validationResult = await productSchema.validateAsync(req.body);
-    const {
+    let {
       categoryId,
       subCategoryId,
       name,
@@ -34,6 +38,10 @@ const createProduct = async (req, res) => {
       nearestPort,
       specifications,
     } = validationResult;
+
+    if (specifications) {
+      specifications = JSON.parse(specifications);
+    }
 
     // Validate if files are provided
     if (!req.files || req.files.length === 0) {
@@ -110,7 +118,7 @@ const updateProduct = async (req, res) => {
       title,
       brand,
       model,
-      material, 
+      material,
       coi,
       description,
       unitType,
@@ -131,10 +139,10 @@ const updateProduct = async (req, res) => {
 
     // Find the product to be updated
     const product = await Product.findOne({
-        where:{
-            id: productId,
-            userId: req.userId
-        }
+      where: {
+        id: productId,
+        userId: req.userId,
+      },
     });
     if (!product) {
       return res
@@ -171,7 +179,7 @@ const updateProduct = async (req, res) => {
     // If files are provided, update the product images
     if (req.files && req.files.length > 0) {
       // Delete existing product images
-    //   await ProductImage.destroy({ where: { productId: product.id } });
+      //   await ProductImage.destroy({ where: { productId: product.id } });
 
       // Save new images to ProductImage table
       const productImages = req.files.map((file) => ({
@@ -185,7 +193,7 @@ const updateProduct = async (req, res) => {
     // If specifications are provided, update product specifications
     if (specifications && Array.isArray(specifications)) {
       // Delete existing specifications
-    //   await ProductSpecification.destroy({ where: { productId: product.id } });
+      //   await ProductSpecification.destroy({ where: { productId: product.id } });
 
       // Save new specifications to ProductSpecification table
       const productSpecifications = specifications.map((spec) => ({
@@ -199,10 +207,178 @@ const updateProduct = async (req, res) => {
 
     return res
       .status(HttpStatus.OK.code)
-      .send(new Response(true, `Product ${HttpStatus.UPDATED.message}`, product));
+      .send(
+        new Response(true, `Product ${HttpStatus.UPDATED.message}`, product)
+      );
   } catch (error) {
     return helpers.validationHandler(res, error);
   }
 };
 
-module.exports = { createProduct, updateProduct };
+const allProduct = async (req, res) => {
+  try {
+    let { page, size, type } = req.query;
+
+    if (!size) size = 12;
+    else size = parseInt(size);
+    if (!page) page = 1;
+    else page = parseInt(page);
+    let skip = size * (parseInt(page) - 1);
+
+    let products;
+    let total;
+    if (type == true) {
+      products = await Product.findAll({
+        where: {
+          userId: req.userId,
+          isFeatured: true,
+        },
+        limit: size,
+        offset: skip,
+      });
+
+      total = await Product.count({
+        where: {
+          userId: req.userId,
+          isFeatured: true,
+        },
+      });
+    } else {
+      products = await Product.findAll({
+        where: {
+          userId: req.userId,
+          isFeatured: false,
+        },
+        limit: size,
+        offset: skip,
+      });
+
+      total = await Product.count({
+        where: {
+          userId: req.userId,
+          isFeatured: false,
+        },
+      });
+    }
+
+    const data = {
+      totalPages: Math.ceil(total / size),
+      totalRecords: total,
+      products: products,
+    };
+    return res
+      .status(HttpStatus.OK.code)
+      .send(new Response(true, `Product ${HttpStatus.OK.message}`, data));
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+const viewProduct = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    if (!productId) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, "ProductId is required."));
+    }
+
+    let product = await Product.findOne({
+      where: {
+        id: Number(productId),
+        userId: req.userId,
+      },
+    });
+
+    product
+      ? res
+          .status(HttpStatus.OK.code)
+          .send(new Response(true, `Product ${HttpStatus.OK.message}`, product))
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(true, `Product ${HttpStatus.FORBIDDEN.message}`));
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    if (!productId) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, "ProductId is required."));
+    }
+
+    let product = await Product.destroy({
+      where: {
+        id: Number(productId),
+        userId: req.userId,
+      },
+    });
+
+    product
+      ? res
+          .status(HttpStatus.OK.code)
+          .send(new Response(true, `Product deleted successfully`, product))
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(true, `Product ${HttpStatus.FORBIDDEN.message}`));
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+const makeFeature = async (req, res) => {
+  try {
+    let productId = req.params.productId;
+
+    if (!productId) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, "ProductId is required."));
+    }
+
+    let product = await Product.findOne({
+      where: {
+        id: Number(productId),
+        userId: req.userId,
+      },
+    });
+
+    if (!product) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, "ProductId not found."));
+    }
+
+    if (product.isFeatured === false) {
+      await product.update({ isFeatured: true });
+    } else {
+      await product.update({ isFeatured: false });
+    }
+
+    product
+    ? res
+        .status(HttpStatus.UPDATED.code)
+        .send(new Response(true, `Product ${HttpStatus.UPDATED.message}`, product))
+    : res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(true, `Product ${HttpStatus.FORBIDDEN.message}`));
+
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+module.exports = {
+  createProduct,
+  updateProduct,
+  allProduct,
+  viewProduct,
+  deleteProduct,
+  makeFeature,
+};
