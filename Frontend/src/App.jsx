@@ -7,6 +7,11 @@ import ForgotPassword from "./components/ForgotPassword";
 import { Toaster } from "react-hot-toast";
 import ResetPassword from "./components/ResetPassword";
 import ProductDetailPage from "./components/LoginComponents/ProductDetailPage";
+import DashboardPage from "./pages/DashboardPage";
+import MembershipPage from "./pages/MembershipPage";
+import TestimonialPage from "./pages/TestimonialPage";
+import ComplaintFeedbackPage from "./pages/ComplaintFeedbackPage";
+import ProfilesettingPage from "./pages/ProfilesettingPage";
 
 const App = () => {
   return (
@@ -21,7 +26,12 @@ const App = () => {
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
            {/* Product Detail Page */}
-        <Route path="/product/:productId" element={<ProductDetailPage />} />
+           <Route path="user/profile" element={<DashboardPage />} />
+           <Route path="user/profile/membership-plans" element={<MembershipPage />} />
+           <Route path="user/profile/testimonial" element={<TestimonialPage />} />
+           <Route path="user/profile/complaint-feedback" element={<ComplaintFeedbackPage />} />
+           <Route path="user/profile/profile-setting" element={<ProfilesettingPage />} />
+        {/* <Route path="/product/:productId" element={<ProductDetailPage />} /> */}
         </Routes>
       </div>
     </Router>
