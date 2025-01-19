@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 // Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
-import '../assets/css/Testimonial.css';
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
+// import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 // Import required modules
-import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import "../assets/css/Testimonial.css";
 
 // Sample Feedback Data
 const feedbackData = [
@@ -32,44 +32,42 @@ const feedbackData = [
 
 export default function Testimonial() {
   return (
-    <>
-      <section id="testimonialSlider">
-        <h1>Customer Feedback</h1>
-        <Swiper
-          effect={'coverflow'}
-          grabCursor={true}
-          centeredSlides={true}
-          slidesPerView={'auto'}
-          coverflowEffect={{
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
-          }}
-          autoplay={{
-            delay: 1500,
-            disableOnInteraction: false,
-          }}
-          initialSlide={2}
-          pagination={true}
-          modules={[EffectCoverflow, Pagination, Autoplay]}
-          className="mySwiper"
-        >
-          {feedbackData.map((feedback, index) => (
-            <SwiperSlide key={index}>
-              <div className="feedback-card">
-                <h3 className="feedback-name">{feedback.name}</h3>
-                <p className="feedback-text">"{feedback.text}"</p>
-                <div className="feedback-rating">
-                  {Array(feedback.rating).fill("⭐").join("")} ({feedback.rating}/5)
-                </div>
-                <p className="feedback-date">{feedback.date}</p>
+    <section id="testimonialSlider">
+      <h1>What Our Customers Say</h1>
+      <Swiper
+        spaceBetween={30}
+        slidesPerView={3} // Default slides per view
+        breakpoints={{
+          320: { slidesPerView: 1 }, // Small screens
+          768: { slidesPerView: 2 }, // Medium screens
+          1024: { slidesPerView: 3 }, // Large screens
+          1440: { slidesPerView: 4 }, // Extra-large screens
+        }}
+        loop={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Pagination, Navigation, Autoplay]}
+        className="mySwiper"
+      >
+        {feedbackData.map((feedback, index) => (
+          <SwiperSlide key={index}>
+            <div className="feedback-card">
+              <h3 className="feedback-name">{feedback.name}</h3>
+              <p className="feedback-text">"{feedback.text}"</p>
+              <div className="feedback-rating">
+                {Array(feedback.rating).fill("⭐").join("")} ({feedback.rating}/5)
               </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section>
-    </>
+              <p className="feedback-date">{feedback.date}</p>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </section>
   );
 }

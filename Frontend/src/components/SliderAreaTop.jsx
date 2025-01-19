@@ -20,7 +20,7 @@ const SliderAreaTop = () => {
           <div className="slider-area">
 		<div className="container-fluid">
 			<div className="row ">
-				<div className="col-xl-5 offset-xl-2" style={{marginTop:'5px'}}>
+				<div className="col-xl-5 offset-xl-2" style={{marginTop:'-9px'}}>
                 <div className="main-slider ">
                 <Swiper
 					spaceBetween={30}

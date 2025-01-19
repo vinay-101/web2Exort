@@ -17,7 +17,7 @@ const Home = () => {
      
       <SliderAreaMiddleProduct />
       <SliderAreaDownProductOne />
-      {/* <Testimonial /> */}
+      <Testimonial />
       <BrandPartner />
       <Footer />
     </>
