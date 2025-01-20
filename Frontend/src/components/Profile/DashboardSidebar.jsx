@@ -19,10 +19,10 @@ const DashboardSidebar = () => {
         </a>
       </li>
       <li className="nav-item">
-        <a className="nav-link" href="#">
+        <Link className="nav-link" to="/user/profile/product-listing">
           <i className="fa fa-archive mr-2" />
           Products
-        </a>
+        </Link>
       </li>
       <li className="nav-item">
         <a className="nav-link" href="#">

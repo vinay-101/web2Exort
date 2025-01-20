@@ -298,3 +298,156 @@
     color: #555;
   }
 }
+
+
+
+// Add product 
+.profile_add_product{
+  .form-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.form-section h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.form-group label {
+    font-weight: 500;
+}
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+.checkbox-group .form-check {
+    margin-right: 20px;
+}
+.note {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+}
+
+
+// Product listing
+// Product Listing Styles
+.profile_product_listing {
+  .tabs-section {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  // Tabs Styling
+  .nav-tabs {
+    .nav-item {
+      .nav-link {
+        color: #343a40; // Default text color
+        border-radius: 5px;
+        padding: 10px 15px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+          background-color: rgba(0, 123, 255, 0.1); // Hover effect
+          color: #007bff;
+        }
+
+        &.active {
+          background-color: #007bff;
+          color: #ffffff;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+
+  // Table Styling
+  .product-table {
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 5px;
+      object-fit: cover; // Ensure consistent sizing for all images
+      border: 1px solid #dee2e6;
+    }
+  }
+
+  // Pagination Styling
+  .pagination {
+    justify-content: center;
+    .page-item {
+      .page-link {
+        color: #007bff;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: rgba(0, 123, 255, 0.1);
+          color: #0056b3;
+        }
+
+        &.active {
+          background-color: #007bff;
+          color: #ffffff;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+
+  // Bulk Import Section
+  .bulk-import {
+    margin-top: 20px;
+
+    h5 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: #6c757d;
+    }
+
+    .form-control-file {
+      display: block;
+      margin-bottom: 15px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      padding: 10px;
+      transition: border-color 0.3s;
+
+      &:hover,
+      &:focus {
+        border-color: #007bff;
+        outline: none;
+      }
+    }
+
+    .btn {
+      margin-top: 10px;
+    }
+  }
+
+  // General Utility Classes
+  .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 15px; // Add spacing between child elements
+  }
+}
