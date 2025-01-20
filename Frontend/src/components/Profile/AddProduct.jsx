@@ -1,8 +1,9 @@
 import "../../assets/profile/profile.scss"
 
+
 const AddProduct = () => {
   return (
-    <div className="profile_add_product">
+    <div className=" col-xl-10 col-lg-10 profile_add_product">
   <form>
     {/* Basic Information */}
     <div className="form-section">

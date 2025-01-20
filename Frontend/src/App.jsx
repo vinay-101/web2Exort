@@ -14,6 +14,7 @@ import ComplaintFeedbackPage from "./pages/ComplaintFeedbackPage";
 import ProfilesettingPage from "./pages/ProfilesettingPage";
 import AddProductPage from "./Pages/AddProductPage";
 import ProductListingPage from "./Pages/ProductListingPage";
+import ViewProductPage from "./Pages/ViewProductPage";
 
 const App = () => {
   return (
@@ -34,7 +35,8 @@ const App = () => {
            <Route path="user/profile/complaint-feedback" element={<ComplaintFeedbackPage />} />
            <Route path="user/profile/profile-setting" element={<ProfilesettingPage />} />
            <Route path="user/profile/add-product" element={<AddProductPage />} />
-           <Route path="user/profile/product-listing" element={<ProductListingPage />} />
+          <Route path="user/profile/product-listing" element={<ProductListingPage />} />
+          <Route path="user/profile/view-product" element={<ViewProductPage /> } />
         {/* <Route path="/product/:productId" element={<ProductDetailPage />} /> */}
         </Routes>
       </div>

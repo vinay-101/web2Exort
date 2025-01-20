@@ -1,10 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure Bootstrap CSS is imported
 import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Include Bootstrap JS with dependencies
 import "../../assets/profile/profile.scss";
+import {Link, NavLink} from "react-router-dom"
+
 
 const ProductListing = () => {
   return (
-    <div className="tabs-section profile_product_listing">
+    <div className=" profile_product_listing">
       {/* Tabs Navigation */}
       <ul className="nav nav-tabs" id="productTabs" role="tablist">
         <li className="nav-item">
@@ -57,14 +59,18 @@ const ProductListing = () => {
           role="tabpanel"
           aria-labelledby="all-products-tab"
         >
-          <div className="mt-4">
-            <button className="btn btn-success mb-3">
-              <i className="fas fa-plus-circle" /> Add Product
+          <div className="mt-2 table-td">
+            <NavLink to="/user/profile/add-product">
+            <button className="btn btn-success mb-2">
+              <i className="fas fa-plus-circle" /> 
+              Add Product
+              
             </button>
+            </NavLink>
             {/* Table Component */}
             <div className="table-responsive">
-              <table className="table table-striped">
-                <thead>
+              <table className="table table-striped ">
+                <thead >
                   <tr>
                     <th>#</th>
                     <th>Image</th>
@@ -84,7 +90,11 @@ const ProductListing = () => {
                         alt="Product"
                       />
                     </td>
-                    <td>Product A</td>
+                    <td>
+                      <Link className=" btn_" to="/user/profile/view-product">                       
+                      Product_Name                
+                      </Link>
+                    </td>
                     <td>Electronics</td>
                     <td>$500</td>
                     <td>

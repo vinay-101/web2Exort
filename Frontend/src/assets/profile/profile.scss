@@ -1,5 +1,5 @@
 .profile_sidebar {
-  height: 100vh;
+  height: fit-content;
   position: sticky;
   top: 0;
   background-color: #343a40;
@@ -303,6 +303,7 @@
 
 // Add product 
 .profile_add_product{
+  margin-top: 10px;
   .form-section {
     background-color: white;
     border-radius: 10px;
@@ -343,20 +344,24 @@
 // Product listing
 // Product Listing Styles
 .profile_product_listing {
-  .tabs-section {
+  
+    border: 0.1px solid #343a4039;
     width: 100%;
     background-color: #ffffff;
     border-radius: 10px;
-    padding: 20px;
+    margin: 10px;
+    padding: 5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
+  
 
   // Tabs Styling
   .nav-tabs {
     .nav-item {
+      margin: 10px;
+      
       .nav-link {
         color: #343a40; // Default text color
-        border-radius: 5px;
+        border-radius: 50px;
         padding: 10px 15px;
         transition: all 0.3s ease-in-out;
 
@@ -368,7 +373,7 @@
         &.active {
           background-color: #007bff;
           color: #ffffff;
-          border-radius: 5px;
+          border-radius: 50px;
         }
       }
     }
@@ -450,4 +455,68 @@
     width: 100%;
     gap: 15px; // Add spacing between child elements
   }
+
+// product name td
+
+  /* 5. Custom styling for Buttons */
+.btn_ {
+  padding: 10px 20px;
+  background-color: transparent; /* Custom color */
+  color: black; /* Custom color */
+  font-weight: 500;
+  text-decoration:none;
+  text-align: start;
+  padding: 0%;
+
+  
 }
+
+}
+
+
+
+
+
+
+// View Product 
+
+
+.view-product {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            padding: 10px;
+        
+        .product-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .product-section h5 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .product-details label {
+            font-weight: 500;
+            margin-right: 5px;
+        }
+        .product-details span {
+            font-weight: 400;
+            color: #6c757d;
+        }
+        .product-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+      }

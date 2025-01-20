@@ -1,16 +1,17 @@
 import React from 'react'
+import ViewProduct from '../components/Profile/ViewProduct'
 import DashboardSidebar from '../components/Profile/DashboardSidebar'
-import AddProduct from '../components/Profile/AddProduct'
 
-const AddProductPage = () => {
+
+const ViewProductPage = () => {
   return (
-    <div className=""> 
+    <div className="">
     <div className="row">
      <DashboardSidebar />
-     <AddProduct />
+     <ViewProduct />
   </div>
   </div>
   )
 }
 
-export default AddProductPage
+export default ViewProductPage
