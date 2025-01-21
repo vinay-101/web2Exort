@@ -1,6 +1,7 @@
 import "../../assets/profile/profile.scss";
 import {Link, NavLink} from "react-router-dom"
-
+import "bootstrap/dist/css/bootstrap.min.css"; // Ensure Bootstrap CSS is imported
+import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Include Bootstrap JS 
 
 const ProductListing = () => {
   return (
