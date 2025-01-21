@@ -97,10 +97,10 @@ const ViewProduct = () => {
     <div className="product-section">
       <div className="product-actions">
         <button className="btn btn-primary">
-          <i className="fas fa-edit" /> Edit
+          <i className="fa fa-edit" /> Edit
         </button>
         <button className="btn btn-danger">
-          <i className="fas fa-trash-alt" /> Delete
+          <i className="fa fa-trash-alt" /> Delete
         </button>
       </div>
     </div>

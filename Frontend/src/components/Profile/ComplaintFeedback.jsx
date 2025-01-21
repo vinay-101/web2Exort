@@ -14,11 +14,13 @@ const ComplaintFeedback = () => {
           role="tab"
           data-toggle="tab"
         >
+        <i className="fa fa-comment mr-2" />
           Your Feedback
         </a>
       </li>
       <li className="nav-item">
         <a className="nav-link" href="#complaint" role="tab" data-toggle="tab">
+        <i className="bi bi-emoji-angry-fill mr-2"></i>
           Complaint
         </a>
       </li>
