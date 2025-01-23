@@ -37,6 +37,7 @@ const App = () => {
            <Route path="user/profile/add-product" element={<AddProductPage />} />
           <Route path="user/profile/product-listing" element={<ProductListingPage />} />
           <Route path="user/profile/view-product" element={<ViewProductPage /> } />
+          <Route path="user/profile/view-product" element={<ViewProductPage /> } />
         {/* <Route path="/product/:productId" element={<ProductDetailPage />} /> */}
         </Routes>
       </div>
