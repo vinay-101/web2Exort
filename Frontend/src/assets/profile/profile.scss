@@ -508,3 +508,282 @@
     border-color: #004085;
   }
 }
+
+
+// company profile 
+/* General Form Styles */
+.company-profile-form-section {
+  .Navborder{
+    // border: solid;
+    height: 70px;
+    background-color: #343a40;
+    margin-left: -20px;
+  }
+
+// start tab 
+/* Tabs container */
+.tabs-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  margin-top: -60px;
+}
+
+/* Tabs */
+.tabs {
+  margin-top: 20px;
+  height: 60px;
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.tab {
+  padding: 15px 25px;
+  color: #343a40;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: 0.1px solid #d5d3d3;
+}
+
+.tab:hover {
+  background-color: #d5d3d3;
+
+}
+
+.tab.active {
+  background-color: #007bff; /* Red active color */
+  color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+  border: 0.1px solid #007bff;
+
+}
+
+/* Tab content */
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: row;
+    flex: 1;
+
+  }
+
+  .tab {
+    margin-bottom: 5px;
+    border-radius: 8px;
+  }
+}
+
+
+
+
+
+  // end tab
+
+  // general details start
+
+  .company-profile-form {
+    width: 96%;
+    padding: 20px 0 20px 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    font-family: "Arial", sans-serif;
+    margin: 10px;
+  }
+  
+  h2 {
+    text-align: start;
+
+    margin: 20px 0 0px 0;
+    color: #096fa6;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  
+  .form-section {
+    margin-bottom: 30px;
+    width: 100%;
+    border: none;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #007bff;
+  }
+  
+  .form-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+  }
+  
+  label {
+    font-weight: bold;
+    color: #333333cc;
+  }
+  
+  input, textarea, select {
+    width: 500px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  .logo-banner-button{
+    width: 245px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: transparent;
+    height: 100px;
+
+    input{
+      width: 100%;
+      border: none;
+    }
+  }
+  
+  textarea {
+    height: 80px;
+    resize: vertical;
+  }
+  
+  .upload-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  .form-actions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    
+    .save-button{
+      width: 10%;
+    }
+    .cancel-button{
+      width: 10%;
+      border-radius: 5px;
+      color: white;
+      background-color: #dcdcdc;
+      border: 0.1px solid rgb(197, 197, 197);
+
+    }
+    .cancel-button:hover{
+      width: 10%;
+      border-radius: 5px;
+      color: white;
+      background-color: #cecdcd;
+      border: 0.1px solid rgb(197, 197, 197);
+
+    }
+  }
+
+  button {
+    cursor: pointer;
+  }
+  
+  .save-button {
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+
+  }
+  
+  button.save-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .form-group {
+      grid-template-columns: 1fr;
+    }
+  
+    label {
+      text-align: left;
+    }
+    input, textarea, select {
+      width: 96%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .logo-banner-button{
+      width: 46%;
+
+    }
+    
+  }
+  // general details end
+
+  // company info start 
+
+  .chat-custom-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Label: 1fr, Input: 2fr */
+    gap: 1rem;
+  }
+  
+  .chat-custom-grid-row {
+    display: contents; /* Ensures label and input are in the defined grid layout */
+  }
+  
+  .chat-custom-form-section {
+    margin-bottom: 2rem;
+  }
+  .form-control{
+    height: fit-content;
+    padding: 5px;
+  }
+
+
+  // company info end
+
+  // certificate css start 
+  .certificate-upload-buton1{
+    width: 60%;
+    color: #333;
+
+
+    .certificate-upload-input{
+      width: 100%;
+      height: 50px;
+      color: #333;
+      border: none;
+    }
+  }
+  .certificate-upload-buton{
+    width: 40%;
+    color: #333;
+
+
+    .certificate-upload-input{
+      width: 100%;
+      height: 50px;
+      color: #333;
+      border: none;
+    }
+  }
+  // certificate css end
+  
+}

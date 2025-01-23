@@ -18,10 +18,13 @@ const DashboardSidebar = () => {
           </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
-            <i className="fa fa-building mr-2" />
+        <Link
+            className={`nav-link ${location.pathname === "/user/profile/company-profile" || location.pathname  === "/user/profile/company-profile" ? "active" : ""}`}
+            to="/user/profile/company-profile"
+          >
+            <i className="fa fa-building mr-2" /> 
             Company Profile
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
           <Link
