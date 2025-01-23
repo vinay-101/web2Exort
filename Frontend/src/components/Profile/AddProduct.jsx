@@ -1,22 +1,41 @@
 import React, { useRef, useState } from "react";
-import JoditEditor from 'jodit-react';
+import JoditEditor from "jodit-react";
 import "../../assets/profile/profile.scss";
+import handleApiResponse from "../../helpers/responseHandler";
 
 const AddProduct = () => {
-    // Jodit Editor
-    const editor = useRef(null);
-	const [content, setContent] = useState('');
+  // Jodit Editor
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
 
-	const config = {
-		toolbarButtonSize: 'middle',
-		buttons: [
-			'bold', 'italic', 'underline', 'strikethrough', 'eraser', 'ul', 'ol', 'outdent', 'indent', 'font', 'fontsize', 'brush', 'paragraph', 'align', 'undo', 'redo', 'hr', 'table', 'link', 'source'
-		],
-		removeButtons: ['image', 'file']
-	};
+  const config = {
+    toolbarButtonSize: "middle",
+    buttons: [
+      "bold",
+      "italic",
+      "underline",
+      "strikethrough",
+      "eraser",
+      "ul",
+      "ol",
+      "outdent",
+      "indent",
+      "font",
+      "fontsize",
+      "brush",
+      "paragraph",
+      "align",
+      "undo",
+      "redo",
+      "hr",
+      "table",
+      "link",
+      "source",
+    ],
+    removeButtons: ["image", "file"],
+  };
 
-    // Product Specifications
-
+  // Product Specifications
   const [specifications, setSpecifications] = useState([
     { id: Date.now(), attribute: "", value: "" },
   ]);
@@ -40,11 +59,16 @@ const AddProduct = () => {
     );
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add form submission logic here
-    console.log("Form submitted");
-  };
+  const handleSubmit = handleApiResponse(async (e) => {
+        e.preventDefault();
+        // const formData = new FormData();
+        // formData.append("categoryId", e.target.categoryId.value);
+        // formData.append("subCategoryId", e.target.subCategoryId.value);
+        // formData.append("subCategoryId", e.target.subCategoryId.value);
+        // formData.append("subCategoryId", e.target.subCategoryId.value);
+    },
+    (data) => {}
+  );
 
   return (
     <div className="col-xl-10 col-lg-10 profile_add_product">
@@ -113,12 +137,12 @@ const AddProduct = () => {
               id="description"
             /> */}
             <JoditEditor
-			ref={editor}
-			value={content}
-			config={config}
-			tabIndex={1} // tabIndex of textarea
-			onChange={newContent => setContent(newContent)}
-		/>
+              ref={editor}
+              value={content}
+              config={config}
+              tabIndex={1} // tabIndex of textarea
+              onChange={(newContent) => setContent(newContent)}
+            />
           </div>
         </div>
 
@@ -134,7 +158,11 @@ const AddProduct = () => {
                   placeholder="Attribute (e.g., Color)"
                   value={spec.attribute}
                   onChange={(e) =>
-                    handleSpecificationChange(spec.id, "attribute", e.target.value)
+                    handleSpecificationChange(
+                      spec.id,
+                      "attribute",
+                      e.target.value
+                    )
                   }
                 />
               </div>
@@ -183,19 +211,11 @@ const AddProduct = () => {
             </div>
             <div className="form-group col-md-3">
               <label htmlFor="minQuantity">Min Quantity</label>
-              <input
-                type="number"
-                className="form-control"
-                id="minQuantity"
-              />
+              <input type="number" className="form-control" id="minQuantity" />
             </div>
             <div className="form-group col-md-3">
               <label htmlFor="maxQuantity">Max Quantity</label>
-              <input
-                type="number"
-                className="form-control"
-                id="maxQuantity"
-              />
+              <input type="number" className="form-control" id="maxQuantity" />
             </div>
           </div>
           <div className="form-group">

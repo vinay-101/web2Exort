@@ -9,6 +9,8 @@ const { HttpStatus, CustomMessages } = require("../../helper/statusCode");
 const ProductImage = require("../../models/product/ProductImage");
 const ProductSpecification = require("../../models/product/ProductSpecifiation");
 const Response = require("../../helper/response");
+const Category = require("../../models/product/Category");
+const SubCategory = require("../../models/product/SubCategory");
 
 const createProduct = async (req, res) => {
   try {
@@ -16,7 +18,6 @@ const createProduct = async (req, res) => {
     let {
       categoryId,
       subCategoryId,
-      name,
       title,
       brand,
       model,
@@ -55,7 +56,6 @@ const createProduct = async (req, res) => {
       userId: req.userId,
       categoryId,
       subCategoryId,
-      name,
       title,
       brand,
       model,
@@ -374,6 +374,56 @@ const makeFeature = async (req, res) => {
   }
 };
 
+const createCategory = async(req,res)=>{
+  try{
+    const {name} = req.body;
+    
+    let category = await Category.create({name});
+    return res.status(HttpStatus.CREATED.code).send(new Response(true, `Category ${HttpStatus.CREATED.message}`, category));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const createSubCategory = async(req,res)=>{
+  try{
+    const {categoryId, name} = req.body;
+    
+    let category = await SubCategory.create({categoryId, name});
+    return res.status(HttpStatus.CREATED.code).send(new Response(true, `SubCategory ${HttpStatus.CREATED.message}`, category));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const allCategory = async(req,res)=>{
+  try{
+ 
+    let category = await Category.findAll({
+      attributes:['id','name']
+    });
+    return res.status(HttpStatus.OK.code).send(new Response(true, `Category ${HttpStatus.OK.message}`, category));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const allSubCategory = async(req,res)=>{
+  try{
+ 
+    let category = await SubCategory.findAll({
+      attributes:['id', 'categoryId', 'name']
+    });
+    return res.status(HttpStatus.OK.code).send(new Response(true, `Category ${HttpStatus.OK.message}`, category));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -381,4 +431,8 @@ module.exports = {
   viewProduct,
   deleteProduct,
   makeFeature,
+  createCategory,
+  allCategory,
+  createSubCategory,
+  allSubCategory
 };

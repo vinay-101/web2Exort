@@ -4,7 +4,7 @@ const { CustomMessages } = require("../helper/statusCode");
 const productSchema = Joi.object({
   categoryId: Joi.number().integer().required(),
   subCategoryId: Joi.number().integer(), // Allow null with Joi.number()
-  name: Joi.string().required(),
+  // name: Joi.string().required(),
   title: Joi.string().required(),
   brand: Joi.string().required(),
   model: Joi.string(), // Allow null with Joi.string()

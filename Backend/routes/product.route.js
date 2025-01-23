@@ -11,4 +11,12 @@ productRouter.route("/:productId").get(requireAuth, product_controller.viewProdu
 productRouter.route("/delete/:productId").delete(requireAuth, product_controller.deleteProduct);
 productRouter.route("/feature/:productId").patch(requireAuth, product_controller.makeFeature); //make feature and unFeature
 
+// Category
+productRouter.route("/category").post(product_controller.createCategory);
+productRouter.route('/category/all').get(requireAuth, product_controller.allCategory);
+
+// subCategory
+productRouter.route("/create/sub-cateogry").post(product_controller.createSubCategory);
+productRouter.route("/sub-category/all").get(product_controller.allSubCategory);
+
 module.exports = {productRouter}
