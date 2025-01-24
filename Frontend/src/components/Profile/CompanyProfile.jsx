@@ -318,7 +318,9 @@ const CompanyProfileForm = () => {
                     <h3 className="mb-4">Certification</h3>
                     <div className="chat-custom-grid">
                       <div className="chat-custom-grid-row">
-                        <label className="mb-0">Recommended format: PDF | Size: Less than 5MB</label>
+                        <label className="mb-0">Recommended format: </label>
+                        <label className="mb-0"> Size: Less than 5MB</label>
+
                       </div>
                       <div className="chat-custom-grid-row">
                         <label htmlFor="certification-name">Name</label>
@@ -339,7 +341,8 @@ const CompanyProfileForm = () => {
                         </div>
                       </div>
                       <div className="chat-custom-grid-row">
-                        <label>Upload Documents (PDF | Less than 5MB)</label>
+                        <label>Upload Documents </label>
+                        <label> (PDF | Less than 5MB)</label>
                       </div>
                       <div className="chat-custom-grid-row">
                         <label>Company Registration Certificate</label>

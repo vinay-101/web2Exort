@@ -16,6 +16,7 @@ import AddProductPage from "./Pages/AddProductPage";
 import ProductListingPage from "./Pages/ProductListingPage";
 import ViewProductPage from "./Pages/ViewProductPage";
 import CompanyProfilePage from "./Pages/CompanyProfilePage";
+import EnquiryPage from "./Pages/EnquiryPage";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="user/profile/product-listing" element={<ProductListingPage />} />
           <Route path="user/profile/view-product" element={<ViewProductPage /> } />
           <Route path="user/profile/company-profile" element={<CompanyProfilePage /> } />
+          <Route path="user/profile/enquiry" element={<EnquiryPage /> } />
         {/* <Route path="/product/:productId" element={<ProductDetailPage />} /> */}
         </Routes>
       </div>

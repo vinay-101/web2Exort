@@ -1,5 +1,5 @@
 .profile_sidebar {
-  height: 100vh;
+  height: 100%;
   position: sticky;
   top: 0;
   background-color: #343a40;
@@ -515,7 +515,7 @@
 .company-profile-form-section {
   .Navborder{
     // border: solid;
-    height: 70px;
+    height: 50px;
     background-color: #343a40;
     margin-left: -20px;
   }
@@ -527,22 +527,22 @@
   flex-direction: column;
   width: 100%;
   font-family: Arial, sans-serif;
-  margin-top: -60px;
+  margin-top: -50px;
 }
 
 /* Tabs */
 .tabs {
   margin-top: 20px;
-  height: 60px;
+  height: 40px;
   display: flex;
   justify-content: start;
   align-items: end;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 20px;
 }
 
 .tab {
-  padding: 15px 25px;
+  padding: 15px 15px;
   color: #343a40;
   text-align: center;
   cursor: pointer;
@@ -679,14 +679,14 @@
       width: 10%;
       border-radius: 5px;
       color: white;
-      background-color: #dcdcdc;
+      background-color: #7e7e7e;
       border: 0.1px solid rgb(197, 197, 197);
 
     }
     .cancel-button:hover{
       width: 10%;
       border-radius: 5px;
-      color: white;
+      color: #343a40;
       background-color: #cecdcd;
       border: 0.1px solid rgb(197, 197, 197);
 
@@ -761,7 +761,7 @@
 
   // certificate css start 
   .certificate-upload-buton1{
-    width: 60%;
+    width: 40%;
     color: #333;
 
 
@@ -786,4 +786,109 @@
   }
   // certificate css end
   
+}
+
+
+
+// enquiry 
+
+// Variables
+$bg-color: #f8f8f8;
+$white: #ffffff;
+$text-color: #555;
+$active-color: #ff4d4f;
+$tab-border: 2px solid $active-color;
+
+// Body Styles
+.custom-chat-enquiry-body {
+  font-family: Arial, sans-serif;
+  background-color: $bg-color;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  height: 100%;
+  padding: 20px;
+}
+
+// Container
+.custom-chat-enquiry-container {
+  background: $white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  max-width: 400px;
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
+}
+
+// Header
+.custom-chat-enquiry-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: $text-color;
+}
+
+// Tabs
+.custom-chat-enquiry-tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 40px;
+
+  .custom-chat-enquiry-tab-button {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: $text-color;
+
+    &:hover {
+      color: $active-color;
+    }
+
+    &.custom-chat-enquiry-active {
+      font-weight: bold;
+      color: $active-color;
+      border-bottom: $tab-border;
+    }
+  }
+}
+
+// Content
+.custom-chat-enquiry-content {
+  .custom-chat-enquiry-icon {
+    .custom-chat-enquiry-clipboards {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+
+      .custom-chat-enquiry-clipboard {
+        width: 40px;
+        height: 50px;
+        background: #ddd;
+        border-radius: 4px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .custom-chat-enquiry-clipboard:first-child {
+        background: #eee;
+        top: -10px;
+        z-index: 1;
+      }
+    }
+  }
+
+  p {
+    font-size: 16px;
+    margin-top: 10px;
+    color: $text-color;
+  }
 }
