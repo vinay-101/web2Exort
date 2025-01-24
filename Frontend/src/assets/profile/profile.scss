@@ -336,7 +336,33 @@
     font-size: 0.875rem;
     color: #6c757d;
   }
+
+  // add product image 
+  .image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 20px;
+  }
+  .image-preview {
+    position: relative;
+    display: inline-block;
+  }
+  .preview-img {
+    max-width: 100px;
+    max-height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .btn-danger {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
 }
+
+//
+
 
 // Product listing
 // Product Listing Styles
@@ -465,6 +491,7 @@
     text-align: start;
     padding: 0%;
   }
+
 }
 
 // View Product

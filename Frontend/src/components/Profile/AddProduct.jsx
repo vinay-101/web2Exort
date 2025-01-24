@@ -7,6 +7,7 @@ const AddProduct = () => {
   // Jodit Editor
   const editor = useRef(null);
   const [content, setContent] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const config = {
     toolbarButtonSize: "middle",
@@ -59,13 +60,26 @@ const AddProduct = () => {
     );
   };
 
-  const handleSubmit = handleApiResponse(async (e) => {
-        e.preventDefault();
-        // const formData = new FormData();
-        // formData.append("categoryId", e.target.categoryId.value);
-        // formData.append("subCategoryId", e.target.subCategoryId.value);
-        // formData.append("subCategoryId", e.target.subCategoryId.value);
-        // formData.append("subCategoryId", e.target.subCategoryId.value);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    const imageURLs = files.map((file) => URL.createObjectURL(file));
+    setSelectedImages((prev) => [...prev, ...imageURLs].slice(0, 20)); // Limit to 20 images
+  };
+
+  const removeImage = (index) => {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+
+  const handleSubmit = handleApiResponse(
+    async (e) => {
+      e.preventDefault();
+      // const formData = new FormData();
+      // formData.append("categoryId", e.target.categoryId.value);
+      // formData.append("subCategoryId", e.target.subCategoryId.value);
+      // formData.append("subCategoryId", e.target.subCategoryId.value);
+      // formData.append("subCategoryId", e.target.subCategoryId.value);
     },
     (data) => {}
   );
@@ -86,6 +100,40 @@ const AddProduct = () => {
                 placeholder="Enter product name"
               />
             </div>
+            {/* Product Images */}
+
+               {/* start  */}
+               <div className="form-group col-md-12">
+              <label htmlFor="productImages">Product Images</label>
+              <input
+                type="file"
+                id="productImages"
+                className="form-control-file"
+                multiple
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+              <div className="image-preview-container mt-3 d-flex flex-wrap">
+                {selectedImages.map((src, index) => (
+                  <div key={index} className="image-preview mr-2 mb-2">
+                    <img
+                      src={src}
+                      alt={`Preview ${index}`}
+                      className="preview-img"
+                      width={60}
+                      height={60}
+                    />
+                    <i
+                      type="button"
+                      className="bi bi-x-circle-fill mt-1"
+                      onClick={() => removeImage(index)}
+                    >
+                    </i>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
             <div className="form-group col-md-6">
               <label htmlFor="modelNumber">Model Number</label>
               <input
@@ -105,7 +153,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="form-group col-md-6">
-              <label htmlFor="productPrice">Price ($)</label>
+              <label htmlFor="productPrice">Price (INR)</label>
               <input
                 type="number"
                 className="form-control"
@@ -123,6 +171,23 @@ const AddProduct = () => {
                 id="productBrochure"
               />
             </div>
+            <div className="form-group col-md-6">
+              <label htmlFor="productMaterial">Product Material</label>
+              <input
+                type="text"
+                className="form-control"
+                id="productMaterial"
+                placeholder="Enter product material"
+              />
+            </div>
+            <div className="form-group col-md-6">
+              <label htmlFor="placeOfOrigin">Place of Origin</label>
+              <select className="form-control" id="placeOfOrigin">
+                <option value="">Select</option>
+                <option value="country1">Country 1</option>
+                <option value="country2">Country 2</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -130,12 +195,6 @@ const AddProduct = () => {
         <div className="form-section">
           <h5>Detailed Description</h5>
           <div className="form-group">
-            {/* <textarea
-              className="form-control"
-              rows={5}
-              placeholder="Describe your product (max 500 characters)"
-              id="description"
-            /> */}
             <JoditEditor
               ref={editor}
               value={content}
@@ -150,7 +209,7 @@ const AddProduct = () => {
         <div className="form-section">
           <h5>Product Specification</h5>
           {specifications.map((spec) => (
-            <div className="form-row align-items-center mb-2" key={spec.id}>
+            <div className="form-row  mb-2" key={spec.id}>
               <div className="col-md-5">
                 <input
                   type="text"
@@ -221,7 +280,18 @@ const AddProduct = () => {
           <div className="form-group">
             <label>Accepted Payment</label>
             <div className="checkbox-group">
-              {["T/T", "L/C", "PayPal"].map((option, index) => (
+              {[
+                "T/T",
+                "L/C",
+                "D/P",
+                "D/A",
+                "MoneyGram",
+                "Credit Card",
+                "PayPal",
+                "Western Union",
+                "Cash",
+                "Escrow",
+              ].map((option, index) => (
                 <div className="form-check" key={index}>
                   <input
                     type="checkbox"
@@ -236,6 +306,70 @@ const AddProduct = () => {
                   </label>
                 </div>
               ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="businessType">Business Type</label>
+            <select className="form-control" id="businessType">
+              <option value="">Select</option>
+              <option value="manufacturer">Manufacturer</option>
+              <option value="tradingCompany">Trading Company</option>
+              <option value="buyingOffice">Buying Office</option>
+              <option value="agent">Agent</option>
+              <option value="distributor">Distributor/Wholesaler</option>
+              <option value="government">
+                Government ministry/Bureau/Commission
+              </option>
+              <option value="association">Association</option>
+              <option value="businessService">
+                Business Service (Transportation, finance, travel, Ads, etc)
+              </option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+            {/* Processing time  */}
+          <div className="form-row">
+            <div className="form-group col-md-6">
+              <label htmlFor="unitType">Processing Time</label>
+              <input type="number" className="form-control" id="minQuantity" />
+            </div>
+            <div className="form-group col-md-6">
+              <label htmlFor="minQuantity">Time Unit</label>
+              <select className="form-control" id="unitType">
+                <option value="Day">Day</option>
+                <option value="Week">Week</option>
+                <option value="Month">Month</option>
+                <option value="Quarter">Quarter</option>
+                <option value="Year">Year</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Packaging Information */}
+        <div className="form-section">
+          <h5>Packaging Information</h5>
+          <div className="form-row">
+            <div className="form-group col-md-4">
+              <label htmlFor="package">Package</label>
+              <select className="form-control" id="package">
+                <option value="">Select</option>
+                <option value="package1">Package 1</option>
+                <option value="package2">Package 2</option>
+              </select>
+            </div>
+            <div className="form-group col-md-4">
+              <label htmlFor="quantity">Quantity</label>
+              <input type="number" className="form-control" id="quantity" />
+            </div>
+            <div className="form-group col-md-4">
+              <label htmlFor="package">Unit</label>
+              <select className="form-control" id="package">
+                <option value="">Select</option>
+                <option value="package1">Package 1</option>
+                <option value="package2">Package 2</option>
+              </select>
             </div>
           </div>
         </div>
