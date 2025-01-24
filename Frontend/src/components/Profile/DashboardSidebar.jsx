@@ -45,10 +45,13 @@ const DashboardSidebar = () => {
           </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
+        <Link
+            className={`nav-link ${location.pathname === "/user/profile/my-requirement" || location.pathname  === "/user/profile/my-requirement" ? "active" : ""}`}
+            to="/user/profile/my-requirement"
+          >
             <i className="fa fa-list mr-2" />
             My Requirements
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
           <a className="nav-link" href="#">

@@ -560,7 +560,6 @@
 /* Tabs */
 .tabs {
   margin-top: 20px;
-  height: 40px;
   display: flex;
   justify-content: start;
   align-items: end;
@@ -632,7 +631,7 @@
   h2 {
     text-align: start;
 
-    margin: 20px 0 0px 0;
+    margin: 50px 0 0px 0;
     color: #096fa6;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
@@ -817,7 +816,7 @@
 
 
 
-// enquiry 
+// my enquiry 
 
 // Variables
 $bg-color: #f8f8f8;
@@ -843,7 +842,7 @@ $tab-border: 2px solid $active-color;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   width: 100%;
-  height: 100%;
+  height: 650px;
   max-width: 400px;
   padding: 20px;
   margin: 20px;
@@ -919,3 +918,127 @@ $tab-border: 2px solid $active-color;
     color: $text-color;
   }
 }
+
+
+// My Requirement 
+
+.custom-chat-Req-container {
+  height: 100vh; // Full viewport height for alignment
+  background-color: #f3f3f3;
+
+  .custom-chat-Req-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #004085;
+    padding-left: 20px;
+    display: flex;
+    align-items: end;
+    gap: 10px;
+
+    .custom-chat-Req-post-link {
+      font-size: 14px;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+
+  .custom-chat-Req-card {
+    width: 96%; // Limit card width
+    height: 80%;
+    border-radius: 10px;
+    margin: 0px 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    .custom-chat-Req-content {
+      .custom-chat-Req-icon img {
+        width: 100px;
+        height: auto;
+        margin-bottom: 10px;
+      }
+
+      .custom-chat-Req-no-req-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .custom-chat-Req-description {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+      }
+
+      .custom-chat-Req-suggestion {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .custom-chat-Req-post-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #dc3545; // Bootstrap danger color
+        border: none;
+        &:hover {
+          background-color: #c82333; // Slightly darker danger color
+        }
+      }
+    }
+  }
+
+}
+
+// popup
+
+.custom-chat-Req-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1050;
+
+  .custom-chat-Req-modal-content {
+    max-width: 600px;
+    width: 90%;
+  }
+
+  .custom-chat-Req-modal-title {
+    font-size: 22px;
+    font-weight: bold;
+    border-bottom: 2px solid #ff0000;
+    display: inline-block;
+    color: #000;
+  }
+
+  label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .form-check-label {
+    font-size: 12px;
+  }
+
+  .custom-chat-Req-post-inquiry-btn {
+    background-color: #0047ab;
+    border-color: #0047ab;
+
+    &:hover {
+      background-color: #003d96;
+      border-color: #003d96;
+    }
+  }
+}
+
+
+
