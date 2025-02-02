@@ -1,3 +1,13 @@
+// round image
+.roundImage {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 0px auto;
+  display: block;
+  object-fit: cover;
+}
+
 .profile_sidebar {
   height: 100vh;
   position: sticky;
@@ -5,6 +15,7 @@
   background-color: #343a40;
   color: white;
   margin: 0;
+
   h5 {
     font-size: 1.4rem;
     font-weight: bold;
@@ -337,7 +348,7 @@
     color: #6c757d;
   }
 
-  // add product image 
+  // add product image
   .image-preview-container {
     display: flex;
     flex-wrap: wrap;
@@ -359,10 +370,25 @@
     top: 5px;
     right: 5px;
   }
+
+  .dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 0.5rem;
+    z-index: 1000;
+  }
+
+  .dropdown-item {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+  }
+
+  .dropdown-item:hover {
+    background-color: #f8f9fa;
+  }
 }
 
 //
-
 
 // Product listing
 // Product Listing Styles
@@ -414,26 +440,37 @@
 
   // Pagination Styling
   .pagination {
+    display: flex;
     justify-content: center;
-    .page-item {
-      .page-link {
-        color: #007bff;
-        border-radius: 5px;
-        transition: all 0.3s ease;
-
-        &:hover {
-          background-color: rgba(0, 123, 255, 0.1);
-          color: #0056b3;
-        }
-
-        &.active {
-          background-color: #007bff;
-          color: #ffffff;
-          border-radius: 5px;
-        }
-      }
-    }
+    list-style: none;
+    padding: 0;
+    margin: 1em 0;
   }
+  
+  .page-item {
+    margin: 0 0.25em;
+  }
+  
+  .page-link {
+    color: #007bff;
+    border-radius: 5px;
+    padding: 0.5em 0.75em;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+  }
+  
+  .page-link:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #0056b3;
+  }
+  
+  .page-item.active .page-link {
+    background-color: #007bff;
+    color: #ffffff !important;
+    border: 1px solid #007bff;
+  }
+  
 
   // Bulk Import Section
   .bulk-import {
@@ -491,7 +528,6 @@
     text-align: start;
     padding: 0%;
   }
-
 }
 
 // View Product
@@ -536,83 +572,74 @@
   }
 }
 
-
-// company profile 
+// company profile
 /* General Form Styles */
 .company-profile-form-section {
-  .Navborder{
+  .Navborder {
     // border: solid;
     height: 50px;
     background-color: #343a40;
     margin-left: -20px;
   }
 
-// start tab 
-/* Tabs container */
-.tabs-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  font-family: Arial, sans-serif;
-  margin-top: -50px;
-}
+  // start tab
+  /* Tabs container */
+  .tabs-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    margin-top: -50px;
+  }
 
-/* Tabs */
-.tabs {
-  margin-top: 20px;
-  display: flex;
-  justify-content: start;
-  align-items: end;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.tab {
-  padding: 15px 15px;
-  color: #343a40;
-  text-align: center;
-  cursor: pointer;
-  background-color: #f9f9f9;
-  border-radius: 50px;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  border: 0.1px solid #d5d3d3;
-}
-
-.tab:hover {
-  background-color: #d5d3d3;
-
-}
-
-.tab.active {
-  background-color: #007bff; /* Red active color */
-  color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
-  border: 0.1px solid #007bff;
-
-}
-
-/* Tab content */
-
-
-/* Responsive design */
-@media (max-width: 768px) {
+  /* Tabs */
   .tabs {
-    flex-direction: row;
-    flex: 1;
-
+    margin-top: 20px;
+    display: flex;
+    justify-content: start;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 20px;
   }
 
   .tab {
-    margin-bottom: 5px;
-    border-radius: 8px;
+    padding: 15px 15px;
+    color: #343a40;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 0.1px solid #d5d3d3;
   }
-}
 
+  .tab:hover {
+    background-color: #d5d3d3;
+  }
 
+  .tab.active {
+    background-color: #007bff; /* Red active color */
+    color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    border: 0.1px solid #007bff;
+  }
 
+  /* Tab content */
 
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .tabs {
+      flex-direction: row;
+      flex: 1;
+    }
+
+    .tab {
+      margin-bottom: 5px;
+      border-radius: 8px;
+    }
+  }
 
   // end tab
 
@@ -627,27 +654,27 @@
     font-family: "Arial", sans-serif;
     margin: 10px;
   }
-  
+
   h2 {
     text-align: start;
 
     margin: 50px 0 0px 0;
     color: #096fa6;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   }
-  
+
   .form-section {
     margin-bottom: 30px;
     width: 100%;
     border: none;
   }
-  
+
   h3 {
     font-size: 1.5rem;
     margin-bottom: 15px;
     color: #007bff;
   }
-  
+
   .form-group {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -655,20 +682,22 @@
     margin-bottom: 15px;
     align-items: center;
   }
-  
+
   label {
     font-weight: bold;
     color: #333333cc;
   }
-  
-  input, textarea, select {
+
+  input,
+  textarea,
+  select {
     width: 500px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
   }
-  .logo-banner-button{
+  .logo-banner-button {
     width: 245px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -677,52 +706,50 @@
     background-color: transparent;
     height: 100px;
 
-    input{
+    input {
       width: 100%;
       border: none;
     }
   }
-  
+
   textarea {
     height: 80px;
     resize: vertical;
   }
-  
+
   .upload-buttons {
     display: flex;
     gap: 10px;
   }
-  .form-actions{
+  .form-actions {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
-    
-    .save-button{
+
+    .save-button {
       width: 10%;
     }
-    .cancel-button{
+    .cancel-button {
       width: 10%;
       border-radius: 5px;
       color: white;
       background-color: #7e7e7e;
       border: 0.1px solid rgb(197, 197, 197);
-
     }
-    .cancel-button:hover{
+    .cancel-button:hover {
       width: 10%;
       border-radius: 5px;
       color: #343a40;
       background-color: #cecdcd;
       border: 0.1px solid rgb(197, 197, 197);
-
     }
   }
 
   button {
     cursor: pointer;
   }
-  
+
   .save-button {
     background-color: #007bff;
     color: white;
@@ -731,79 +758,75 @@
     padding: 10px 20px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-
   }
-  
+
   button.save-button:hover {
     background-color: #0056b3;
   }
-  
+
   /* Responsive Styles */
   @media (max-width: 768px) {
     .form-group {
       grid-template-columns: 1fr;
     }
-  
+
     label {
       text-align: left;
     }
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       width: 96%;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
       font-size: 1rem;
     }
-    .logo-banner-button{
+    .logo-banner-button {
       width: 46%;
-
     }
-    
   }
   // general details end
 
-  // company info start 
+  // company info start
 
   .chat-custom-grid {
     display: grid;
     grid-template-columns: 1fr 2fr; /* Label: 1fr, Input: 2fr */
     gap: 1rem;
   }
-  
+
   .chat-custom-grid-row {
     display: contents; /* Ensures label and input are in the defined grid layout */
   }
-  
+
   .chat-custom-form-section {
     margin-bottom: 2rem;
   }
-  .form-control{
+  .form-control {
     height: fit-content;
     padding: 5px;
   }
 
-
   // company info end
 
-  // certificate css start 
-  .certificate-upload-buton1{
+  // certificate css start
+  .certificate-upload-buton1 {
     width: 40%;
     color: #333;
 
-
-    .certificate-upload-input{
+    .certificate-upload-input {
       width: 100%;
       height: 50px;
       color: #333;
       border: none;
     }
   }
-  .certificate-upload-buton{
+  .certificate-upload-buton {
     width: 40%;
     color: #333;
 
-
-    .certificate-upload-input{
+    .certificate-upload-input {
       width: 100%;
       height: 50px;
       color: #333;
@@ -811,53 +834,45 @@
     }
   }
   // certificate css end
-  
 }
 
-
-
-// my enquiry 
-.profile_Equiry{
-  
+// my enquiry
+.profile_Equiry {
   .table img {
     width: 50px;
     height: auto;
   }
-  
+
   .btn {
     display: flex;
     align-items: center;
     gap: 5px;
   }
-  
+
   .pagination .page-item.active .page-link {
     background-color: #007bff;
     border-color: #007bff;
     color: #fff;
   }
-  
+
   .badge-success {
     background-color: #28a745;
   }
-  
+
   .badge-danger {
     background-color: #dc3545;
   }
 
-  .btn_wrapper button{
+  .btn_wrapper button {
     width: 70px;
   }
-  .btn_wrapper{
+  .btn_wrapper {
     margin-left: 10px;
     border: 0;
   }
-  
 }
 
-
-
-
-// My Requirement 
+// My Requirement
 
 .custom-chat-Req-container {
   height: 100vh; // Full viewport height for alignment
@@ -880,7 +895,6 @@
     }
   }
 
-
   .custom-chat-Req-card {
     width: 96%; // Limit card width
     height: 80%;
@@ -890,7 +904,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 
     .custom-chat-Req-content {
       .custom-chat-Req-icon img {
@@ -929,7 +942,6 @@
       }
     }
   }
-
 }
 
 // popup
@@ -976,6 +988,3 @@
     }
   }
 }
-
-
-

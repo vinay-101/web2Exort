@@ -1,169 +1,176 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import userService from "../../Services/userServices";
+import handleApiResponse from "../../helpers/responseHandler";
+import InquiryForm from "../RequirementForm";
+import moment from "moment";
 
 const MyRequirements = () => {
-
+  const [enquiries, setEnquiries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const itemsPerPage = 8; // Number of items per page
 
-  // Sample data
-  const enquiries = [
-    {
-      id: 1,
-      image: "Product",
-      name: "Product_Name",
-      category: "Electronics",
-      price: "$500",
-      stock: "In Stock",
-    },
-    {
-      id: 2,
-      image: "Product",
-      name: "Item 2",
-      category: "Clothing",
-      price: "$100",
-      stock: "Out of Stock",
-    },
-    {
-      id: 3,
-      image: "Product",
-      name: "Item 3",
-      category: "Books",
-      price: "$20",
-      stock: "In Stock",
-    },
-    {
-      id: 4,
-      image: "Product",
-      name: "Item 4",
-      category: "Toys",
-      price: "$50",
-      stock: "In Stock",
-    },
-    {
-      id: 5,
-      image: "Product",
-      name: "Item 5",
-      category: "Furniture",
-      price: "$800",
-      stock: "Out of Stock",
-    },
-    {
-      id: 6,
-      image: "Product",
-      name: "Item 6",
-      category: "Electronics",
-      price: "$400",
-      stock: "In Stock",
-    },
-    {
-      id: 7,
-      image: "Product",
-      name: "Item 7",
-      category: "Kitchenware",
-      price: "$30",
-      stock: "Out of Stock",
-    },
-    {
-      id: 8,
-      image: "Product",
-      name: "Item 8",
-      category: "Beauty",
-      price: "$70",
-      stock: "In Stock",
-    },
-  ];
+  useEffect(() => {
+    const fetchEnquiries = async () => {
+      try {
+        const res = await userService.allEnquiry(currentPage, itemsPerPage);
+        setEnquiries(res.data.data.enquiry);
+        setTotalPages(res.data.data.totalPages);
+        setTotalRecords(res.data.data.totalRecords);
+      } catch (error) {
+        handleApiResponse(error);
+      }
+    };
+    fetchEnquiries();
+  }, [currentPage]);
 
-  // Pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = enquiries.slice(indexOfFirstItem, indexOfLastItem);
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Generate pagination buttons
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => handlePageChange(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    }
+
+    return (
+      <nav>
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              «
+            </button>
+          </li>
+          {pages}
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
+          >
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              »
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  };
 
   return (
     <div className="container col-md-10 my-4 profile_Equiry">
-    <h2 className="mb-4">My Requirements</h2>
-    <div className="card shadow-sm mr-2">
-      <div className="card-body">
-        <table className="table table-bordered table-hover">
-          <thead className="thead-light">
-            <tr>
-              <th>#</th>
-              <th>Image</th>
-              <th>Product Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((item, index) => (
-              <tr key={item.id}>
-                <td>{indexOfFirstItem + index + 1}</td>
-                <td>
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Product"
-                    className="img-thumbnail"
-                  />
-                </td>
-                <td>{item.name}</td>
-                <td>{item.category}</td>
-                <td>{item.price}</td>
-                <td>
-                  <span
-                    className={`badge ${
-                      item.stock === "In Stock"
-                        ? "badge-success"
-                        : "badge-danger"
-                    }`}
-                  >
-                    {item.stock}
-                  </span>
-                </td>
-                <td className="row btn_wrapper">
-                  <button className="btn btn-sm btn-primary me-2">
-                    <i className="fa fa-edit" /> Edit
-                  </button>
-                  <button className="btn btn-sm btn-danger">
-                    <i className="fa fa-trash" /> Delete
-                  </button>
-                </td>
+      <h2 className="mb-4">My Requirements</h2>
+      <div className="card shadow-sm mr-2">
+        <div className="card-body">
+          <button
+            className="btn btn-success mb-2"
+            data-toggle="modal"
+            data-target="#enquiryModal"
+          >
+            <i className="fa fa-plus-circle mr-2" />
+            Post Requirement
+          </button>
+          <table className="table table-bordered table-hover">
+            <thead className="thead-light">
+              <tr>
+                <th>Requirement</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Company Name</th>
+                <th>Type</th>
+                <th>Created At</th>
+                {/* <th>Actions</th> */}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {enquiries.length > 0 ? enquiries.map((item, index) => (
+                <tr key={item.id}>
+                  <td style={{maxWidth:"150px"}}>{item.requirement}</td>
+                  <td>{item.fullname}</td>
+                  <td>{item.email}</td>
+                  <td>{item.phoneNumber}</td>
+                  <td>{item.companyName}</td>
+                  <td>{item.userType}</td>
+                  <td>{moment(item.createdAt).format("DD-MM-YYYY")}</td>
 
-        {/* Pagination */}
-        <nav>
-            <ul className="pagination justify-content-center">
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  «
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  1
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  2
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  »
-                </a>
-              </li>
-            </ul>
-          </nav>
+                  {/* <td className="row btn_wrapper">
+                    <button className="btn btn-sm btn-primary me-2">
+                      <i className="fa fa-edit" /> Edit
+                    </button>
+                    <button className="btn btn-sm btn-danger">
+                      <i className="fa fa-trash" /> Delete
+                    </button>
+                  </td> */}
+                </tr>
+              )): (<h6 style={{padding: "5px"}}>No Data found.</h6>)}
+        
+            </tbody>
+          </table>
+
+          {/* Pagination */}
+          {renderPagination()}
+        </div>
+      </div>
+
+      {/* Modal */}
+      <div
+        className="modal"
+        id="enquiryModal"
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="enquiryModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-sm" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title" id="enquiryModalLabel">
+                Post Requirement
+              </h4>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div
+              className="modal-body"
+              style={{
+                padding: "0",
+                margin: "0",
+                border: "none",
+                boxShadow: "none",
+                borderRadius: "0",
+              }}
+            >
+              <InquiryForm enquiryHeading={""} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 

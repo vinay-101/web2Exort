@@ -129,6 +129,10 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      brochure: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       isFeatured: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

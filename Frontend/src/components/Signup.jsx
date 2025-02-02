@@ -1,6 +1,6 @@
 import React from "react";
-import "../assets/signup.css";
-import { useNavigate } from "react-router-dom";
+import "../assets/signup.scss";
+import { Link, useNavigate } from "react-router-dom";
 import handleApiResponse from "../helpers/responseHandler";
 import userService from "../Services/userServices";
 
@@ -36,7 +36,7 @@ const Signup = () => {
   );
   return (
     <>
-      <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="signup_container container d-flex justify-content-center align-items-center vh-100">
         <div className="card p-4 shadow-lg rounded" style={{ maxWidth: '600px', width: '100%' }}>
           <div className="text-center mb-4">
             <img src="logo.png" alt="Web2Export" className="mb-3" style={{ width: '80px' }} />
@@ -192,9 +192,9 @@ const Signup = () => {
           </form>
           <p className="text-center mt-4">
             Already have an account?
-            <a href="#" className="text-decoration-none text-primary ml-1">
+            <Link to="/login" className="text-decoration-none text-primary ml-1">
               Login
-            </a>
+            </Link>
           </p>
         </div>
       </div>

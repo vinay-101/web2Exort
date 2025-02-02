@@ -35,7 +35,7 @@ const DashboardSidebar = () => {
             Products
           </Link>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
         <Link
             className={`nav-link ${location.pathname === "/user/profile/enquiry" || location.pathname  === "/user/profile/enquiry" ? "active" : ""}`}
             to="/user/profile/enquiry"
@@ -43,7 +43,7 @@ const DashboardSidebar = () => {
             <i className="fa fa-envelope mr-2" />
             My Enquiries
           </Link>
-        </li>
+        </li> */}
         <li className="nav-item">
         <Link
             className={`nav-link ${location.pathname === "/user/profile/my-requirement" || location.pathname  === "/user/profile/my-requirement" ? "active" : ""}`}

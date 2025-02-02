@@ -1,40 +1,48 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import "../../assets/profile/profile.scss";
 import handleApiResponse from "../../helpers/responseHandler";
+import productService from "../../Services/productService";
+import debounce from "lodash.debounce";
 
 const AddProduct = () => {
   // Jodit Editor
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
+  const [dropdownData, setDropdownData] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const formRef = useRef(null);
 
-  const config = {
-    toolbarButtonSize: "middle",
+  const config = useMemo(() => ({
+    toolbarButtonSize: 'middle',
     buttons: [
-      "bold",
-      "italic",
-      "underline",
-      "strikethrough",
-      "eraser",
-      "ul",
-      "ol",
-      "outdent",
-      "indent",
-      "font",
-      "fontsize",
-      "brush",
-      "paragraph",
-      "align",
-      "undo",
-      "redo",
-      "hr",
-      "table",
-      "link",
-      "source",
+      'bold',
+      'italic',
+      'underline',
+      'strikethrough',
+      'eraser',
+      'ul',
+      'ol',
+      'outdent',
+      'indent',
+      'font',
+      'fontsize',
+      'brush',
+      'paragraph',
+      'align',
+      'undo',
+      'redo',
+      'hr',
+      'table',
+      'link',
+      'source',
     ],
-    removeButtons: ["image", "file"],
-  };
+    removeButtons: ['image', 'file'],
+  }), []);
+
 
   // Product Specifications
   const [specifications, setSpecifications] = useState([
@@ -60,64 +68,164 @@ const AddProduct = () => {
     );
   };
 
-
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageURLs = files.map((file) => URL.createObjectURL(file));
-    setSelectedImages((prev) => [...prev, ...imageURLs].slice(0, 20)); // Limit to 20 images
+    const newImages = files.map((file) => ({
+      file, // Store file object
+      url: URL.createObjectURL(file), // Create URL for preview
+    }));
+
+    // Update selectedImages with the new files
+    setSelectedImages((prev) => [...prev, ...newImages].slice(0, 20)); // Limit to 20
   };
 
   const removeImage = (index) => {
-    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    setSelectedImages((prev) => {
+      // Revoke the URL before removing the image
+      URL.revokeObjectURL(prev[index].url); // Revoke the object URL to free up memory
+      const updatedImages = prev.filter((_, i) => i !== index); // Remove image by index
+
+      // Only return the updated list, which no longer includes the removed image
+      return updatedImages;
+    });
   };
 
+  // Product Dropdown
+  // Function to fetch dropdown data
+  const fetchDropdownData = async (scope = "") => {
+    try {
+      const response = await productService.allCategory(scope);
+      setDropdownData(response.data.data); // Assuming response.data contains the array of dropdown items
+    } catch (error) {
+      console.error("Error fetching dropdown data:", error);
+    }
+  };
+
+  // Debounced function for fetching based on user input
+  const handleProductDropdown = debounce((value) => {
+    fetchDropdownData(value);
+  }, 300);
+
+  // Effect to trigger API call on inputValue change
+  useEffect(() => {
+    if (inputValue) {
+      handleProductDropdown(inputValue);
+    }
+  }, [inputValue]);
+
+  // Handle input focus to fetch all categories initially
+  const handleInputFocus = () => {
+    setShowDropdown(true);
+    if (!inputValue) {
+      fetchDropdownData(); // Fetch all categories if no scope is provided
+    }
+  };
+
+  // Handle input change
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    setSelectedCategoryId(null);
+  };
+
+  // Handle dropdown item selection
+  const handleItemClick = (item) => {
+    setInputValue(item.name);
+    setSelectedCategoryId(item.id); // Store the selected item's ID
+    setShowDropdown(false);
+  };
 
   const handleSubmit = handleApiResponse(
     async (e) => {
       e.preventDefault();
-      // const formData = new FormData();
-      // formData.append("categoryId", e.target.categoryId.value);
-      // formData.append("subCategoryId", e.target.subCategoryId.value);
-      // formData.append("subCategoryId", e.target.subCategoryId.value);
-      // formData.append("subCategoryId", e.target.subCategoryId.value);
+      const formData = new FormData(formRef.current);
+
+      // // Add images
+      selectedImages.forEach((image, index) => {
+        formData.append('images', image.file); 
+      });
+
+
+      // Add category ID
+      console.log("selectedCategoryId", selectedCategoryId);
+      formData.append("categoryId", selectedCategoryId);
+
+      // Add specifications
+      const specs = specifications.map((spec) => ({
+        key: spec.attribute,
+        value: spec.value,
+      }));
+      formData.append("specifications", JSON.stringify(specs));
+
+      return await productService.createProduct(formData);
     },
-    (data) => {}
+    (data) => {
+      // Optionally handle success response
+      console.log("Product created successfully:", data);
+    }
   );
 
   return (
     <div className="col-xl-10 col-lg-10 profile_add_product">
-      <form onSubmit={handleSubmit}>
+      <form ref={formRef} onSubmit={handleSubmit}>
         {/* Basic Information */}
         <div className="form-section">
           <h5>Basic Information</h5>
           <div className="form-row">
-            <div className="form-group col-md-6">
-              <label htmlFor="productName">Product Name</label>
+            <div className="form-group col-md-6 position-relative">
+              <label htmlFor="productName">Product Category</label>
               <input
                 type="text"
                 className="form-control"
                 id="productName"
+                // name="categoryId"
                 placeholder="Enter product name"
+                value={inputValue}
+                onChange={handleChange}
+                onFocus={handleInputFocus}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 200)} // Close dropdown on blur
+              />
+              {showDropdown && dropdownData.length > 0 && (
+                <ul className="dropdown-menu show w-100 position-absolute mt-1 shadow">
+                  {dropdownData.map((item, index) => (
+                    <li
+                      key={item.id}
+                      className="dropdown-item"
+                      onClick={() => handleItemClick(item)}
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="form-group col-md-6">
+              <label htmlFor="modelNumber">Name</label>
+              <input
+                type="text"
+                className="form-control"
+                id="modelNumber"
+                name="title"
+                placeholder="Enter Product Name"
               />
             </div>
-            {/* Product Images */}
 
-               {/* start  */}
-               <div className="form-group col-md-12">
+            {/* Product Image  */}
+            <div className="form-group col-md-12">
               <label htmlFor="productImages">Product Images</label>
               <input
                 type="file"
                 id="productImages"
                 className="form-control-file"
+                // name="images"
                 multiple
                 accept="image/*"
                 onChange={handleImageChange}
               />
               <div className="image-preview-container mt-3 d-flex flex-wrap">
-                {selectedImages.map((src, index) => (
+                {selectedImages.map((image, index) => (
                   <div key={index} className="image-preview mr-2 mb-2">
                     <img
-                      src={src}
+                      src={image.url}
                       alt={`Preview ${index}`}
                       className="preview-img"
                       width={60}
@@ -127,23 +235,23 @@ const AddProduct = () => {
                       type="button"
                       className="bi bi-x-circle-fill mt-1"
                       onClick={() => removeImage(index)}
-                    >
-                    </i>
+                    ></i>
                   </div>
                 ))}
               </div>
             </div>
-            
+
             <div className="form-group col-md-6">
               <label htmlFor="modelNumber">Model Number</label>
               <input
                 type="text"
                 className="form-control"
                 id="modelNumber"
+                name="model"
                 placeholder="Enter model number"
               />
             </div>
-            <div className="form-group col-md-6">
+            {/* <div className="form-group col-md-6">
               <label htmlFor="productKeyword">Product Keyword</label>
               <input
                 type="text"
@@ -151,12 +259,13 @@ const AddProduct = () => {
                 id="productKeyword"
                 placeholder="Enter keywords"
               />
-            </div>
+            </div> */}
             <div className="form-group col-md-6">
               <label htmlFor="productPrice">Price (INR)</label>
               <input
                 type="number"
                 className="form-control"
+                name="price"
                 id="productPrice"
                 placeholder="Enter price"
               />
@@ -168,6 +277,8 @@ const AddProduct = () => {
               <input
                 type="file"
                 className="form-control-file"
+                name="brochure"
+                accept="application/pdf"
                 id="productBrochure"
               />
             </div>
@@ -177,16 +288,27 @@ const AddProduct = () => {
                 type="text"
                 className="form-control"
                 id="productMaterial"
+                name="material"
                 placeholder="Enter product material"
               />
             </div>
             <div className="form-group col-md-6">
               <label htmlFor="placeOfOrigin">Place of Origin</label>
-              <select className="form-control" id="placeOfOrigin">
+              <select className="form-control" id="placeOfOrigin" name="coi">
                 <option value="">Select</option>
-                <option value="country1">Country 1</option>
-                <option value="country2">Country 2</option>
+                <option value="1">Country 1</option>
+                <option value="2">Country 2</option>
               </select>
+            </div>
+            <div className="form-group col-md-6">
+              <label htmlFor="placeOfOrigin">Brand</label>
+              <input
+                type="text"
+                className="form-control"
+                name="brand"
+                id="brand"
+                placeholder="Enter Brand"
+              />
             </div>
           </div>
         </div>
@@ -197,10 +319,10 @@ const AddProduct = () => {
           <div className="form-group">
             <JoditEditor
               ref={editor}
-              value={content}
               config={config}
+              value={content}
+              name="description"
               tabIndex={1} // tabIndex of textarea
-              onChange={(newContent) => setContent(newContent)}
             />
           </div>
         </div>
@@ -262,40 +384,48 @@ const AddProduct = () => {
           <div className="form-row">
             <div className="form-group col-md-6">
               <label htmlFor="unitType">Unit Type</label>
-              <select className="form-control" id="unitType">
+              <select className="form-control" id="unitType" name="unitType">
                 <option value="">Select</option>
-                <option value="kg">Kilogram</option>
-                <option value="pcs">Pieces</option>
+                <option value="Bags">Bags</option>
+                <option value="Carton">Carton</option>
+                <option value="Dozen">Dozen</option>
+                <option value="Feet">Feet</option>
+                <option value="Kilogram">Kilogram</option>
+                <option value="Meter">Meter</option>
+                <option value="Metric Ton">Metric Ton</option>
+                <option value="Pieces">Pieces</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <div className="form-group col-md-3">
               <label htmlFor="minQuantity">Min Quantity</label>
-              <input type="number" className="form-control" id="minQuantity" />
+              <input
+                type="number"
+                className="form-control"
+                id="minQuantity"
+                name="minQuantity"
+              />
             </div>
             <div className="form-group col-md-3">
               <label htmlFor="maxQuantity">Max Quantity</label>
-              <input type="number" className="form-control" id="maxQuantity" />
+              <input
+                type="number"
+                className="form-control"
+                id="maxQuantity"
+                name="maxQuantity"
+              />
             </div>
           </div>
           <div className="form-group">
             <label>Accepted Payment</label>
             <div className="checkbox-group">
-              {[
-                "T/T",
-                "L/C",
-                "D/P",
-                "D/A",
-                "MoneyGram",
-                "Credit Card",
-                "PayPal",
-                "Western Union",
-                "Cash",
-                "Escrow",
-              ].map((option, index) => (
+              {["Razorpay", "CcAvenue", "PayPal"].map((option, index) => (
                 <div className="form-check" key={index}>
                   <input
-                    type="checkbox"
+                    type="radio"
                     className="form-check-input"
+                    value={option}
+                    name="acceptedPayment"
                     id={`paymentOption${index}`}
                   />
                   <label
@@ -310,33 +440,40 @@ const AddProduct = () => {
           </div>
           <div className="form-group">
             <label htmlFor="businessType">Business Type</label>
-            <select className="form-control" id="businessType">
+            <select
+              className="form-control"
+              id="businessType"
+              name="businessType"
+            >
               <option value="">Select</option>
-              <option value="manufacturer">Manufacturer</option>
-              <option value="tradingCompany">Trading Company</option>
-              <option value="buyingOffice">Buying Office</option>
-              <option value="agent">Agent</option>
-              <option value="distributor">Distributor/Wholesaler</option>
-              <option value="government">
-                Government ministry/Bureau/Commission
-              </option>
-              <option value="association">Association</option>
-              <option value="businessService">
-                Business Service (Transportation, finance, travel, Ads, etc)
-              </option>
-              <option value="other">Other</option>
+              <option value="Manufacturer">Manufacturer</option>
+              <option value="Companies">Companies</option>
+              <option value="Trader">Trader</option>
+              <option value="Distributor">Distributor</option>
+              <option value="Reseller">Reseller</option>
+              <option value="Wholesaler">Wholesaler</option>
+              <option value="Service Provider">Service Provider</option>
             </select>
           </div>
 
-            {/* Processing time  */}
+          {/* Processing time  */}
           <div className="form-row">
             <div className="form-group col-md-6">
               <label htmlFor="unitType">Processing Time</label>
-              <input type="number" className="form-control" id="minQuantity" />
+              <input
+                type="number"
+                className="form-control"
+                id="minQuantity"
+                name="processLeadTime"
+              />
             </div>
             <div className="form-group col-md-6">
               <label htmlFor="minQuantity">Time Unit</label>
-              <select className="form-control" id="unitType">
+              <select
+                className="form-control"
+                id="unitType"
+                name="processLeadTimeUnit"
+              >
                 <option value="Day">Day</option>
                 <option value="Week">Week</option>
                 <option value="Month">Month</option>
@@ -353,22 +490,30 @@ const AddProduct = () => {
           <div className="form-row">
             <div className="form-group col-md-4">
               <label htmlFor="package">Package</label>
-              <select className="form-control" id="package">
+              <select className="form-control" id="package" name="packageType">
                 <option value="">Select</option>
-                <option value="package1">Package 1</option>
-                <option value="package2">Package 2</option>
+                <option value="Bag">Bag</option>
+                <option value="Carton box">Carton box</option>
+                <option value="bottle">bottle</option>
+                <option value="Customised">Customised</option>
               </select>
             </div>
             <div className="form-group col-md-4">
               <label htmlFor="quantity">Quantity</label>
-              <input type="number" className="form-control" id="quantity" />
+              <input
+                type="number"
+                className="form-control"
+                id="quantity"
+                name="packageQuantity"
+              />
             </div>
             <div className="form-group col-md-4">
               <label htmlFor="package">Unit</label>
-              <select className="form-control" id="package">
+              <select className="form-control" id="package" name="packageUnit">
                 <option value="">Select</option>
-                <option value="package1">Package 1</option>
-                <option value="package2">Package 2</option>
+                <option value="Pieces">Pieces</option>
+                <option value="Kgs">Kgs</option>
+                <option value="Litters">Litters</option>
               </select>
             </div>
           </div>
@@ -385,14 +530,19 @@ const AddProduct = () => {
                 className="form-control"
                 id="deliveryTime"
                 placeholder="Enter delivery time"
+                name="deliveryTime"
               />
             </div>
             <div className="form-group col-md-6">
               <label htmlFor="releasePorts">Release Ports</label>
-              <select className="form-control" id="releasePorts">
+              <select
+                className="form-control"
+                id="releasePorts"
+                name="nearestPort"
+              >
                 <option value="">Select</option>
-                <option value="port1">Port 1</option>
-                <option value="port2">Port 2</option>
+                <option value="1">Port 1</option>
+                <option value="2">Port 2</option>
               </select>
             </div>
           </div>

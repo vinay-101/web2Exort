@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../assets/resetPassword.css";
+import "../assets/resetPassword.scss";
 import handleApiResponse from "../helpers/responseHandler";
 import userService from "../Services/userServices";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ const ResetPassword = ({ token }) => {
   );
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="reset_password_container container d-flex justify-content-center align-items-center vh-100">
       <div
         className="shadow-lg p-4"
         style={{

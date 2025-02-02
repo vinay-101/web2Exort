@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import "../assets/login.css";
+import "../assets/login.scss";
 import handleApiResponse from "../helpers/responseHandler";
 import userService from "../Services/userServices";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ const Login = () => {
   const [showModalState, setShowModalState] = useState(false);
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [activeTab, setActiveTab] = useState("email-login"); // State to manage active tab
   const navigate = useNavigate();
 
   // Create a ref for the OTP input fields
@@ -143,7 +144,7 @@ const Login = () => {
   });
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="Login_container container d-flex justify-content-center align-items-center vh-100">
       {!showModalState ? (
         <div
           className="card shadow-lg p-4 w-100 rounded-lg"
@@ -161,22 +162,24 @@ const Login = () => {
           </div>
           <ul className="nav nav-pills nav-justified mb-4">
             <li className="nav-item">
-              <a
-                className="nav-link active"
-                data-toggle="tab"
-                href="#email-login"
+              <button
+                className={`nav-link ${activeTab === "email-login" ? "active" : ""}`}
+                onClick={() => setActiveTab("email-login")}
               >
                 <i className="bi bi-envelope"></i> Email
-              </a>
+              </button>
             </li>
             <li className="nav-item">
-              <a className="nav-link" data-toggle="tab" href="#phone-login">
+              <button
+                className={`nav-link ${activeTab === "phone-login" ? "active" : ""}`}
+                onClick={() => setActiveTab("phone-login")}
+              >
                 <i className="bi bi-phone"></i> Phone
-              </a>
+              </button>
             </li>
           </ul>
           <div className="tab-content">
-            <div id="email-login" className="tab-pane fade show active">
+            <div id="email-login" className={`tab-pane fade ${activeTab === "email-login" ? "show active" : ""}`}>
               <form onSubmit={handleEmailLogin}>
                 <div className="form-group">
                   <label className="font-weight-bold">Email</label>
@@ -206,7 +209,7 @@ const Login = () => {
                 </button>
               </form>
             </div>
-            <div id="phone-login" className="tab-pane fade">
+            <div id="phone-login" className={`tab-pane fade ${activeTab === "phone-login" ? "show active" : ""}`}>
               <form onSubmit={handlePhoneLogin}>
                 <div className="form-group">
                   <label className="font-weight-bold">Phone Number</label>
@@ -244,7 +247,7 @@ const Login = () => {
           </div>
           <p className="text-center mt-4">
             Don't have an account?{" "}
-            <Link to="/register" className="text-primary">
+            <Link to="/signup" className="text-primary">
               Sign Up
             </Link>
           </p>

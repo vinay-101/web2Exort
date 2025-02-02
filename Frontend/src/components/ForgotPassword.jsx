@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import "../assets/forgotPassword.css";
-import "../assets/verifyOTP.css";
+import "../assets/forgotPassword.scss";
+import "../assets/verifyOTP.scss";
 import { Link, useNavigate } from "react-router-dom";
 import handleApiResponse from "../helpers/responseHandler";
 import userService from "../Services/userServices";
@@ -165,7 +165,7 @@ const ForgotPassword = () => {
   // console.log("142", verificationModalOpen);
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="forget_password_container container d-flex justify-content-center align-items-center vh-100">
       {resetPasswordScreen ? (
         <ResetPassword token={forgetPasswordToken} />
       ) : verificationModalOpen ? (
@@ -261,7 +261,7 @@ const ForgotPassword = () => {
 
       ) : (
         <div
-          className="form-card p-4 shadow rounded-lg"
+          className="verify_otp_container form-card p-4 shadow rounded-lg"
           style={{ maxWidth: "400px", width: "100%" }}
         >
           <div className="text-center mb-4">

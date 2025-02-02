@@ -8,7 +8,8 @@ const User = require("../models/user/User");
 const requireAuth = (req, res, next) => {
     const authHeader = req.headers['authorization']
    
-    const token = authHeader && authHeader.split(' ')[1]
+    const token = authHeader && authHeader.split(' ')[1];
+    // console.log("Incoming token", token);
     if (token) {
         jwt.verify(token, process.env.SECRETKEY, async (err, user) => {
             if (err) {
@@ -18,12 +19,16 @@ const requireAuth = (req, res, next) => {
 
             } else {
                 req.user = user
-                // console.log("user",user);
+                console.log("user",user);
                 if (req.user) {
                    let reqProfile = await User.findOne(
                         {
                             where: { id: user.id }
                         });
+                    if(!reqProfile){
+                        res.status(HttpStatus.UNAUTHORIZED.code).send(
+                            new Response(false, `User not exist.`));
+                    }
                     req.userId = parseInt(reqProfile.id);
                     next();
                 } 

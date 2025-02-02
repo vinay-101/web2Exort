@@ -1,6 +1,7 @@
 const { DataTypes, Sequelize, literal } = require("sequelize");
 const sequelize = require("../../helper/db.config");
 
+// Post Requirement table
 const Enquiry = sequelize.define(
   "enquires",
   {
@@ -9,6 +10,10 @@ const Enquiry = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     requirement: {
       // Resons for enquiry

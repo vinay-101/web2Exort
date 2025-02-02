@@ -1,5 +1,7 @@
 const { DataTypes, Sequelize, literal } = require("sequelize");
 const sequelize = require("../../helper/db.config");
+const Category = require("./Category");
+const ProductImage = require("./ProductImage");
 
 const Product = sequelize.define(
   "products",
@@ -129,6 +131,10 @@ const Product = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    brochure:{
+      type:DataTypes.STRING,
+      allowNull:true
+    },
     isFeatured: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -142,5 +148,8 @@ const Product = sequelize.define(
     timestamps: true,
   }
 );
+
+Product.belongsTo(Category, { foreignKey: "categoryId" });
+Product.hasMany(ProductImage, { foreignKey: "productId" });
 
 module.exports = Product;

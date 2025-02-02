@@ -446,7 +446,7 @@ const getProfile = async (req, res) => {
   try {
     const user = await User.findOne({
       where: {
-        id: req.profileActive,
+        id: req.userId,
       },
       attributes: [
         "id",
@@ -480,7 +480,7 @@ const updateProfile = async (req, res) => {
 
     let user = await User.findOne({
       where: {
-        id: req.profileActive,
+        id: req.userId,
       },
     });
 
@@ -514,17 +514,62 @@ const updateProfile = async (req, res) => {
 const createEnquiry = async(req,res)=>{
   try{
     const validationResult = await enquirySchema.validateAsync(req.body);
-    const { requirement, fullname, email, phoneNumber, companyName, userType } = validationResult;
+    const {userId, requirement, fullname, email, phoneNumber, companyName, userType } = validationResult;
 
-    let enquiry = await Enquiry.create({requirement, fullname, email, phoneNumber, companyName, userType});
+    let enquiry = await Enquiry.create({userId: userId || null, requirement, fullname, email, phoneNumber, companyName, userType});
 
     enquiry
     ? res
-      .status(HttpStatus.UPDATED.code)
+      .status(HttpStatus.CREATED.code)
       .send(new Response(true, `Enquiry ${HttpStatus.CREATED.message}`, enquiry))
     : res
-      .status(HttpStatus.OK.code)
+      .status(HttpStatus.FORBIDDEN.code)
       .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const allEnquiry = async(req,res)=>{
+  try{
+    let { page, size} = req.query;
+
+    if (!size) size = 5;
+    else size = parseInt(size);
+    if (!page) page = 1;
+    else page = parseInt(page);
+    let skip = size * (parseInt(page) - 1);
+
+    console.log("userId---->>>>>>",req.userId);
+
+    let enquiry = await Enquiry.findAll({
+      where:{
+        userId: req.userId
+      },
+      limit: size,
+      offset: skip,
+    });
+
+    let totalEnquiry = await Enquiry.count({
+      where:{
+        userId: req.userId
+      }
+    });
+
+    const data = {
+      totalPages: Math.ceil(totalEnquiry / size),
+      totalRecords: totalEnquiry,
+      enquiry,
+    }
+
+    enquiry
+    ? res
+      .status(HttpStatus.OK.code)
+      .send(new Response(true, `Enquiry ${HttpStatus.OK.message}`, data))
+    : res
+      .status(HttpStatus.FORBIDDEN.code)
+      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+
   }catch(error){
     return helpers.validationHandler(res, error);
   }
@@ -541,4 +586,5 @@ module.exports = {
   getProfile,
   updateProfile,
   createEnquiry,
+  allEnquiry
 };

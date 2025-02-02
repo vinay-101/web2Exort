@@ -1,4 +1,5 @@
 import axiosClient from '../api/axiosClient';
+import AuthService from './authService';
 
 // Define API functions
 const userService = {
@@ -37,6 +38,13 @@ const userService = {
 
     // Create Enquiry
     createEnquiry: (data) => axiosClient.post('/users/create/enquiry', data),
+
+    // Get all Enquiry
+    allEnquiry: (currentPage, size) => axiosClient.get(`/users/all/enquiry?page=${currentPage}&size=${size}`, {
+        headers: {
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
 };
 
 export default userService;
