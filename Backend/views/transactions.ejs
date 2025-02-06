@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Transactions' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <h1>Transactions</h1>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">Transactions</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Main content -->
+                        <section class="content">
+
+                            <!-- Default box -->
+                            <div class="card">
+                                <div class="card-header">
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                            title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove"
+                                            title="Remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    <table class="table table-striped projects" id="addPagination">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10%">
+                                                    User
+                                                </th>
+                                                <th style="width: 10%">
+                                                    OrderId
+                                                </th>
+                                                <th style="width: 8%">
+                                                    Payment Status
+                                                </th>
+                                                <th style="width: 8%">
+                                                    Paid Amt
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Txn Id
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Type
+                                                </th>
+                                                <th style="width: 8%">
+                                                    Paid At
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% orders.forEach((value)=>{ %>
+                                                <tr>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/user/<%=value?.userId %>">
+                                                            <span>
+                                                                <%= value?.user?.fullName %>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <% if(!value?.type){ %>
+                                                        <a href="/admin/order/<%=value.id %>">
+                                                            <span>
+                                                                <%= value?.id %>
+                                                            </span>
+                                                        </a>
+                                                        <% }else{ %>
+                                                            <a href="/admin/order/<%=value.orderId %>">
+                                                                <span>
+                                                                    <%= value?.orderId %>
+                                                                </span>
+                                                            </a>
+                                                            <% }%>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-success">
+                                                            <% if(value?.paymentStatus){ %>
+                                                                <%=value?.paymentStatus %>
+                                                                <% }else{ %>
+                                                                    <%="Complete"%>
+                                                                    <%} %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.paidAmt %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.txnId %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <% if(value?.type){ %>
+                                                                <%=value?.type %>
+                                                                <% }else{ %>
+                                                                    <%="N/A" %>
+                                                                    <% } %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-secondary">
+                                                            <% if(value?.paidAt) {%>
+                                                                <%= new Date(value?.paidAt).toLocaleString("en-US", {
+                                                                    month: "short" , day: "numeric" , year:"numeric" })
+                                                                    %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                        </span>
+                                                    </td>
+                                                   
+                                                </tr>
+
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+                        </section>
+                        <!-- /.content -->
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+
+        <%- include("partials/_scripts.ejs") %>
+    </body>
+
+</html>

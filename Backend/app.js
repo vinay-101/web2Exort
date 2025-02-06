@@ -11,6 +11,7 @@ const path = require("path");
 const session = require("express-session");
 const { userRouter } = require("./routes/user.route");
 const { productRouter } = require('./routes/product.route');
+const { adminRouter } = require('./routes/admin.route');
 
 app.use(cors({
   origin: "http://localhost:5173", // React app origin
@@ -41,6 +42,7 @@ app.use(
 );
 app.use("/users", userRouter);
 app.use("/products", productRouter);
+app.use('/admin', adminRouter)
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)

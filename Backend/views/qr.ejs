@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'User' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="tab-pane" id="tab_2"> <!-- Tab 2 start-->
+                                            <div class="col-md-12">
+
+                                                <!-- Profile Image -->
+
+                                                <!-- /.card -->
+
+                                                <!-- About Me Box -->
+                                                <!-- <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">About Qr</h3>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Created</strong>
+                                                                <p class="text-muted">
+                                                                    <span class="badge badge-secondary">
+                                                                        <% if(qr?.createdAt) {%>
+                                                                            <%= new Date(qr.createdAt).toLocaleString("en-US", {
+                                                                                month: "short" , day: "numeric" , year:"numeric" })
+                                                                                %>
+                                                                                <% }else{ %>
+                                                                                    <%="N /A" %>
+                                                                                        <% } %>
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <strong><i
+                                                                        class="fas fa-map-marker-alt mr-1"></i>Dispatch</strong>
+                                                                <% if(qr?.dispatch_date) { %>
+                                                                    <p class="text-muted">
+                                                                        <%=qr?.dispatch_date %>
+                                                                    </p>
+                                                                    <% }else{ %>
+                                                                        <p class="text-muted">
+                                                                            <%="N /A" %>
+                                                                        </p>
+                                                                        <% } %>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <strong><i
+                                                                        class="fas fa-map-marker-alt mr-1"></i>Allocated</strong>
+                                                                <% if(qr?.userId) { %>
+                                                                    <p class="text-muted">
+                                                                        <%=qr?.userId %>
+                                                                    </p>
+                                                                    <% }else{ %>
+                                                                        <p class="text-muted">
+                                                                            <%="N /A" %>
+                                                                        </p>
+                                                                        <% } %>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Name</strong>
+                                                                <p class="text-muted">
+                                                                    <% if(qr?.userId){ %>
+                                                                      <a href="/admin/user/<%=qr?.userId %>"><%=user?.fullName %> </a> 
+                                                                        <% } else{%>
+                                                                            <%="N /A" %>
+                                                                            <% } %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div> -->
+
+                                                <!-- <h3 class="display-5 my-3 mx-2">All Orders:</h3> -->
+                                                <div class="row">
+                                                    <div class="col-12 table-responsive">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Created</th>
+                                                                    <!-- <th>Dispatched</th> -->
+                                                                    <th>Allocated Date</th>
+                                                                    <!-- <th>Allocated UserId</th> -->
+                                                                    <th>Allocated User</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span class="badge badge-secondary">
+                                                                                <% if(qr?.createdAt) {%>
+                                                                                    <%= new Date(qr.createdAt).toLocaleString("en-US", {
+                                                                                        month: "short" , day: "numeric" , year:"numeric" })
+                                                                                        %>
+                                                                                        <% }else{ %>
+                                                                                            <%="N /A" %>
+                                                                                                <% } %>
+                                                                            </span>
+                                                                        </td>
+                                                                        <td> 
+                                                                                <% if(qr?.dispatch_date) { %>
+                                                                                <p class="text-muted">
+                                                                                    <%=qr?.dispatch_date %>
+                                                                                </p>
+                                                                                <% }else{ %>
+                                                                                    <p class="text-muted">
+                                                                                        <%="N /A" %>
+                                                                                    </p>
+                                                                                    <% } %>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <% if(qr?.userId) { %>
+                                                                                <p class="text-muted">
+                                                                                    <%=qr?.userId %>
+                                                                                </p>
+                                                                                <% }else{ %>
+                                                                                    <p class="text-muted">
+                                                                                        <%="N /A" %>
+                                                                                    </p>
+                                                                                    <% } %>
+                                                                        </td> -->
+                                                                        <td>
+                                                                            <% if(qr?.userId){ %>
+                                                                                <a href="/admin/user/<%=qr?.userId %>"><%=user?.fullName %> </a> 
+                                                                                  <% } else{%>
+                                                                                      <%="N /A" %>
+                                                                                      <% } %>
+                                                                                
+                                                                        </td>
+                                                                        
+                                                                    </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                                <!-- /.card -->
+                                            </div>
+                                        </div>
+                                        <!-- /.tab-pane -->
+
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+
+                            </div><!-- /.container-fluid -->
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+            <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+            <!-- <script type="text/javascript" src="/js/ck-editor.js"></script> -->
+    </body>
+
+</html>

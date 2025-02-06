@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Order' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <h1>Orders</h1>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">Order</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Main content -->
+                        <section class="content">
+
+                            <!-- Default box -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <!-- <h3 class="card-title">Product</h3> -->
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                            title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove"
+                                            title="Remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <!-- Button for export table -->
+                                    <!-- <a type="button" class="btn btn-primary"
+                                        href="/admin/order/qr/list/export">Export</a> -->
+                                </div>
+                                <div class="card-body p-3">
+                                    <table class="table table-striped projects" id="addPagination">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10%">
+                                                    User Id
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Name
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Order Id
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Price
+                                                </th>
+                                                <th style="width: 10%" class="text-center">
+                                                    Payment Status
+                                                </th>
+                                                <th style="width: 10%" class="text-center">
+                                                    Order Status
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Created On
+                                                </th>
+                                                <th style="width: 16%">
+                                                    Change Order Status
+                                                </th>
+                                                <th style="width: 10%">
+
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% order.forEach((value, index)=>{ %>
+                                                <tr>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.userId %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <a href="/admin/user/<%=value?.userId %>" target="_blank">
+                                                                <%= value?.user.dataValues?.fullname %>
+                                                            </a>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.id %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.paidAmt %>
+                                                        </span>
+                                                    </td>
+                                                    <td class="project-state">
+                                                        <%if(value?.paymentStatus==='Complete' ){ %>
+                                                            <span class="badge badge-success">
+                                                                <%="Completed" %>
+                                                            </span>
+                                                            <% }else{ %>
+                                                                <span class="badge badge-warning">
+                                                                    <%=value?.paymentStatus %>
+                                                                </span>
+                                                                <% } %>
+                                                    </td>
+                                                    <td class="project-state">
+                                                        <%if(value?.orderStatus==='Delivered' ){ %>
+                                                            <span class="badge badge-success">
+                                                                <%=value?.orderStatus %>
+                                                            </span>
+                                                            <% } else if(value?.orderStatus==='Failed' ){ %>
+                                                                <span class="badge badge-danger">
+                                                                    <%=value?.orderStatus %>
+                                                                </span>
+
+                                                                <% }else{ %>
+                                                                    <span class="badge badge-warning">
+                                                                        <%=value?.orderStatus %>
+                                                                    </span>
+                                                                    <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-secondary">
+                                                            <% if(value?.createdAt) {%>
+                                                                <%= new Date(value.createdAt).toLocaleString("en-US", {
+                                                                    month: "short" , day: "numeric" , year:"numeric" })
+                                                                    %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <select name="order_status" id="order_status_<%= index %>"
+                                                                class="form-control"
+                                                                onchange="changeOrderStatus('<%=value?.id %>', '<%= index %>')">
+                                                                <% if(value?.orderStatus==='Processing' ){ %>
+                                                                    <option selected value="Processing">Processing</option>
+                                                                    <option value="Shipped">Shipped</option>
+                                                                    <option value="Delivered">Delivered</option>
+                                                                    <option value="Failed">Failed</option>
+                                                                    <% }else if(value?.orderStatus==='Delivered' ){ %>
+                                                                        <option value="Processing">Processing</option>
+                                                                        <option value="Shipped">Shipped</option>
+                                                                        <option selected value="Delivered">Delivered</option>
+                                                                        <option value="Failed">Failed</option>
+                                                                        <% }else if(value?.orderStatus==='Failed' ){ %>
+                                                                            <option value="Processing">Processing</option>
+                                                                            <option value="Shipped">Shipped</option>
+                                                                            <option value="Delivered">Delivered</option>
+                                                                            <option selected value="Failed">Failed
+                                                                            </option>
+                                                                            <% }else if(value?.orderStatus === 'Shipped'){  %>
+                                                                                <option value="Processing">Processing</option>
+                                                                                <option selected value="Shipped">Shipped</option>
+                                                                                <option value="Delivered">Delivered</option>
+                                                                                <option value="Failed">Failed
+                                                                                </option>
+                                                                                <% } %>
+
+                                                            </select>
+                                                        </span>
+                                                    </td>
+                                                    <td class="project-actions text-right">
+                                                        <a class="btn btn-primary btn-sm" href="<%=value?.id %>">
+                                                            <i class="fas fa-folder">
+                                                            </i>
+                                                            View
+                                                        </a>
+                                                        <!-- <a class="btn btn-info btn-sm"
+                                                            onclick="assignApi('<%=value?.id %>')" data-toggle="modal"
+                                                            data-target="#assign">
+                                                            Assign
+                                                        </a> -->
+                                                    </td>
+                                                </tr>
+                                                <!-- The Modal -->
+                                                <div class="modal" id="assign">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">Assign QR code</h4>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal">&times;</button>
+                                                            </div>
+
+                                                            <!-- Modal body -->
+                                                            <div class="modal-body">
+                                                                <form method="POST" action="/admin/qr/assign">
+                                                                    <div class="form-group" id="myOptionForm">
+                                                                        <label for="exampleInputEmail1">Select QR
+                                                                            Code:</label></br>
+                                                                        <input type="hidden" name="orderId"
+                                                                            value="<%=value?.id %>">
+                                                                        <input type="hidden" name="userId"
+                                                                            value="<%= value?.user.dataValues?.id %>">
+                                                                        <select class="form-select"
+                                                                            aria-label="Default select example"
+                                                                            name="orderQrId" id="mySelect">
+                                                                            <option>Select Option</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <!-- Modal footer -->
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-danger"
+                                                                            data-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Submit</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+                        </section>
+                        <!-- /.content -->
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+
+        <%- include("partials/_scripts.ejs") %>
+            <script>
+                function assignApi(value) {
+                    console.log("220", value);
+                    function truncateBase64String(base64String, maxLength) {
+                        if (base64String.length <= maxLength) {
+                            return base64String;
+                        } else {
+                            // Truncate the string and add ellipsis
+                            return base64String.substring(0, maxLength - 3) + '...';
+                        }
+                    }
+
+                    // Fetch data from the API when the modal is shown
+                    $('#assign').on('show.bs.modal', function () {
+                        // Make an AJAX request to fetch data from the API
+                        $.ajax({
+                            url: `http://localhost:3000/admin/qr/list/select/${value}`,
+                            type: 'GET',
+                            success: function (data) {
+                                console.log("222", data);
+                                // Populate the select options with the fetched data
+                                let select = $('#assign').find('select');
+                                select.empty(); // Clear existing options
+
+                                // Add options from the API response
+                                for (let i = 0; i < data.length; i++) {
+                                    let truncatedString = truncateBase64String(data[i].qr, 20);
+                                    select.append(`<option value="${data[i].id}"> ${truncatedString}  </option>`);
+                                }
+                            },
+                            error: function (error) {
+                                console.error('Error fetching data:', error);
+                            }
+                        });
+                    });
+                }
+
+
+                function changeOrderStatus(id, index) {
+                    let deliveryStatus = $(`#order_status_${index}`).val();
+                    console.log("282", deliveryStatus);
+                    $.ajax({
+                        url: `/admin/order/delivery/change/${id}/${deliveryStatus}`,
+                        type: 'GET',
+                        success: function (data) {
+                            return window.location.reload();
+                            console.log("222", data);
+                        },
+                        error: function (error) {
+                            return window.location.reload();
+                            console.error('Error fetching data:', error);
+                        }
+
+                    });
+
+
+                }
+
+
+
+
+            </script>
+    </body>
+
+</html>

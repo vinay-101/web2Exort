@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'QR Code' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <h1>QR Code</h1>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">QR</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div><!-- /.container-fluid -->
+                        </section>
+
+                        <!-- Main content -->
+                        <section class="content">
+
+                            <!-- Default box -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <!-- <h3 class="card-title">Product</h3> -->
+                                    <a type="button" class="btn btn-primary" style="cursor: pointer;"
+                                        data-toggle="modal" data-target="#addQr">Add QR</a>
+
+                                    <a type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#qrDownloadModal" style="cursor: pointer;">Download QR</a>
+
+                                    <!-- Button to trigger modal -->
+                                    <a type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#qrRangeModal">
+                                        Download QR By Range
+                                    </a>
+
+                                    <!-- Button for export table -->
+                                    <a type="button" class="btn btn-primary"
+                                        href="/admin/qr/list/export?categoryId=<%=categoryId %>">Export</a>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                            title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove"
+                                            title="Remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped projects" id="addPagination">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 5%">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                id="selectAll">
+                                                            <label class="form-check-label" for="selectAll">All</label>
+                                                        </div>
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        SR.no
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        QR.no
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Category
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Url
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Status
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Created At
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Allocated At
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Allocated User
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Owner
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Download At
+                                                    </th>
+                                                    <th style="width: 5%">
+                                                        Download Status
+                                                    </th>
+                                                    <th style="width: 20%">
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% qr.forEach((value,counter)=>{ %>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" value="<%= value.id %>"
+                                                                    class="form-check-input" id="<%= value.id %>">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                <%=value?.serialNumber || "N/A" %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                <%=value.id %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value.categoryId==0){ %>
+                                                                <span>
+                                                                    <%="N /A" %>
+                                                                </span>
+                                                                <% }else{ %>
+                                                                    <span>
+                                                                        <%= value?.category?.name %>
+                                                                    </span>
+                                                                    <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                <% if(value.url){ %>
+                                                                    <a href=""
+                                                                        onclick="openQrModal('<%=value.qr %>', ' <%= value.id %>')"
+                                                                        data-toggle="modal" data-target="#openQrModal">
+                                                                        <%=value.url %>
+                                                                    </a>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value.status==true ){ %>
+                                                                <span class="badge badge-success">Active</span>
+                                                                <% }else{ %>
+                                                                    <% if(value?.action_status=='Disabled by user' ) {%>
+                                                                        <span class="badge badge-warning">Disabled by
+                                                                            user</span>
+                                                                        <% }else
+                                                                            if(value?.action_status=='Disabled by admin'
+                                                                            ){ %>
+                                                                            <span class="badge badge-warning">Disabled
+                                                                                by
+                                                                                admin</span>
+                                                                            <% }else{ %>
+                                                                                <span
+                                                                                    class="badge badge-warning">Inactive</span>
+                                                                                <% } %>
+                                                                                    <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-secondary">
+                                                                <% if(value?.createdAt) {%>
+                                                                    <%= new
+                                                                        Date(value.createdAt).toLocaleString("en-US", {
+                                                                        month: "short" , day: "numeric" , year:"numeric"
+                                                                        }) %>
+                                                                        <% }else{ %>
+                                                                            <%="N /A" %>
+                                                                                <% } %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value.dispatch_date) { %>
+                                                                <p class="text-muted">
+                                                                    <%= new
+                                                                        Date(value.dispatch_date).toLocaleString("en-US",
+                                                                        { month: "short" , day: "numeric" ,
+                                                                        year:"numeric" }) %>
+                                                                </p>
+                                                                <% }else{ %>
+                                                                    <p class="text-muted">
+                                                                        <%="N /A" %>
+                                                                    </p>
+                                                                    <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.dataValues?.userFullName){ %>
+                                                                <a href="/admin/user/<%=value?.userId %>">
+                                                                    <%=value?.dataValues?.userFullName %>
+                                                                </a>
+                                                                <% } else{%>
+                                                                    <%="N /A" %>
+                                                                        <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.dataValues?.ownerUserFullName){ %>
+                                                                <a href="/admin/user/<%=value?.ownerId %>">
+                                                                    <%=value?.dataValues?.ownerUserFullName %>
+                                                                </a>
+                                                                <% } else{%>
+                                                                    <%="N /A" %>
+                                                                        <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-secondary">
+                                                                <% if(value?.downloadedAt) {%>
+                                                                    <%= new
+                                                                        Date(value.downloadedAt).toLocaleString("en-US",
+                                                                        { month: "short" , day: "numeric" ,
+                                                                        year:"numeric" }) %>
+                                                                        <% }else{ %>
+                                                                            <%="N /A" %>
+                                                                                <% } %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.downloadedAt){ %>
+                                                                <span class="badge badge-info">Downloaded</span>
+                                                                <% }else{ %>
+                                                                    <span class="badge badge-warning">Pending</span>
+                                                                    <% } %>
+                                                        </td>
+                                                        <td class="project-actions text-right">
+                                                            <!-- <a class="btn btn-danger btn-sm" href="delete/<%=value?.id %>">
+                                                            <i class="fa fa-trash">
+                                                            </i>
+                                                            Delete
+                                                        </a> -->
+
+                                                            <!-- <a class="btn btn-primary btn-sm" style="width: 90px"
+                                                            href="/admin/qr/<%=value.id %>">
+                                                            <i class="fas fa-folder">
+                                                            </i>
+                                                            View Log
+                                                        </a> -->
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+                            <!-- The Modal -->
+                            <div class="modal" id="addQr">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Add QR Code</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            <div class="container">
+                                                <form action="/admin/create/qr" method="POST">
+
+                                                    <div class="form-group">
+                                                        <label for="productPrice">Total QR:</label>
+                                                        <input type="number" class="form-control" name="qrCount"
+                                                            id="qrCount" placeholder="Total no of QR" min="0" required>
+                                                        <small id="qrCountError" class="form-text text-danger"></small>
+                                                    </div>
+                                                    <!-- category  -->
+                                                    <div class="form-group">
+                                                        <label for="productPrice">Category:</label>
+                                                        <select class="custom-select mr-sm-2" disabled name="category"
+                                                            id="category">
+                                                            <% if(type=='Smart Doorbell' ){ %>
+                                                                <option value="1">Doorbell tag</option>
+                                                                <% }else if(type==='Vehicle Tag' ){ %>
+                                                                    <option value="2">Vehicle tag</option>
+                                                                    <% }else if(type==='Luggage Tag' ){ %>
+                                                                        <option value="3">Luggage tag</option>
+                                                                        <% }else if(type==="Pet Tag" ){ %>
+                                                                            <option value="4">Pet tag</option>
+                                                                            <% } else if(type==="Small Wrist Tag" ){ %>
+                                                                                <option value="5">Wrist tag</option>
+                                                                                <% } else if(type==="Property-Tag" ){ %>
+                                                                                    <option value="6">Property tag
+                                                                                    </option>
+                                                                                    <% } %>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <!-- Submit Button -->
+                                                        <button type="submit" id="generateQRButton"
+                                                            class="btn btn-primary"
+                                                            onclick="validateForm()">Submit</button>
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- The Modal -->
+                            <div class="modal fade" id="openQrModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">QR code</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body text-center">
+                                            <p style="font-size: 20px; font-weight: bold;" id="qrId"></p>
+                                            <img id="qrImage" src="" alt="QR Code">
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- /.content -->
+                    </div>
+                    <!-- model  -->
+                    <div class="modal fade" id="qrRangeModal" tabindex="-1" role="dialog"
+                        aria-labelledby="qrRangeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="qrRangeModalLabel">Download QR Codes By Range
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="qrRangeForm">
+                                        <div class="form-group">
+                                            <label for="fromField">From</label>
+                                            <input type="number" class="form-control" id="fromField" name="from"
+                                                placeholder="Enter start range" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="toField">To</label>
+                                            <input type="number" class="form-control" id="toField" name="to"
+                                                placeholder="Enter end range" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="toField">First Heading</label>
+                                            <input type="text" class="form-control" id="firstHeading"
+                                                name="firstHeading" placeholder="First Heading" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="toField">Company Heading</label>
+                                            <input type="text" class="form-control" id="companyHeading"
+                                                name="companyHeading" placeholder="Company Heading" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="categoryField">Category</label>
+                                            <select class="form-control" id="categoryField" disabled name="category"
+                                                required>
+                                                <% if(type=='Smart Doorbell' ){ %>
+                                                    <option value="1">Doorbell tag</option>
+                                                    <% }else if(type==='Vehicle Tag' ){ %>
+                                                        <option value="2">Vehicle tag</option>
+                                                        <% }else if(type==='Luggage Tag' ){ %>
+                                                            <option value="3">Luggage tag</option>
+                                                            <% }else if(type==="Pet Tag" ){ %>
+                                                                <option value="4">Pet tag</option>
+                                                                <% } else if(type==="Small Wrist Tag" ){ %>
+                                                                    <option value="5">Wrist tag</option>
+                                                                    <% } else if(type==="Property-Tag" ){ %>
+                                                                        <option value="6">Property tag
+                                                                        </option>
+                                                                        <% } %>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" form="qrRangeForm" id="download_Btn"
+                                        class="btn btn-primary">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- downlaod modal  -->
+                    <div class="modal fade" id="qrDownloadModal" tabindex="-1" role="dialog"
+                        aria-labelledby="qrDownloadModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="qrDownloadModalLabel">Download QR
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="toField">First Heading</label>
+                                            <input type="text" class="form-control" id="firstHeadingDownload"
+                                                name="firstHeadingDownload" placeholder="First Heading" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="toField">Company Heading</label>
+                                            <input type="text" class="form-control" id="companyHeadingDownload"
+                                                name="companyHeadingDownload" placeholder="Company Heading" required>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" id="submitBtn" form=""
+                                        class="btn btn-primary">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+
+
+        <%- include("partials/_scripts.ejs") %>
+
+
+            <script>
+                function openQrModal(qrValue, id) {
+                    // Set the src attribute of the img tag in the modal
+                    document.getElementById('qrImage').src = qrValue;
+                    document.getElementById('qrId').innerText = `QR No. ${id}`;
+                }
+            </script>
+
+            <script>
+                function validateForm() {
+                    var qrCountInput = document.getElementById("qrCount");
+                    var qrCountError = document.getElementById("qrCountError");
+                    var qrCountValue = parseInt(qrCountInput.value);
+                    // const button = document.getElementById("generateQRButton");
+
+                    if (isNaN(qrCountValue) || qrCountValue <= 0) {
+                        window.alert("Total QR must be a positive number.")
+                        return false;
+                    } else {
+                        qrCountError.textContent = "";
+                        document.getElementById("addQrForm").submit();
+                    }
+
+
+                }
+            </script>
+
+
+            <script>
+                document.getElementById("submitBtn").addEventListener("click", function (event) {
+                    // Get all checkboxes with the class 'form-check-input'
+                    var checkboxes = document.querySelectorAll(".form-check-input[type='checkbox']");
+                    var isAnySelected = false;
+
+                    // Check if any checkbox is checked
+                    checkboxes.forEach(function (checkbox) {
+                        if (checkbox.checked && checkbox.id !== 'selectAll') {
+                            isAnySelected = true;
+                        }
+                    });
+
+                    if (!isAnySelected) {
+                        // Prevent further action if no QR is selected
+                        alert("Please select at least one QR to download.");
+                        event.preventDefault();  // Stop the download action
+                        return;  // Exit the function early
+                    }
+
+                    // If a QR is selected, proceed with the download logic
+                    console.log("Download initiated for selected QRs");
+                });
+            </script>
+
+            <!-- below code for modern qr design -->
+
+            <script src="https://cdn.jsdelivr.net/npm/qr-code-styling/lib/qr-code-styling.js"></script>
+
+            <script>
+                async function generateQRCodes(event) {
+                    event.preventDefault();  // Prevent form submission
+
+                    const qrCount = document.getElementById("qrCount").value;
+                    const category = document.getElementById("category").value;
+                    const qrBase64Array = [];
+                    const uidArray = [];
+
+                    // Validate the QR count
+                    if (qrCount <= 0) {
+                        alert("Please enter a valid number of QRs.");
+                        return false;
+                    }
+
+                    // Loop to generate multiple QR codes
+                    for (let i = 0; i < qrCount; i++) {
+                        const uid = generateUUID();
+                        const url = `http://scanzureact.dignitech.com/en/qr/${uid}`;
+                        let image = 'https://scanzubackend.dignitech.com/imgs/Scanzu.png';
+                        let base64Image = qrCodeToBase64(image)
+                        uidArray.push(uid);  // Store UID for backend
+
+                        const qrCode = new QRCodeStyling({
+                            width: 300,
+                            height: 300,
+                            type: "png",  // Use 'png' or 'svg'
+                            data: url,  // The URL/data for the QR code
+                            // image: image,  // Your logo image
+                            dotsOptions: {
+                                color: "#0055A1", // Primary color for dots
+                                gradient: {
+                                    type: "linear",
+                                    rotation: 32.64 * (Math.PI / 180),  // Convert to radians
+                                    colorStops: [
+                                        { offset: 0.0, color: "#0055A1" },
+                                        { offset: 1.0, color: "#0090D4" }
+                                    ],
+                                },
+                                type: "dots", // Type of dots
+                            },
+                            backgroundOptions: {
+                                color: "#ffffff", // Set a solid color background to avoid solid coverage
+                            },
+                            cornersSquareOptions: {
+                                color: "#0055A1", // Corners' color
+                                type: "extra-rounded",
+                            },
+                            cornersDotOptions: {
+                                color: "#0090D4", // Color for inner dots
+                            },
+                            imageOptions: {
+                                crossOrigin: "anonymous",
+                                imageSize: 0.25
+                            },
+                        });
+
+                        // Convert QR code to base64 and store it in the array
+                        const qrBase64 = await qrCodeToBase64(qrCode);
+                        qrBase64Array.push(qrBase64);
+                    }
+
+                    // Send the data to the backend as JSON
+                    sendQRCodesToBackend(qrBase64Array, uidArray, category);
+                }
+
+                function qrCodeToBase64(qrCode) {
+                    return new Promise((resolve, reject) => {
+                        qrCode.getRawData("png").then(blob => {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(blob);
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.onerror = (err) => reject(err);
+                        });
+                    });
+                }
+
+                function sendQRCodesToBackend(qrBase64Array, uidArray, category) {
+                    const batchSize = 10; // Number of QR codes per batch
+                    const totalBatches = Math.ceil(qrBase64Array.length / batchSize);
+                    const promises = []; // Array to hold the promises for each batch
+                    const button = document.getElementById("generateQRButton");
+
+                    // Disable button and update text
+                    button.disabled = true;
+                    button.innerText = "Processing...";
+
+                    for (let i = 0; i < totalBatches; i++) {
+                        const batchData = {
+                            category: category,
+                            qrCodes: qrBase64Array.slice(i * batchSize, (i + 1) * batchSize),
+                            uids: uidArray.slice(i * batchSize, (i + 1) * batchSize)
+                        };
+
+                        const promise = fetch("/admin/create/qr", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(batchData),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Failed to save batch ${i + 1}`);
+                                }
+                                console.log(`Batch ${i + 1} saved successfully.`);
+                            });
+
+                        promises.push(promise); // Add the promise to the array
+                    }
+
+                    // Wait for all batches to complete
+                    Promise.all(promises)
+                        .then(() => {
+                            alert("QR codes generated and saved successfully.");
+                            window.location.reload();
+                        })
+                        .catch(error => {
+                            alert(error.message); // Show the error message from the failed batch
+                        }).finally(() => {
+                            // Re-enable button after processing
+                            button.disabled = false;
+                            button.innerText = "Submit";
+                        });
+                }
+
+
+                // Helper function to generate UUID
+                function generateUUID() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+
+                // Bind the function to the form submit
+                document.querySelector("form").addEventListener("submit", generateQRCodes);
+            </script>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const downloadBtn = document.getElementById("submitBtn"); // "Download QR" button
+                    const rangeDownloadBtn = document.querySelector("[data-target='#qrRangeModal']"); // "Download QR By Range" button
+
+                    function disableButton(button, disable) {
+                        button.disabled = disable;
+                        if (disable) {
+                            button.classList.add("disabled");
+                        } else {
+                            button.classList.remove("disabled");
+                        }
+                    }
+
+                    // Handle "Download QR" button click
+                    downloadBtn.addEventListener("click", async function () {
+                        disableButton(downloadBtn, true); // Disable only the clicked button
+                        try {
+                            // Simulate download process
+                            await fakeDownloadProcess();
+                        } catch (error) {
+                            console.error("Download failed:", error);
+                        } finally {
+                            disableButton(downloadBtn, false); // Re-enable the button
+                        }
+                    });
+
+
+                    // Fake download process to simulate delay
+                    function fakeDownloadProcess() {
+                        return new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve();
+                            }, 3000); // Simulate a 3-second delay
+                        });
+                    }
+                });
+
+            </script>
+    </body>
+
+</html>

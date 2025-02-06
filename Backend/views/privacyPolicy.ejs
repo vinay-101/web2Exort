@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Privacy Policy' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <h3 class="display-5 my-2">Privacy Policy</h3>
+                                <form method="POST" action="/admin/create/privacy/policy/<%=policy.id %>">
+                                    <div class="form-group">
+                                      <textarea class="form-control my-4" id="description" name="description" rows="20"><%=policy?.desc %></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                  </form>
+                               
+                            </div><!-- /.container-fluid -->
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+            <script src="https://cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
+    </body>
+
+</html>

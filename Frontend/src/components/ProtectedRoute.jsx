@@ -2,13 +2,14 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { isTokenExpired } from "../Services/API"; // Utility function to check token expiration
+import AuthService from "../Services/authService";
 
 const ProtectedRoute = () => {
-  const token = localStorage.getItem("accessToken");
+  const token = AuthService.getAccessToken(); // Get the token from local storage
 
   // Check if the token exists and is not expired
   if (!token || isTokenExpired(token)) {
-    localStorage.removeItem("accessToken"); // Clear expired token
+    AuthService.clearTokens(token) // Clear expired token 
     return <Navigate to="/login" replace />; // Redirect to login page
   }
 

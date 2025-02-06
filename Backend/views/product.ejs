@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Products' }) %>
+
+  <body class="hold-transition sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include("partials/_headerNavbar.ejs") %>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <%- include("partials/_sidebar.ejs") %>
+
+          <!-- Content Wrapper. Contains page content -->
+          <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <!-- <section class="content-header"> -->
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-12">
+                    <!-- Custom Tabs -->
+                      <div class="card-header d-flex p-0">
+                        <ul class="nav nav-pills  p-2">
+                          <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Description</a></li>
+                          <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Image</a></li>
+                        </ul>
+                      </div><!-- /.card-header -->
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="tab_1">     <!-- Tab 1 start-->
+                            <div class="col-md-12">
+
+                              <!-- Profile Image -->
+          
+                              <!-- /.card -->
+          
+                              <!-- About Me Box -->
+                              <div class="card card-primary">
+                                <div class="card-header">
+                                  <h3 class="card-title">About Product</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                  <strong><i class="fas fa-book mr-1"></i>Name</strong>
+          
+                                  <p class="text-muted">
+                                    <%=product?.dataValues?.category?.name %>
+                                  </p>
+          
+                                  <hr>
+          
+                                  <strong><i class="fa fa-inr"></i> Price</strong>
+          
+                                  <p class="text-muted">Rs <%=product?.price %></p>
+          
+                                  <hr>
+          
+                                  <strong><i class="fa fa-inr"></i> Discounted Price</strong>
+                                  
+                                  <p class="text-muted">
+                                    <%if(product?.dataValues?.dicountedPrice) {%>
+                                      Rs <%=product?.dataValues?.dicountedPrice %>
+                                      <% }else{ %>
+                                        <%="N/A" %>
+                                        <% } %>
+                                  
+                                  </p>
+          
+                                  <hr>
+          
+                                  <strong><i class="fas fa-pencil-alt mr-1"></i>Created On</strong>
+          
+                                  <p class="text-muted">
+                                    <%= new Date(product.dataValues?.createdAt).toLocaleString("en-US", { month: "short" ,
+                                      day: "numeric" , year:"numeric" }) %>
+                                  </p>
+          
+                                  <hr>
+          
+                                  <strong><i class="far fa-file-alt mr-1"></i>Description</strong>
+          
+                                  <p class="text-muted"><%-product.description %></p>
+                                </div>
+                                <!-- /.card-body -->
+                              </div>
+                              <!-- /.card -->
+                            </div>
+                          </div>
+                          <!-- /.tab-pane -->
+                          <div class="tab-pane" id="tab_2">             <!-- Tab 2 start-->
+                            <div class="col-md-12">
+                              <!-- <button type="button" class="btn btn-default btn-sm" style="padding: 5px 30px; margin: 10px 0; margin-bottom: 20px;" data-toggle="modal" data-target="#uploadImageModal">
+                                Upload Image
+                            </button> -->
+                              <div class="card">
+                                <div class="card-body">
+                                  <div class="tab-content">
+                               
+                                      <!-- Post -->
+
+                                      <div class="post">
+                                        <!-- /.user-block -->
+                                        <div class="mb-3">
+                                          <h5 class="display-5 mx-2">Cover Image</h5>
+                                          <div class="col-md-6">
+                                            <img style="width: 250px;" src="http://scanzubackend.dignitech.com/<%=product.image %>" alt="Photo">
+                                          </div>
+                                          <!-- /.col -->
+                                          <div class="col-md-12 mt-5">
+                                            <h5 class="display-5 mx-2">Images</h5>
+                                            <div class="row">
+                                              <% producutAllImg.forEach((value) => { %>
+                                              <div class="">
+                                                <div class="image-container d-flex">
+                                                  <img class="mb-3 img-fluid" src="http://scanzubackend.dignitech.com/<%=value.file %>"
+                                                    alt="Img">
+                                                  <div class="update-delete-icons">
+                                                    <a type="button" onclick="return confirmation()"
+                                                      href="/admin/product/image/delete/<%=value.id %>"> <i class="fas fa-trash fa-1x text-danger ml-2"></i> </a>
+                                                    <!-- Font Awesome trash icon -->
+                                                    <a type="button" data-toggle="modal" data-target="#editUploadImageModal"> <i
+                                                      class="fas fa-edit fa-1x text-primary"></i> </a>
+                                                    <!-- Font Awesome edit icon -->
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <% }) %>
+                                            </div>
+                                          </div>
+                                          <!-- /.col -->
+                                        </div>
+                                        <!-- /.row -->
+                                      </div>
+                                      
+                                      <!-- /.post -->
+                                   
+                                    <!-- /.tab-pane -->
+
+                                    <!-- /.tab-pane -->
+
+
+                                    <!-- /.tab-pane -->
+                                  </div>
+                                  <!-- /.tab-content -->
+                                </div>
+                              </div>
+                              <!-- /.card -->
+                            </div>
+                          </div>
+                          <!-- /.tab-pane -->
+                        </div>
+                  </div>
+                  <!-- /.col -->
+                </div>
+              </div><!-- /.container-fluid -->
+            <!-- </section> -->
+            <!-- Model upload image  -->
+            <div class="modal fade" id="uploadImageModal" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form method="POST" action="/admin/product/image/add/<%=product.id %>"
+                      enctype="multipart/form-data">
+                      <div class="form-group">
+                        <label for="imageFile">Choose an image:</label>
+                        <input type="file" class="form-control-file" id="imageInput" onclick="previewImage()"
+                          name="image">
+                        <div style="margin-top: 20px;" id="imagePreview"></div>
+
+                      </div>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Model edit upload image  -->
+            <div class="modal fade" id="editUploadImageModal" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Add your image upload form here -->
+                    <form method="POST" action="/admin/product/image/edit/<%=product.id %>"
+                      enctype="multipart/form-data">
+                      <div class="form-group">
+                        <label for="imageFile">Choose an image:</label>
+                        <input type="file" class="form-control-file" id="EditimageInput" onclick="EditpreviewImage()"
+                          name="image">
+                        <div style="margin-top: 20px;" id="EditimagePreview"></div>
+                      </div>
+                      <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                          <button type="submit" class="btn btn-primary">Upload</button> -->
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+  
+          </div>
+          <!-- /.content-wrapper -->
+
+          <!-- footer  -->
+          <%- include("partials/_footer.ejs") %>
+
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+              <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+
+    <%- include("partials/_scripts.ejs") %>
+      <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+      <!-- <script type="text/javascript" src="/js/ck-editor.js"></script> -->
+  </body>
+
+</html>

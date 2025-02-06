@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Get In Touch' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <h3 class="display-5 my-2">About Us</h3>
+                                <form enctype="multipart/form-data" class="my-4" method="POST" action="/admin/create/About/us/<%=aboutUs.id %>">
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" class="form-control" name="title" id="title" value="<%= aboutUs?.title %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="image">Image</label>
+                                        <input type="file" class="form-control-file" onclick="replaceImagePreview(this)" name="image" id="image-input">
+                                        <img class="mt-2" style="border-radius: 5px;" id="image-preview" src="/<%=aboutUs.image %>" alt="" width="200">
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" rows="20" name="about" id="description"><%= aboutUs?.about %></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                  </form>
+                               
+                            </div><!-- /.container-fluid -->
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+        <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+    </body>
+
+</html>

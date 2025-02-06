@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Add Testimonial' }) %>
+
+  <body class="hold-transition sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include("partials/_headerNavbar.ejs") %>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <%- include("partials/_sidebar.ejs") %>
+
+          <!-- Content Wrapper. Contains page content -->
+          <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+              <div class="container-fluid">
+                <h3 class="display-5 my-2">Add Testimonial</h3>
+                <form enctype="multipart/form-data" method="POST" action="/admin/create/testimonial">
+                  <div class="form-group">
+                    <label for="language">Language:</label>
+                    <select class="form-control" id="language" name="lang" required>
+                        <option value="en">English</option>
+                        <option value="hi">Hindi</option>
+                    </select>
+                </div>
+                  <div class="form-group">
+                    <label for="file">Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                  </div>
+                  <div class="form-group">
+                    <label for="file">Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="text" rows="20"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="file">Image</label>
+                    <input type="file" class="form-control" id="image" name="image">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+              </div><!-- /.container-fluid -->
+            </section>
+          </div>
+          <!-- /.content-wrapper -->
+
+          <!-- footer  -->
+          <%- include("partials/_footer.ejs") %>
+
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+              <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+
+    <%- include("partials/_scripts.ejs") %>
+      <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+  </body>
+
+</html>

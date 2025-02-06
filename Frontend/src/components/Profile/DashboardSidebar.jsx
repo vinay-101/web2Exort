@@ -1,8 +1,13 @@
 import "../../assets/profile/profile.scss"
 import { Link, useLocation } from "react-router-dom"
+import AuthService from "../../Services/authService";
 
 const DashboardSidebar = () => {
   const location = useLocation();
+
+  const handleLogout = () => {
+    AuthService.clearTokens();
+  }
 
   return (
     <aside className="col-md-2 profile_sidebar py-3">
@@ -99,6 +104,16 @@ const DashboardSidebar = () => {
           >
             <i className="fa fa-star mr-2" />
             Testimonial
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link
+            className="nav-link"
+            to="/"
+            onClick={handleLogout}
+          >
+            <i className="fa fa-sign-out mr-2" />
+            Logout
           </Link>
         </li>
       </ul>

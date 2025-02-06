@@ -2,6 +2,7 @@ const { DataTypes, Sequelize, literal } = require("sequelize");
 const sequelize = require("../../helper/db.config");
 const Category = require("./Category");
 const ProductImage = require("./ProductImage");
+const ProductSpecification = require("./ProductSpecifiation");
 
 const Product = sequelize.define(
   "products",
@@ -151,5 +152,6 @@ const Product = sequelize.define(
 
 Product.belongsTo(Category, { foreignKey: "categoryId" });
 Product.hasMany(ProductImage, { foreignKey: "productId" });
+Product.hasMany(ProductSpecification, { foreignKey: "productId" });
 
 module.exports = Product;

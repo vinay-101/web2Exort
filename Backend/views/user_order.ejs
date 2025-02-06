@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'User' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="tab-pane" id="tab_2">
+                                            <div class="col-md-12">
+
+                                                <!-- About Me Box -->
+                                              
+                                                <!-- /.card -->
+
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+                                <!-- Table row -->
+                                <h3 class="display-5 my-3 mx-2">All Orders:</h3>
+                                <div class="row">
+                                    <div class="col-12 table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Order Id</th>
+                                                    <th>Payment Status</th>
+                                                    <th>Paid Amt</th>
+                                                    <th>Paid Date</th>
+                                                    <th>Order Status</th>
+                                                    <th>Transaction Id</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% order?.forEach((value)=>{ %>
+                                                    <tr>
+                                                        <td>
+                                                            <%=value?.orderId %>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-success mx-2">  <%=value?.paymentStatus %></span</p>
+                                                        </td>
+                                                        <td>
+                                                            <%=value?.paidAmt %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.paidAt){ %>
+                                                                <%= value?.paidAt %>
+                                                                <% } else{ %>
+                                                                    <%="N/A" %>
+                                                                    <% } %>
+                                                                
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-warning mx-2"><%=value?.orderStatus %></span</p>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.txnId){ %>
+                                                                <%= value?.txnId %>
+                                                                <% } else{ %>
+                                                                    <%="N/A" %>
+                                                                    <% } %>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- The Modal -->
+                                                    <div class="modal" id="assign">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+
+                                                                <!-- Modal Header -->
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Assign QR code</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+
+                                                                <!-- Modal body -->
+                                                                
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+
+                                 <!-- <h3 class="display-5 mx-3">Members: <span class="text-muted"><%=familyMember?.length %></span></h3> -->
+                                <div class="row">
+                                    <% familyMember.forEach((value, index) => { %>
+                                        <div class="col-md-6">
+                                            <div class="card mb-3 family-card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <strong>Name:</strong>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <%= value?.fullName %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <strong>Email:</strong>
+                                                        </div>
+                                                        <% if(value?.email) { %>
+                                                        <div class="col-md-9">
+                                                            <%= value?.email %>
+                                                        </div>
+                                                        <% }else{ %>
+                                                            <div class="col-md-9">
+                                                                <%= "N/A" %>
+                                                            </div>
+                                                            <% } %>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <strong>Mobile Number:</strong>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <%= value?.mobileNumber %>
+                                                            <% if(value?.isVerified) {%>
+                                                                <span class="badge badge-success">Verified</span>
+                                                                <% }else{ %>
+                                                                    <span class="badge badge-danger">Not Verified</span>
+                                                                    <% } %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <strong>Created At:</strong>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <%= new Date(value?.dataValues?.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" }) %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% if ((index + 1) % 2 === 0) { %>
+                                            </div><div class="row">
+                                        <% } %>
+                                    <% }); %>
+                                </div>
+                           
+                            </div><!-- /.container-fluid -->
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+            <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+            <!-- <script type="text/javascript" src="/js/ck-editor.js"></script> -->
+    </body>
+
+
+</html>

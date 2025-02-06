@@ -5,11 +5,9 @@ import DashboardSidebar from '../components/Profile/DashboardSidebar'
 
 const ViewProductPage = () => {
   return (
-    <div className="">
-    <div className="row">
+    <div style={{ display: "flex" }}>
      <DashboardSidebar />
      <ViewProduct />
-  </div>
   </div>
   )
 }

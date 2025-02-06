@@ -78,7 +78,7 @@ const Login = () => {
     },
     (data) => {
       AuthService.setTokens(data.data.access_token);
-      navigate("/");
+      navigate("/user/profile");
     },
     (error) => {
       if (error.message === "Account has not been verified") {
@@ -100,7 +100,7 @@ const Login = () => {
     },
     (data) => {
       AuthService.setTokens(data.data.access_token);
-      navigate("/");
+      navigate("/user/profile");
     },
     (error) => {
       if (error.message === "Account has not been verified") {

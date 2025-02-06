@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Products' }) %>
+
+    <body class="hold-transition sidebar-mini">
+       
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+
+
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-12">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">Product</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div><!-- /.container-fluid -->
+                        </section>
+
+                        <!-- Main content -->
+                        <div class="container">
+                                <h1 class="display-5" style="margin-bottom: 30px;"> Edit Product</h1>
+                            <form enctype="multipart/form-data" method="POST"
+                                action="/admin/product/edit/<%=product.id %>" onsubmit="return validateDiscount()">
+                                <div class="form-group">
+                                    <label for="sel1">Category:</label>
+                                    <select class="form-control" id="sel1" name="category">
+                                        <option selected value="<%=product.categoryId %>">
+                                            <%=product?.dataValues.category.name %>
+                                        </option>
+                                        <option value="2">Vehicle tag</option>
+                                        <option value="3">Luggage tag</option>
+                                        <option value="4">Pet tag</option>
+                                        <option value="5">Wrist tag</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Price (In Rs):</label>
+                                    <input type="text" value="<%=product.price %>" class="form-control" id="price"
+                                        name="price">
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Discount Price (%):</label>
+                                    <input type="text" value="<%=product.discount %>" class="form-control"
+                                        id="dicountPrice" name="discountedPrice">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="image">Cover Image:</label>
+                                    <input type="file" class="form-control-file" id="image-input"
+                                        onclick="replaceImagePreview()" accept="image/*" name="image">
+                                    <img style="width: 100%; width: 200px; margin-top: 25px;" id="image-preview"
+                                        src="http://scanzubackend.dignitech.com/<%=product.image %>" alt="product-img">
+
+                                </div>
+                                <!-- Cover images  -->
+                                <div class="form-group">
+                                    <label for="image" class="mx-3">Images:</label>
+                                    <button type="button" class="btn btn-default btn-sm"
+                                        style="padding: 5px 30px; margin: 10px 0; margin-bottom: 20px;"
+                                        data-toggle="modal" data-target="#uploadImageModal">
+                                        Upload Image
+                                    </button>
+                                    <div class="cover__Images" style="display: flex; align-items: center; gap: 20px;">
+                                        <% allCoveImages.forEach((value) => { %>
+                                            <div class="image__container">
+                                                <img style="width: 150px; margin-top: 17px;" id="cover-image"
+                                                    src="http://scanzubackend.dignitech.com/<%=value.file %>"
+                                                    alt="cover-img">
+                                                <a href="/admin/product/image/delete/<%=value.id %>" class="delete__icon">
+                                                    <i class="fas fa-trash fa-1x text-danger ml-2"></i>
+                                                </a>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Description:</label>
+                                    <textarea class="form-control" id="description" name="description"
+                                        rows="4"><%-product.description %></textarea>
+                                </div>
+
+                                <button style="margin-bottom: 15px;" type="submit"
+                                    class="btn btn-primary">Update</button>
+                            </form>
+                            <!-- Model upload image  -->
+                            <div class="modal fade" id="uploadImageModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Upload Image</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="POST" action="/admin/product/image/add/<%=product.id %>"
+                                                enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                    <label for="imageFile">Choose an image:</label>
+                                                    <input type="file" class="form-control-file" accept="image/*"  id="imageInput"
+                                                        onchange="previewMultipleImages(this)" name="cover_image" multiple>
+                                                    <div style="margin-top: 20px;" id="imageshowsPreview"></div>
+
+                                                </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Upload</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.content -->
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+        <!-- Add Modal -->
+
+
+        <!-- Edit Modal -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+            <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+            <!-- <script type="text/javascript" src="/js/ck-editor.js"></script> -->
+
+            <script>
+                function validateDiscount() {
+                    var discount = document.getElementById("dicountPrice").value;
+                    if (parseFloat(discount) > 100) {
+                        alert("Discount price cannot be greater than 100%");
+                        return false;
+                    }
+                    return true;
+                }
+            </script>
+    </body>
+
+</html>

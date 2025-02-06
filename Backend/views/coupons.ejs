@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Coupons' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <h1>Coupons</h1>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">Coupons</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Main content -->
+                        <section class="content">
+
+                            <!-- Default box -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <a href="/admin/coupon/create" type="submit"  class="btn-sm btn-primary">Create Coupon</a>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                            title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove"
+                                            title="Remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    <table class="table table-striped projects" id="addPagination">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10%">
+                                                    Coupon
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Type
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Discount Value
+                                                </th>
+                                                <th style="width: 8%">
+                                                    Limit
+                                                </th>
+                                                <th style="width: 8%">
+                                                    Used Count
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Start Date
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Expire Date
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Expire Status
+                                                </th>
+                                                <th style="width: 10%">
+                                                    Status
+                                                </th>
+                                                <th style="width: 8%" class="text-center">
+                                                    Created On
+                                                </th>
+                                                <th style="width: 15%">
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% coupons.forEach((value)=>{ %>
+                                                <tr>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.code %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <% if(value?.discountType === 'percentage'){ %>
+                                                                <%="Percentage" %>
+                                                                <% }else{ %>
+                                                                    <%="Fixed" %>
+                                                                    <% } %>
+                                                           
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <% if(value?.discountType === 'percentage'){ %>
+                                                            <%= value?.discountValue %> %
+                                                            <% }else{ %>
+                                                               Rs <%= value?.discountValue %> 
+                                                                <% } %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.usageLimit %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <%= value?.usedCount %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-success">
+                                                            <% if(value?.startDate) {%>
+                                                                <%= new Date(value?.startDate).toLocaleString("en-US", {
+                                                                    month: "short" , day: "numeric" , year:"numeric" })
+                                                                    %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-secondary">
+                                                            <% if(value?.expirationDate) {%>
+                                                                <%= new Date(value?.expirationDate).toLocaleString("en-US", {
+                                                                    month: "short" , day: "numeric" , year:"numeric" })
+                                                                    %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                        </span>
+                                                    </td>
+                                                    <td class="project-state">
+                                                        <% if(value?.dataValues?.expireStatus){ %>
+                                                            <span class="badge badge-danger">Expired</span>
+                                                        <% }else{ %>
+                                                            <span class="badge badge-success">Active</span>
+                                                            <% }  %>
+                                                    </td>
+                                                    <td class="project-state">
+                                                        <% if(value?.status){ %>
+                                                        <span class="badge badge-success">Active</span>
+                                                        <% }else{ %>
+                                                            <span class="badge badge-danger">Inactive</span>
+                                                            <% }  %>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-warning">
+                                                            <% if(value?.createdAt) {%>
+                                                                <%= new Date(value?.createdAt).toLocaleString("en-US", {
+                                                                    month: "short" , day: "numeric" , year:"numeric" })
+                                                                    %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                        </span>
+                                                    </td>
+                                                    <td class="project-actions text-right">
+                                                       
+                                                    </td>
+                                                </tr>
+                                                
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+                        </section>
+                        <!-- /.content -->
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+
+        <%- include("partials/_scripts.ejs") %>
+    </body>
+
+</html>

@@ -441,6 +441,9 @@ const viewProduct = async (req, res) => {
       },
       include:[
         {
+          model: ProductSpecification,
+        },
+        {
           model: ProductImage,
           attributes:['id', 'image']
         },

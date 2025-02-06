@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Update Testimonial' }) %>
+
+  <body class="hold-transition sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include("partials/_headerNavbar.ejs") %>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <%- include("partials/_sidebar.ejs") %>
+
+          <!-- Content Wrapper. Contains page content -->
+          <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+              <div class="container-fluid">
+                <h3 class="display-5 my-2">Update Testimonial</h3>
+                <form enctype="multipart/form-data" method="POST" action="/admin/testimonial/update/<%=testimonial?.id %>">
+                  <div class="form-group">
+                    <label for="language">Language:</label>
+                    <select class="form-control" id="language" name="lang" required>
+                        <% if(testimonial.lang === 'en') { %>
+                          <option value="en" selected>English</option>
+                        <option value="hi">Hindi</option>
+                        <% }else{ %>
+                        <option value="en">English</option>
+                        <option value="hi"selected>Hindi</option>
+                        <% } %>
+                    </select>
+                </div>
+                  <div class="form-group">
+                    <label for="file">Name</label>
+                    <input type="text" class="form-control" id="name" value="<%=testimonial?.name %>" name="name">
+                  </div>
+                  <div class="form-group">
+                    <label for="file">Title</label>
+                    <input type="text" class="form-control" id="title" value="<%=testimonial?.title %>" name="title">
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="text" rows="20"><%=testimonial?.desc %></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="file">Image</label>
+                    <input type="file" class="form-control" id="image" name="image">
+                    <img style="margin-top: 10px; width: 200px;" src="http://scanzubackend.dignitech.com/<%=testimonial?.image%>" alt="img">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+
+              </div><!-- /.container-fluid -->
+            </section>
+          </div>
+          <!-- /.content-wrapper -->
+
+          <!-- footer  -->
+          <%- include("partials/_footer.ejs") %>
+
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+              <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+
+    <%- include("partials/_scripts.ejs") %>
+      <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+  </body>
+
+</html>

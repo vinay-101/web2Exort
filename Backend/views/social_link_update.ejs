@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Update Social Link' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <h3 class="display-5 my-2">Update Social Link</h3>
+                                <form method="POST" enctype="multipart/form-data" action="/admin/social/links/update/<%=link?.id %>">
+                                    <div class="form-group">
+                                        <label for="file">Icon</label>
+                                      <input type="file" class="form-control" value="<%=link?.logo %>" id="image-input" name="image"  onclick="replaceImagePreview()">
+                                      <img style="margin-top: 10px; border-radius: 5px;" src="/<%=link?.logo %>" width="80px" alt="" id="image-preview">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="file">Name</label>
+                                      <input type="text" class="form-control" value="<%=link?.name %>" id="name" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="file">Link</label>
+                                      <input type="text" class="form-control" id="link"  value="<%=link?.link %>" name="link">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                  </form>
+                               
+                            </div><!-- /.container-fluid -->
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+            <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+    </body>
+
+</html>

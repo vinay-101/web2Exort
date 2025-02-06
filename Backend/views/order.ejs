@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'User' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="tab-pane" id="tab_2">
+                                            <div class="col-md-12">
+
+                                                <!-- About Me Box -->
+                                                <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">About Order</h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Name</strong>
+                                                                <p class="text-muted">
+                                                                    <%=order?.user?.dataValues?.fullname %>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <strong><i
+                                                                        class="fas fa-map-marker-alt mr-1"></i>Email</strong>
+                                                                <p class="text-muted">
+                                                                    <% if(order?.user?.dataValues?.email){ %>
+                                                                        <%=order?.user?.dataValues?.email %>
+                                                                            <% }else{ %>
+                                                                                <%="N/A" %>
+                                                                                    <% } %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Mobile
+                                                                    Number</strong>
+                                                                <p class="text-muted">
+                                                                    <%=order?.user?.dataValues?.mobileNumber %>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Order
+                                                                    Id</strong>
+                                                                <p class="text-muted">
+                                                                    <%=order?.orderId %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Coupon
+                                                                    Code</strong>
+                                                                <p class="text-muted">
+                                                                    <% if(coupon?.coupon?.code){ %>
+                                                                        <%=coupon?.coupon?.code %>
+                                                                            <%}else{ %>
+                                                                                <%="N /A" %>
+                                                                                    <% } %>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Coupon
+                                                                    Type</strong>
+                                                                <p class="text-muted">
+                                                                    <% if(coupon?.coupon?.discountType){ %>
+                                                                        <% if(coupon?.coupon?.discountType==='percentage'
+                                                                            ){ %>
+                                                                            <%="Percentage" %>
+                                                                                <% }else{ %>
+                                                                                    <%="Fixed" %>
+                                                                                        <% } %>
+                                                                                            <%}else{ %>
+                                                                                                <%="N /A" %>
+                                                                                                    <% } %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Coupon
+                                                                    Discount</strong>
+                                                                <p class="text-muted">
+                                                                    <% if(coupon?.coupon?.discountValue){ %>
+                                                                        <% if(coupon?.coupon?.discountType==='percentage'
+                                                                            ){ %>
+                                                                            Rs <%=coupon?.couponAmt %>
+                                                                                <% }else{ %>
+                                                                                    Rs <%=coupon?.coupon?.discountValue
+                                                                                        %>
+                                                                                        <% } %>
+                                                                                            <%}else{ %>
+                                                                                                <%="N /A" %>
+                                                                                                    <% } %>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Payment
+                                                                    Status</strong>
+                                                                <p class="text-muted">
+                                                                    <% if(order?.paymentStatus==='Complete' ){ %>
+                                                                        <%="Completed" %>
+                                                                            <%}else{ %>
+                                                                                <%="InCompleted" %>
+                                                                                    <% } %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="row">
+
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Paid
+                                                                    Amount</strong>
+                                                                <p class="text-muted">
+                                                                    Rs <%=order?.paidAmt %>
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Tax (GST
+                                                                    <%=order?.tax %> %)
+                                                                </strong>
+                                                                <p class="text-muted">
+                                                                    <% if(order.gst){ %>
+                                                                        Rs <%=order?.gst %>
+                                                                            <% }else{ %>
+                                                                                <%="N /A" %>
+                                                                                    <% } %>
+                                                                </p>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <hr>
+                                                        <div class="row">
+
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Delivery
+                                                                    Fee</strong>
+                                                                <p class="text-muted">
+                                                                    Rs <%=order?.delivery_fee %>
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Transasction
+                                                                    Id</strong>
+                                                                <p class="text-muted">
+                                                                    <% if(order?.txnId) { %>
+                                                                        <%=order?.txnId %>
+                                                                            <% }else{ %>
+                                                                                <%="N /A" %>
+                                                                                    <% } %>
+
+                                                                </p>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <hr>
+
+                                                        <div class="row">
+
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Paid At</strong>
+                                                                <p class="text-muted">
+                                                                    <%= new
+                                                                        Date(order?.dataValues?.paidAt).toLocaleString("en-US",
+                                                                        { month: "short" , day: "numeric" ,
+                                                                        year: "numeric" }) %>
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-book mr-1"></i>Order
+                                                                    Status</strong>
+                                                                <p class="text-muted">
+                                                                    <%=order?.orderStatus %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="row">
+
+                                                            <div class="col-md-6">
+                                                                <strong><i class="fas fa-pencil-alt mr-1"></i>Created
+                                                                    On</strong>
+                                                                <p class="text-muted">
+                                                                    <%= new
+                                                                        Date(order?.dataValues?.createdAt).toLocaleString("en-US",
+                                                                        { month: "short" , day: "numeric" ,
+                                                                        year: "numeric" }) %>
+                                                                </p>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                                <!-- /.card -->
+
+
+
+
+                                                <!-- Shipping details -->
+                                                <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">About Shipping </h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <% if(address){ %>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <strong><i class="fas fa-book mr-1"></i>First
+                                                                        Name</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.firstName %>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <strong><i class="fas fa-map-marker-alt mr-1"></i>
+                                                                        Last Name</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.lastName %>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <strong><i class="fas fa-book mr-1"></i>Phone
+                                                                        Number</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.phoneNumber %>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <strong><i
+                                                                            class="fas fa-map-marker-alt mr-1"></i>Email</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.email %>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <strong><i
+                                                                            class="fas fa-book mr-1"></i>Location</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.location %>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <strong><i
+                                                                            class="fas fa-map-marker-alt mr-1"></i>House
+                                                                        Number</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.houseNumber %>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
+                                                            <hr>
+
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <strong><i class="fas fa-book mr-1"></i>Pin
+                                                                        Code</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.pincode%>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <strong><i
+                                                                            class="fas fa-book mr-1"></i>City</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.city %>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <strong><i
+                                                                            class="fas fa-book mr-1"></i>State</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.state %>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <strong><i
+                                                                            class="fas fa-book mr-1"></i>Country</strong>
+                                                                    <p class="text-muted">
+                                                                        <%=address?.country%>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                                <% } else{ %>
+                                                    <p class="text-muted">This order is created by offline</p>
+                                                    <% } %>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+                                <!-- Table row -->
+                                <h3 class="display-5 my-3 mx-2">Product:</h3>
+                                <div class="row">
+                                    <div class="col-12 table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Product Id</th>
+                                                    <th>Category</th>
+                                                    <th>Qty</th>
+                                                    <!-- <th>Tax</th> -->
+                                                    <th>Price</th>
+                                                    <th>Membership</th>
+                                                    <th>Membership Price</th>
+                                                    <th>QR Id</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%order?.order_items?.forEach((value)=>{ %>
+                                                    <tr>
+                                                        <td>
+                                                            <%=value?.product?.category?.name %>
+                                                        </td>
+                                                        <td>
+                                                            <%=value?.product?.category?.id %>
+                                                        </td>
+                                                        <td>
+                                                            <%=value?.product?.category?.name %>
+                                                        </td>
+                                                        <td>
+                                                            <%=value?.qty %>
+                                                        </td>
+                                                        <!-- <td>
+                                                            <%=order?.tax %>
+                                                        </td> -->
+                                                        <td>
+                                                            <%=value?.product?.price %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.dataValues?.membership?.type){ %>
+                                                                <%=value?.dataValues?.membership?.type %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.dataValues?.membership?.price){ %>
+                                                                <%=value?.dataValues?.membership?.price %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
+                                                                            <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.order_qr?.id ){ %>
+                                                                <a href="/admin/qr/<%=value?.order_qr?.id %>">
+                                                                    <%=value?.order_qr?.id %>
+                                                                </a>
+                                                                <%}else{ %>
+                                                                    <%="N /A" %>
+                                                                        <% } %>
+
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.order_qr?.status===true ){ %>
+                                                                <span class="badge badge-success">
+                                                                    <%="Active" %>
+                                                                </span>
+                                                                <% }else{ %>
+                                                                    <span class="badge badge-warning">
+                                                                        <%="Inactive" %>
+                                                                    </span>
+                                                                    <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(value?.order_qr?.orderId && value?.order_qr?.itemId){
+                                                                %>
+                                                                <a type="button" class="btn btn-danger btn-sm"
+                                                                    href="/admin/qr/unassign/<%=value?.order_qr?.id %>">Unassign</a>
+                                                                <%} else{ %>
+                                                                    <a class="btn btn-info btn-sm"
+                                                                        onclick="assignApi('<%=value?.id %>', '<%=value?.product?.category?.id %>')"
+                                                                        data-toggle="modal" data-target="#assign">
+                                                                        Assign
+                                                                    </a>
+                                                                    <% } %>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- The Modal -->
+                                                    <div class="modal" id="assign">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+
+                                                                <!-- Modal Header -->
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Assign QR code</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+
+                                                                <!-- Modal body -->
+                                                                <div class="modal-body">
+                                                                    <form id="assignForm">
+                                                                        <div class="form-group" id="myOptionForm">
+                                                                            <label for="exampleInputEmail1"
+                                                                                class="mx-3">Enter QR Id:</label>
+                                                                            <input type="hidden" name="orderId"
+                                                                                value="<%=order?.id %>">
+                                                                            <input type="hidden" id="itemId"
+                                                                                name="itemId" value="">
+                                                                            <input type="hidden" id="categoryId"
+                                                                                name="categoryId" value="">
+                                                                            <input type="hidden" name="userId"
+                                                                                value="<%= order?.userId %>">
+                                                                            <input type="text" name="orderQrId"
+                                                                                id="mySelect">
+                                                                            <!-- <select class="form-select"
+                                                                                aria-label="Default select example"
+                                                                                name="orderQrId" id="mySelect">
+                                                                                <option>Select Option</option>
+                                                                            </select> -->
+                                                                        </div>
+
+                                                                        <!-- Modal footer -->
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-danger"
+                                                                                data-dismiss="modal">Close</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary">Submit</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+                            </div><!-- /.container-fluid -->
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+            <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+            <!-- <script type="text/javascript" src="/js/ck-editor.js"></script> -->
+    </body>
+    <script>
+        function assignApi(value, categoryId) {
+            $("#itemId").val(value);
+            $("#categoryId").val(categoryId);
+            // console.log("274", value);
+            function truncateBase64String(base64String, maxLength) {
+                if (base64String.length <= maxLength) {
+                    return base64String;
+                } else {
+                    // Truncate the string and add ellipsis
+                    return base64String.substring(0, maxLength - 3) + '...';
+                }
+            }
+
+            // Fetch data from the API when the modal is shown
+            // $('#assign').on('show.bs.modal', function () {
+            //     $.ajax({
+            //         url: `/admin/qr/list/select`,
+            //         type: 'GET',
+            //         success: function (data) {
+            //             console.log("222", data);
+            //             let select = $('#assign').find('select');
+            //             select.empty(); // Clear existing options
+
+            //             for (let i = 0; i < data.length; i++) {
+            //                 let truncatedString = truncateBase64String(data[i].url, 49);
+            //                 select.append(`<option value="${data[i].id}"> ${truncatedString}  </option>`);
+            //             }
+            //         },
+            //         error: function (error) {
+            //             console.error('Error fetching data:', error);
+            //         }
+            //     });
+            // });
+        }
+
+    </script>
+
+    <script>
+        function assignApi(value, categoryId) {
+            $("#itemId").val(value);
+            $("#categoryId").val(categoryId);
+
+            // Add an event listener to submit the form using AJAX
+            $("#assignForm").submit(function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                const formData = {
+                    orderId: $("input[name='orderId']").val(),
+                    itemId: $("#itemId").val(),
+                    categoryId: $("#categoryId").val(),
+                    userId: $("input[name='userId']").val(),
+                    orderQrId: $("input[name='orderQrId']").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/qr/assign",
+                    data: formData,
+                    success: function (response) {
+                        alert("QR assigned successfully.");
+                        return window.location.reload();
+                        // Handle success, maybe refresh the page or update the DOM
+                    },
+                    error: function (xhr, status, error) {
+                        return alert("QR code is not available.");
+                        console.error("Error: ", error);
+                    }
+                });
+            });
+        }
+
+    </script>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Contact Us' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <h3 class="display-5 my-2">Contact Us</h3>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="file">Name</label>
+                                      <input type="text" class="form-control" value="<%=contactUs?.name %>" id="image">
+                                      
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="file">Email</label>
+                                      <input type="text" class="form-control" value="<%=contactUs?.email %>" id="name" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="file">Phone Number</label>
+                                      <input type="text" class="form-control" id="link"  value="<%=contactUs?.phoneNumber %>" name="link">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="file">Message</label>
+                                      <input type="text" class="form-control" id="link"  value="<%=contactUs?.msg %>" name="link">
+                                    </div>
+                                  </form>
+                               
+                            </div><!-- /.container-fluid -->
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+
+        <%- include("partials/_scripts.ejs") %>
+            
+    </body>
+
+</html>
