@@ -13,11 +13,12 @@ userRouter.route("/login/otp/verify").post(user_controller.LoginVerifyOtp);  // 
 userRouter.route("/forget/password/send/otp").post(user_controller.forgetPasswordSendOtp);  // send OTP for forget password
 userRouter.route("/forget/password/verify/otp").post(user_controller.forgetPasswordVerifyOtp);  // Verify OTP for forget password
 userRouter.route("/forget/password/reset").post(user_controller.resetForgetPassword);  // Reset forget password
+userRouter.route("/change/password").post(requireAuth, user_controller.changePassword);  // Change password
 
 
 // profile 
 userRouter.route("/profile").get(requireAuth, user_controller.getProfile);  
-userRouter.route("/profile/update").patch(requireAuth, profileImages, user_controller.updateProfile);  // update profile
+userRouter.route("/profile/update").patch(requireAuth, user_controller.updateProfile);  // update profile
 
 // Post Requirement
 userRouter.route("/create/enquiry").post(user_controller.createEnquiry);

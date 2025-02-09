@@ -442,6 +442,79 @@ const resetForgetPassword = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const validationResult = await changePasswordValidation.validateAsync(req.body);
+    const { password, confirm_password, current_password } = validationResult;
+    if (password && confirm_password) {
+      if (password !== confirm_password) {
+          return res
+              .status(HttpStatus.BAD_REQUEST.code)
+              .send(
+                  new Response(false, `Password & Confirm password should match`)
+              );
+        }
+
+    const user = await User.findOne({
+      where:{
+        id: req.userId
+      }
+    });
+
+      if (user) {
+        if (!user.isVerified) {
+            return res
+                .status(HttpStatus.UNAUTHORIZED.code)
+                .send(
+                    new Response(false, CustomMessages.MESSAGE.accountNotVerified)
+                );
+        }
+        const currentPassword = await bcrypt.compare(current_password, user.password);
+        if (currentPassword === false) {
+            return res.status(400).send(new Response(false, "Password not matched"))
+        }
+
+        const isSamePassword = await bcrypt.compare(password, user.password);
+        if (isSamePassword) {
+            return res.status(400).send(new Response(false, "Old password & New password can't be same"))
+        }
+
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(password, salt);
+        const updatePassword = await User.update(
+            {
+              password: hashPassword,
+            },
+            {
+              where: {
+                id: req.userId,
+              },
+            }
+        );
+        // await user.save();
+        if (updatePassword) {
+            return res
+                .status(HttpStatus.UPDATED.code)
+                .send(new Response(true, `Password ${HttpStatus.UPDATED.message}`));
+        }
+      } else {
+          return res
+              .status(HttpStatus.BAD_REQUEST.code)
+              .send(new Response(false, `Wrong token`));
+      }
+    } else {
+        return res
+            .status(HttpStatus.BAD_REQUEST.code)
+            .send(
+                new Response(false, `Please enter Password & Confirm password both`)
+            );
+      }
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+}
+
+
 const getProfile = async (req, res) => {
   try {
     const user = await User.findOne({
@@ -453,9 +526,12 @@ const getProfile = async (req, res) => {
         "name",
         "email",
         "phoneNumber",
-        "isVerified",
-        "accountActivatedAt",
         "profileImage",
+        "country",
+          "state",
+          "city",
+          "company",
+          "userType"
       ],
     });
 
@@ -476,7 +552,7 @@ const updateProfile = async (req, res) => {
     const validationResult = await updateProfileValidator.validateAsync(
       req.body
     );
-    let { name, email, mobile_number } = validationResult;
+    let { name, email, country, state, city, company} = validationResult;
 
     let user = await User.findOne({
       where: {
@@ -484,24 +560,23 @@ const updateProfile = async (req, res) => {
       },
     });
 
-    let updatedUser;
-    if (req.files.profile_img) {
-      console.log("786");
-      let profileImage = `users/${req.files.profile_img[0].filename}`;
-      updatedUser = user.update({
+      // let profileImage = `users/${req.files.profile_img[0].filename}`;
+    let updatedUser = user.update({
         name,
         email,
-        phoneNumber: mobile_number,
-        profileImage: profileImage,
+        country,
+        state,
+        city,
+        company,
+        // phoneNumber: mobile_number,
+        // profileImage: profileImage,
       });
-    } else {
-      updatedUser = user.update({ name, email, phoneNumber: mobile_number });
-    }
+
 
     updatedUser
       ? res
         .status(HttpStatus.UPDATED.code)
-        .send(new Response(true, `${HttpStatus.UPDATED.message}`, user))
+        .send(new Response(true, `Profile ${HttpStatus.UPDATED.message}`, user))
       : res
         .status(HttpStatus.OK.code)
         .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
@@ -586,5 +661,6 @@ module.exports = {
   getProfile,
   updateProfile,
   createEnquiry,
-  allEnquiry
+  allEnquiry,
+  changePassword,
 };

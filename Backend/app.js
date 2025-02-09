@@ -15,7 +15,7 @@ const { adminRouter } = require('./routes/admin.route');
 
 app.use(cors({
   origin: "http://localhost:5173", // React app origin
-  methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
+  methods: "GET,POST,PUT,DELETE, PATCH", // Allowed HTTP methods
   credentials: true, // Allow credentials like cookies
 }));
 

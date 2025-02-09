@@ -97,9 +97,12 @@ let changePasswordValidation = Joi.object({
 
 
 const updateProfileValidator = Joi.object({
-    email:Joi.string().optional().email(),
-    mobile_number: Joi.string().optional(),
     name: Joi.string().optional(),
+    email:Joi.string().optional().email(),
+    country: Joi.number().integer().optional(),
+    state: Joi.number().integer().optional(),
+    city: Joi.number().integer().optional(),
+    company: Joi.string().optional(),
 });
 
 

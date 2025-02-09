@@ -45,6 +45,27 @@ const userService = {
             Authorization: `Bearer ${AuthService.getAccessToken()}`
         }
     }),
+
+    // Get user profile
+    getProfile: () => axiosClient.get(`/users/profile`, {
+        headers:{
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    // update User
+    updateUser: (data)=> axiosClient.patch('users/profile/update', data, {
+        headers:{
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    // change password
+    changePassword: (data)=> axiosClient.post('/users/change/password', data, {
+        headers:{
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    })
 };
 
 export default userService;
