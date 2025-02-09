@@ -133,14 +133,14 @@ const MyRequirements = () => {
 
       {/* Modal */}
       <div
-        className="modal"
+        className="modal fade"
         id="enquiryModal"
         tabIndex="-1"
         role="dialog"
         aria-labelledby="enquiryModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-sm" role="document">
+        <div className="modal-dialog" style={{ maxWidth: '500px' }} role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="enquiryModalLabel">

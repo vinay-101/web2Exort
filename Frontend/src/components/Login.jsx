@@ -78,6 +78,7 @@ const Login = () => {
     },
     (data) => {
       AuthService.setTokens(data.data.access_token);
+      AuthService.setName(data.data.user.id);
       navigate("/user/profile");
     },
     (error) => {

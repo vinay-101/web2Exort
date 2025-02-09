@@ -11,6 +11,15 @@ class AuthService {
 
   static clearTokens() {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem('userId')
+  }
+
+  static setName(userId){
+    localStorage.setItem("userId", userId)
+  }
+
+  static getUserId(){
+   return  localStorage.getItem('userId')
   }
 }
 

@@ -67,7 +67,7 @@ const ProductListing = () => {
   return (
     <div className="profile_product_listing">
       {/* Tabs Navigation */}
-      <ul className="nav nav-tabs" id="productTabs" role="tablist">
+      <ul className="nav nav-tabs" style={{display:"flex", alignItems:"center", justifyContent:"center"}} id="productTabs" role="tablist">
         <li className="nav-item">
           <a
             className={`nav-link ${activeTab === "all-products" ? "active" : ""}`}

@@ -11,7 +11,7 @@ const DashboardSidebar = () => {
 
   return (
     <aside className="col-md-2 profile_sidebar py-3">
-      <h5 style={{ textAlign: "center" }}>Web2Export</h5>
+     <Link style={{color: "white", listStyle: "none", textDecoration:"none", }} to={"/"}> <h5>Web2Export</h5></Link>
       <ul className="nav flex-column">
         <li className="nav-item">
           <Link
