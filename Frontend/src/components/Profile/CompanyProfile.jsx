@@ -2,199 +2,307 @@ import React from "react";
 import { useState } from "react";
 
 const CompanyProfileForm = () => {
-
   const [activeTab, setActiveTab] = useState("generalDetails");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-
   return (
-    <>
+      <div className="container col-md-10">
+        <section className="row justify-content-center">
+          <div className="col-lg-10">
+            <article className="Navborder"></article>
 
-      <section className="col-lg-10 company-profile-form-section">
-        <article className="Navborder">
-
-        </article>
-        
-        <div className="tabs-container">
-          <div className="tabs">
-            <button
-              className={`tab ${activeTab === "generalDetails" ? "active" : ""}`}
-              onClick={() => handleTabClick("generalDetails")}
-            >
-              General details
-            </button>
-            <button
-              className={`tab ${activeTab === "companyInfo" ? "active" : ""}`}
-              onClick={() => handleTabClick("companyInfo")}
-            >
-              Company info
-            </button>
-            <button
-              className={`tab ${
-                activeTab === "certification" ? "active" : ""
-              }`}
-              onClick={() => handleTabClick("certification")}
-            >
-              Certification & Licensing
-            </button>
-            <button
-              className={`tab ${
-                activeTab === "officeLocation" ? "active" : ""
-              }`}
-              onClick={() => handleTabClick("officeLocation")}
-            >
-              Office location(s)
-            </button>
-          </div>
-        <h2>Company Profile</h2>
-
-
-          {/* Tab Content */}
-          <div className="tab-content">
-            {activeTab === "generalDetails" &&
-              <div>
-                  
-                  <div className=" company-profile-form">
-
-                    {/* Basic Information Section */}
-                    <section className="form-section">
-                      <h3>Basic Information</h3>
-                      <div className="form-group">
-                        <label>Company Name</label>
-                        <input type="text" placeholder="Enter company name" />
-                      </div>
-                      <div className="form-group">
-                        <label>Company Description</label>
-                        <textarea placeholder="Enter here..."></textarea>
-                      </div>
-                      <div className="form-group">
-                        <label>Upload Images</label>
-                        <div className="upload-buttons">
-                          <button className="logo-banner-button" type="button"><input type="file" />Add company logo</button>
-                          <button className="logo-banner-button" type="button"><input type="file" />Add profile banner</button>
-                        </div>
-                      </div>
-                      <div className="form-group">
-                        <label>Country</label>
-                        <select>
-                          <option>India</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>State</label>
-                        <select>
-                          <option>Bihar</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>City</label>
-                        <select>
-                          <option>Buxar</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Zip / Postal Code</label>
-                        <input type="text" placeholder="Enter here..." />
-                      </div>
-                      <div className="form-group">
-                        <label>Street Address</label>
-                        <input type="text" placeholder="Enter here..." />
-                      </div>
-                      <div className="form-group">
-                        <label>Primary Business Type</label>
-                        <select>
-                          <option>Select...</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Business Categories</label>
-                        <select>
-                          <option>Select...</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Working Days</label>
-                        <select>
-                          <option>Select...</option>
-                        </select>
-                      </div>
-                    </section>
-                  </div>
-                  <div className=" company-profile-form">
-
-                    {/* Contact Information Section */}
-                    <section className="form-section">
-                      <h3>Contact Information</h3>
-                      <div className="form-group">
-                        <label>Contact Person</label>
-                        <input type="text" placeholder="Enter name" />
-                      </div>
-                      <div className="form-group">
-                        <label>Mobile Number</label>
-                        <input type="text" placeholder="+91 98765 43210" />
-                      </div>
-                      <div className="form-group">
-                        <label>Alternate Mobile Number</label>
-                        <input type="text" placeholder="+1 (555) 123-4567" />
-                      </div>
-                      <div className="form-group">
-                        <label>Primary Email Address</label>
-                        <input type="email" placeholder="example@gmail.com" />
-                      </div>
-                      <div className="form-group">
-                        <label>Alternate Email Address</label>
-                        <input type="email" placeholder="Enter here..." />
-                      </div>
-                      <div className="form-group">
-                        <label>Landline Number</label>
-                        <input type="text" placeholder="Enter here..." />
-                      </div>
-                      <div className="form-group">
-                        <label>Fax Number</label>
-                        <input type="text" placeholder="Enter here..." />
-                      </div>
-                    </section>
-
-                    {/* Save Button */}
-                    <div className="form-actions">
-                          <button type="submit" className="save-button">Save</button>
-                          <button type="submit" className="cancel-button">Cancel</button>
-                      </div> 
-                  </div>
-      
-
-            </div>}
-            {activeTab === "companyInfo" &&
+            <div className="tabs-container text-center mb-4">
+              <div className="nav nav-tabs justify-content-center my-3" style={{border:0}}>
+                <button style={{color:"#555", fontWeight:"bold", border: "none", outline: "none", cursor: "default" }}
+                    className={`nav-link d-flex align-items-center gap-2 ${
+                        activeTab === "generalDetails" ? "active btn-primary text-white rounded-pill px-3" : ""
+                    }`}
+                    onClick={() => handleTabClick("generalDetails")}
+                >
+                  <i className="bi bi-box"></i>
+                  General Details
+                </button>
+                <button style={{color:"#555", fontWeight:"bold", border: "none", outline: "none", cursor: "default"}}
+                    className={`nav-link d-flex align-items-center gap-2 ${
+                        activeTab === "companyInfo" ? "active btn-primary text-white rounded-pill px-3" : ""
+                    }`}
+                    onClick={() => handleTabClick("companyInfo")}
+                >
+                  <i className="bi bi-building"></i>
+                  Company Info
+                </button>
+                <button style={{color:"#555", fontWeight:"bold", border: "none", outline: "none", cursor: "default"}}
+                    className={`nav-link d-flex align-items-center gap-2 ${
+                        activeTab === "certification" ? "active btn-primary text-white rounded-pill px-3" : ""
+                    }`}
+                    onClick={() => handleTabClick("certification")}
+                >
+                  <i className="bi bi-award"></i>
+                  Certification & Licensing
+                </button>
+                <button style={{color:"#555", fontWeight:"bold", border: "none", outline: "none", cursor: "default"}}
+                    className={`nav-link d-flex align-items-center gap-2 ${
+                        activeTab === "officeLocation" ? "active btn-primary text-white rounded-pill px-3" : ""
+                    }`}
+                    onClick={() => handleTabClick("officeLocation")}
+                >
+                  <i className="bi bi-geo-alt"></i>
+                  Office Location(s)
+                </button>
+              </div>
+              <h2 className="mt-5">Company Profile</h2>
+            </div>
+            {/* Tab Content */}
+            <div className="tab-content">
+              {activeTab === "generalDetails" && (
                   <div>
-                    <form className="company-profile-form">
-                      {/* Basic Information Section */}
-                      <section className="form-section chat-custom-form-section">
+                    {/* Basic Information Section */}
+                    <div className="card mb-4">
+                      <div className="card-body">
                         <h3 className="mb-4">Basic Information</h3>
-                        <div className="chat-custom-grid">
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="year-of-establishment">Year of establishment *</label>
-                            <select id="year-of-establishment" className="form-control">
-                              <option>Please select year</option>
+                        <div className="form-row">
+                          {/* Company Name */}
+                          <div className="form-group col-md-6">
+                            <label>Company Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter company name"
+                            />
+                          </div>
+
+                          {/* Company Description */}
+                          <div className="form-group col-md-6">
+                            <label>Company Description</label>
+                            <textarea
+                                className="form-control"
+                                placeholder="Enter here..."
+                                rows="3"
+                            ></textarea>
+                          </div>
+
+                          {/* Company Logo Upload */}
+                          <div className="form-group col-md-6">
+                            <label>Add Company Logo</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="companyLogo"
+                              />
+                              <label className="custom-file-label" htmlFor="companyLogo">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+
+                          {/* Profile Banner Upload */}
+                          <div className="form-group col-md-6">
+                            <label>Add Profile Banner</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="profileBanner"
+                              />
+                              <label className="custom-file-label" htmlFor="profileBanner">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+
+                          {/* Country */}
+                          <div className="form-group col-md-6">
+                            <label>Country</label>
+                            <select className="form-control">
+                              <option>India</option>
                             </select>
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="ownership-type">Ownership type *</label>
-                            <select id="ownership-type" className="form-control">
-                              <option>Select</option>
+
+                          {/* State */}
+                          <div className="form-group col-md-3">
+                            <label>State</label>
+                            <select className="form-control">
+                              <option>Bihar</option>
                             </select>
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="major-market">Major market *</label>
-                            <select id="major-market" className="form-control">
+
+                          {/* City */}
+                          <div className="form-group col-md-3">
+                            <label>City</label>
+                            <select className="form-control">
+                              <option>Buxar</option>
+                            </select>
+                          </div>
+
+                          {/* Zip / Postal Code */}
+                          <div className="form-group col-md-6">
+                            <label>Zip / Postal Code</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+
+                          {/* Street Address */}
+                          <div className="form-group col-md-6">
+                            <label>Street Address</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+
+                          {/* Primary Business Type */}
+                          <div className="form-group col-md-6">
+                            <label>Primary Business Type</label>
+                            <select className="form-control">
                               <option>Select...</option>
                             </select>
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="terms-of-delivery">Terms of delivery *</label>
-                            <select id="terms-of-delivery" className="form-control">
+
+                          {/* Business Categories */}
+                          <div className="form-group col-md-6">
+                            <label>Business Categories</label>
+                            <select className="form-control">
+                              <option>Select...</option>
+                            </select>
+                          </div>
+
+                          {/* Working Days */}
+                          <div className="form-group col-md-6">
+                            <label>Working Days</label>
+                            <select className="form-control">
+                              <option>Select...</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Contact Information Section */}
+                    <div className="card mb-4">
+                      <div className="card-body">
+                        <h3 className="mb-4">Contact Information</h3>
+                        <div className="form-row">
+                          {/* Contact Person */}
+                          <div className="form-group col-md-6">
+                            <label>Contact Person</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter name"
+                            />
+                          </div>
+
+                          {/* Mobile Number */}
+                          <div className="form-group col-md-6">
+                            <label>Mobile Number</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="+91 98765 43210"
+                            />
+                          </div>
+
+                          {/* Alternate Mobile Number */}
+                          <div className="form-group col-md-6">
+                            <label>Alternate Mobile Number</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="+1 (555) 123-4567"
+                            />
+                          </div>
+
+                          {/* Primary Email Address */}
+                          <div className="form-group col-md-6">
+                            <label>Primary Email Address</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                placeholder="example@gmail.com"
+                            />
+                          </div>
+
+                          {/* Alternate Email Address */}
+                          <div className="form-group col-md-6">
+                            <label>Alternate Email Address</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+
+                          {/* Landline Number */}
+                          <div className="form-group col-md-6">
+                            <label>Landline Number</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+
+                          {/* Fax Number */}
+                          <div className="form-group col-md-6">
+                            <label>Fax Number</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Save and Cancel Buttons */}
+                    <div className="form-actions text-right">
+                      <button type="submit" className="btn btn-primary mr-2">
+                        Save
+                      </button>
+                      <button type="submit" className="btn btn-secondary">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+
+              )}
+
+              {activeTab === "companyInfo" && (
+                  <div>
+                    <div className="card mb-4">
+                      <div className="card-body">
+                        <h3 className="mb-4">Basic Information</h3>
+                        <div className="form-row">
+                          <div className="form-group col-md-6">
+                            <label>Year of establishment *</label>
+                            <select className="form-control">
+                              <option>Please select year</option>
+                            </select>
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Ownership type *</label>
+                            <select className="form-control">
+                              <option>Select</option>
+                            </select>
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Major market *</label>
+                            <select className="form-control">
+                              <option>Select...</option>
+                            </select>
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Terms of delivery *</label>
+                            <select className="form-control">
                               <option>DAP - Delivery at place</option>
                               <option>DDP - Delivered Duty Paid</option>
                               <option>FAS - Free Alongside Ship</option>
@@ -202,349 +310,358 @@ const CompanyProfileForm = () => {
                               <option>CIF - Cost, Insurance, Freight</option>
                             </select>
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="area">Area</label>
-                            <select id="area" className="form-control">
+                          <div className="form-group col-md-6">
+                            <label>Area</label>
+                            <select className="form-control">
                               <option>Select</option>
                             </select>
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="employees">No. of employees</label>
+                          <div className="form-group col-md-6">
+                            <label>No. of employees</label>
                             <input
-                              type="text"
-                              id="employees"
-                              className="form-control"
-                              placeholder="Enter here..."
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
                             />
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="product-line">No. of product line</label>
+                          <div className="form-group col-md-6">
+                            <label>No. of product line</label>
                             <input
-                              type="text"
-                              id="product-line"
-                              className="form-control"
-                              placeholder="Enter here..."
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
                             />
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="output-capacity">Output capacity</label>
+                          <div className="form-group col-md-6">
+                            <label>Output capacity</label>
                             <input
-                              type="text"
-                              id="output-capacity"
-                              className="form-control"
-                              placeholder="Enter here..."
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
                             />
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="lead-time">Average lead time</label>
-                            <select id="lead-time" className="form-control">
+                          <div className="form-group col-md-6">
+                            <label>Average lead time</label>
+                            <select className="form-control">
                               <option>Select</option>
                             </select>
                           </div>
                         </div>
-                      </section>
+                      </div>
+                    </div>
 
-                    {/* Trade Information Section */}
-                    </form>
-                    <form className="company-profile-form">
-                      <section className="form-section chat-custom-form-section mt-4">
+                    <div className="card mb-4">
+                      <div className="card-body">
                         <h3 className="mb-4">Trade Information</h3>
-                        <div className="chat-custom-grid">
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="gst-number">GST number</label>
+                        <div className="form-row">
+                          <div className="form-group col-md-6">
+                            <label>GST number</label>
                             <input
-                              type="text"
-                              id="gst-number"
-                              className="form-control"
-                              placeholder="Enter here..."
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
                             />
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="pan-number">PAN number</label>
+                          <div className="form-group col-md-6">
+                            <label>PAN number</label>
                             <input
-                              type="text"
-                              id="pan-number"
-                              className="form-control"
-                              placeholder="Enter here..."
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
                             />
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="tan-number">TAN number</label>
+                          <div className="form-group col-md-6">
+                            <label>TAN number</label>
                             <input
-                              type="text"
-                              id="tan-number"
-                              className="form-control"
-                              placeholder="Enter here..."
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
                             />
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="annual-revenue">Annual revenue *</label>
-                            <select id="annual-revenue" className="form-control">
+                          <div className="form-group col-md-6">
+                            <label>Annual revenue *</label>
+                            <select className="form-control">
                               <option>Select</option>
                             </select>
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="export-percentage">Export percentage</label>
+                          <div className="form-group col-md-6">
+                            <label>Export percentage</label>
                             <input
-                              type="text"
-                              id="export-percentage"
-                              className="form-control"
-                              placeholder="Enter here..."
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
                             />
                           </div>
-                          <div className="chat-custom-grid-row">
-                            <label htmlFor="nearest-port">Nearest port</label>
-                            <select id="nearest-port" className="form-control">
+                          <div className="form-group col-md-6">
+                            <label>Nearest port</label>
+                            <select className="form-control">
                               <option>Please select</option>
                             </select>
                           </div>
                         </div>
-                      </section>
+                      </div>
+                    </div>
 
-                      {/* Save Button */}
-                        <div className="form-actions">
-                          <button type="submit" className="save-button">Save</button>
-                          <button type="submit" className="cancel-button">Cancel</button>
-                      </div>  
-                    </form>
+                    <div className="form-actions text-right">
+                      <button type="submit" className="btn btn-primary mr-2">
+                        Save
+                      </button>
+                      <button type="submit" className="btn btn-secondary">
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-              }
-            {activeTab === "certification" && (
-              
-              <div className="">
-                <form className=" company-profile-form certification-form">
-                  {/* Certification Section */}
-                  <section className="form-section chat-custom-form-section">
-                    <h3 className="mb-4">Certification</h3>
-                    <div className="chat-custom-grid">
-                      <div className="chat-custom-grid-row">
-                        <label className="mb-0">Recommended format: </label>
-                        <label className="mb-0"> Size: Less than 5MB</label>
+              )}
 
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label htmlFor="certification-name">Name</label>
-                        <input
-                          type="text"
-                          id="certification-name"
-                          className="form-control"
-                          placeholder="Enter here..."
-                        />
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label htmlFor="upload-certificate">Upload Certificate</label>
-                        <div className="file-upload">
-                          <button className="btn btn-secondary certificate-upload-buton1" type="button">
-                          <input type="file" id="upload-certificate"  className="certificate-upload-input"/>
-                            
-                          </button>
-                        </div>
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label>Upload Documents </label>
-                        <label> (PDF | Less than 5MB)</label>
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label>Company Registration Certificate</label>
-                        <div className="file-upload">
-                          <button className="btn btn-secondary certificate-upload-buton" type="button">
-                          <input type="file" className="certificate-upload-input" />
-                             
-                          </button>
-                        </div>
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label>Tax Certificate</label>
-                        <div className="file-upload">
-                          <button className="btn btn-secondary certificate-upload-buton" type="button">
-                          <input type="file" className="certificate-upload-input" />
-                             
-                          </button>
-                        </div>
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label>Utility Bill</label>
-                        <div className="file-upload">
-                          <button className="btn btn-secondary certificate-upload-buton" type="button">
-                          <input type="file" className="certificate-upload-input" />
-                             
-                          </button>
-                        </div>
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label>Passport/Driving License</label>
-                        <div className="file-upload">
-                          <button className="btn btn-secondary certificate-upload-buton" type="button">
-                          <input type="file" className="certificate-upload-input" />
-                             
-                          </button>
-                        </div>
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label>Business License</label>
-                        <div className="file-upload">
-                          <button className="btn btn-secondary  certificate-upload-buton" type="button">
-                          <input type="file" className="certificate-upload-input"  />
-                             
-                          </button>
+              {activeTab === "certification" && (
+                  <div>
+                    <div className="card mb-4">
+                      <div className="card-body">
+                        <h3 className="mb-4">Certification</h3>
+                        <div className="form-row">
+                          <div className="form-group col-md-12">
+                            <label>Recommended format: </label>
+                            <label>Size: Less than 5MB</label>
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Upload Certificate</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="companyLogo"
+                              />
+                              <label className="custom-file-label" htmlFor="companyLogo">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+                          <div className="form-group col-md-12">
+                            <label>Upload Documents (PDF | Less than 5MB)</label>
+                          </div>
+
+                          <div className="form-group col-md-6">
+                            <label>Company Registration Certificate</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="companyLogo"
+                              />
+                              <label className="custom-file-label" htmlFor="companyLogo">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+
+                          <div className="form-group col-md-6">
+                            <label>Tax Certificate</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="companyLogo"
+                              />
+                              <label className="custom-file-label" htmlFor="companyLogo">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+
+                          <div className="form-group col-md-6">
+                            <label>Utility Bill</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="companyLogo"
+                              />
+                              <label className="custom-file-label" htmlFor="companyLogo">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+
+                          <div className="form-group col-md-6">
+                            <label>Passport/Driving License</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="companyLogo"
+                              />
+                              <label className="custom-file-label" htmlFor="companyLogo">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+
+                          <div className="form-group col-md-6">
+                            <label>Business License</label>
+                            <div className="custom-file">
+                              <input
+                                  type="file"
+                                  className="custom-file-input"
+                                  id="companyLogo"
+                              />
+                              <label className="custom-file-label" htmlFor="companyLogo">
+                                Choose file
+                              </label>
+                            </div>
+                          </div>
+
                         </div>
                       </div>
                     </div>
-                  </section>
-                </form>
-                  {/* Registration Information Section */}
-                <form className=" company-profile-form">
-                  <section className="form-section chat-custom-form-section mt-4">
-                    <h3 className="mb-4">Registration Information</h3>
-                    <div className="chat-custom-grid">
-                      <div className="chat-custom-grid-row">
-                        <label htmlFor="location-of-registration">
-                          Location of Registration *
-                        </label>
-                        <select
-                          id="location-of-registration"
-                          className="form-control"
-                        >
-                          <option>Select country</option>
-                        </select>
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label htmlFor="registration-date">Registration Date *</label>
-                        <input
-                          type="date"
-                          id="registration-date"
-                          className="form-control"
-                          placeholder="Please enter registration date"
-                        />
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label htmlFor="registration-number">Registration Number *</label>
-                        <input
-                          type="text"
-                          id="registration-number"
-                          className="form-control"
-                          placeholder="Enter here..."
-                        />
-                      </div>
-                      <div className="chat-custom-grid-row">
-                        <label htmlFor="fax-number">FAX Number</label>
-                        <input
-                          type="text"
-                          id="fax-number"
-                          className="form-control"
-                          placeholder="Enter here..."
-                        />
+
+                    <div className="card mb-4">
+                      <div className="card-body">
+                        <h3 className="mb-4">Registration Information</h3>
+                        <div className="form-row">
+                          <div className="form-group col-md-6">
+                            <label>Location of Registration *</label>
+                            <select className="form-control">
+                              <option>Select country</option>
+                            </select>
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Registration Date *</label>
+                            <input
+                                type="date"
+                                className="form-control"
+                                placeholder="Please enter registration date"
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Registration Number *</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>FAX Number</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </section>
 
-                  {/* Save Button */}
-                  <div className="form-actions">
-                          <button type="submit" className="save-button">Save</button>
-                          <button type="submit" className="cancel-button">Cancel</button>
-                  </div> 
-                </form>
-              </div>
+                    <div className="form-actions text-right">
+                      <button type="submit" className="btn btn-primary mr-2">
+                        Save
+                      </button>
+                      <button type="submit" className="btn btn-secondary">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+              )}
 
-              
-            )}
-            {activeTab === "officeLocation" && (
-              <div>
-                
-                  <form className="company-profile-form office-form">
-                    {/* Head Office Section */}
-                    <section className="form-section chat-custom-form-section">
-                      <h3 className="mb-4">Head Office</h3>
-                      <div className="chat-custom-grid">
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="office-location">Office location *</label>
-                          <select id="office-location" className="form-control">
-                            <option>Select country</option>
-                          </select>
-                        </div>
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="state">State</label>
-                          <input
-                            type="text"
-                            id="state"
-                            className="form-control"
-                            placeholder="State (optional)"
-                          />
-                        </div>
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="zipcode">Zipcode *</label>
-                          <input
-                            type="text"
-                            id="zipcode"
-                            className="form-control"
-                            placeholder="Enter here..."
-                          />
-                        </div>
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="street-address">Street Address *</label>
-                          <textarea
-                            id="street-address"
-                            className="form-control"
-                            placeholder="Enter here..."
-                          ></textarea>
+              {activeTab === "officeLocation" && (
+                  <div>
+                    <div className="card mb-4">
+                      <div className="card-body">
+                        <h3 className="mb-4">Head Office</h3>
+                        <div className="form-row">
+                          <div className="form-group col-md-6">
+                            <label>Office location *</label>
+                            <select className="form-control">
+                              <option>Select country</option>
+                            </select>
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>State</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="State (optional)"
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Zipcode *</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Street Address *</label>
+                            <textarea
+                                className="form-control"
+                                placeholder="Enter here..."
+                            ></textarea>
+                          </div>
                         </div>
                       </div>
-                    </section>
-                  </form>
-                  <form className=" company-profile-form">
-                    {/* Branches Section */}
-                    <section className="form-section chat-custom-form-section mt-4">
-                      <h3 className="mb-4">Branches</h3>
-                      <p>Add your branch details (If any)</p>
-                      <div className="chat-custom-grid">
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="branch-office-location">Office location *</label>
-                          <select id="branch-office-location" className="form-control">
-                            <option>Select country</option>
-                          </select>
-                        </div>
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="branch-state">State</label>
-                          <input
-                            type="text"
-                            id="branch-state"
-                            className="form-control"
-                            placeholder="State (optional)"
-                          />
-                        </div>
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="branch-zipcode">Zipcode *</label>
-                          <input
-                            type="text"
-                            id="branch-zipcode"
-                            className="form-control"
-                            placeholder="Enter here..."
-                          />
-                        </div>
-                        <div className="chat-custom-grid-row">
-                          <label htmlFor="branch-street-address">Street Address *</label>
-                          <textarea
-                            id="branch-street-address"
-                            className="form-control"
-                            placeholder="Enter here..."
-                          ></textarea>
-                        </div>
-                      </div>
-                    </section>
+                    </div>
 
-                    {/* Save Button */}
-                    <div className="form-actions">
-                          <button type="submit" className="save-button">Save</button>
-                          <button type="submit" className="cancel-button">Cancel</button>
+                    <div className="card mb-4">
+                      <div className="card-body">
+                        <h3 className="mb-4">Branches</h3>
+                        <p>Add your branch details (If any)</p>
+                        <div className="form-row">
+                          <div className="form-group col-md-6">
+                            <label>Office location *</label>
+                            <select className="form-control">
+                              <option>Select country</option>
+                            </select>
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>State</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="State (optional)"
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Zipcode *</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter here..."
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label>Street Address *</label>
+                            <textarea
+                                className="form-control"
+                                placeholder="Enter here..."
+                            ></textarea>
+                          </div>
+                        </div>
                       </div>
-                  </form>
-                
-              </div>
-            )}
+                    </div>
+
+                    <div className="form-actions text-right">
+                      <button type="submit" className="btn btn-primary mr-2">
+                        Save
+                      </button>
+                      <button type="submit" className="btn btn-secondary">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+              )}
+            </div>
           </div>
-        </div>
-      </section>
-    </>
+        </section>
+      </div>
   );
 };
 
