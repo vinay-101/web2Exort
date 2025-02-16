@@ -121,8 +121,8 @@ const companyValidationSchema = Joi.object({
     // Company description and images
     companyName: Joi.string().optional(),
     companyDescription: Joi.string().required(),
-    companyLogo: Joi.string().allow('', null),
-    profileBanner: Joi.string().allow('', null),
+    // companyLogo: Joi.string().allow('', null),
+    // profileBanner: Joi.string().allow('', null),
 
     // Address information
     country: Joi.number().integer().optional(),
@@ -194,30 +194,30 @@ const companyInfoValidationSchema = Joi.object({
 
 const companyCertificationValidationSchema = Joi.object({
     // The ID of the company that owns this certification.
-    // companyId: Joi.number().integer().required(),
+    companyId: Joi.number().integer().required(),
 
     // The name of the certification.
     name: Joi.string().trim().min(1).required(),
 
     // The file path or URL for the certificate file.
-    certificateFile: Joi.string().trim().min(1).optional()
+    certificateFile: Joi.string().trim().min(1).required()
 });
 
 
 const companyDocumentValidationSchema = Joi.object({
-    // companyId: Joi.number().integer().required(),
+    companyId: Joi.number().integer().required(),
     documentType: Joi.string()
         .valid('Registration', 'Tax', 'Utility', 'Identification', 'Business')
         .required(),
-    documentFile: Joi.string().trim().min(1).optional()
+    documentFile: Joi.string().trim().min(1).required()
 })
 
 const companyRegistrationValidationSchema = Joi.object({
     // The ID of the company that owns this registration record.
-    // companyId: Joi.number().integer().required(),
+    companyId: Joi.number().integer().required(),
 
     // Location of the registration. This field is required.
-    registrationLocation: Joi.number().integer().required(),
+    registrationLocation: Joi.string().trim().min(1).required(),
 
     // The registration date must be a valid ISO date string (YYYY-MM-DD).
     registrationDate: Joi.date().iso().required(),
@@ -231,7 +231,7 @@ const companyRegistrationValidationSchema = Joi.object({
 
 const officeLocationValidationSchema = Joi.object({
     // The ID of the company that this office location belongs to.
-    // companyId: Joi.number().integer().required(),
+    companyId: Joi.number().integer().required(),
 
     // The location type should be either 'Head' or 'Branch'.
     locationType: Joi.string()

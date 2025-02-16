@@ -65,7 +65,55 @@ const userService = {
         headers:{
             Authorization: `Bearer ${AuthService.getAccessToken()}`
         }
-    })
+    }),
+
+    // Create general details
+    createGeneralDetail: (data)=> axiosClient.post('/users/create/company/profile/general/detail', data, {
+        headers:{
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    // create/update comp info
+    createCompanyInfo: (data)=> axiosClient.post('/users/create/company/profile/contact/info', data, {
+        headers:{
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    // create certificate / update
+    createCertificate: (data)=> axiosClient.post('/users/create/company/profile/certification', data, {
+        headers:{
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+    
+    // create document / update
+    createDocument: (data)=> axiosClient.post('/users/create/company/document', data, {
+        headers:{
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    // create document / update
+    createCompanyRegistration: (data)=> axiosClient.post('/users/create/company/profile/registration', data, {
+        headers:{
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    // create office location / update
+    createOfficeLocation: (data)=> axiosClient.post('/users/create/company/office/location', data, {
+        headers:{
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+
+
 };
 
 export default userService;

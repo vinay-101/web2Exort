@@ -2,7 +2,7 @@ const express = require("express");
 const userRouter = express.Router();
 const user_controller = require("../controllers/user/user.controller");
 const { requireAuth } = require("../middlewares/auth.middleware");
-const { profileImages } = require("../middlewares/uploadCoverImage.middleware");
+const { uploadFiles } = require("../middlewares/uploadFiles.middleware");
 
 /////////////////////////////////////// AUTH routes //////////////////////////////////////
 
@@ -23,5 +23,27 @@ userRouter.route("/profile/update").patch(requireAuth, user_controller.updatePro
 // Post Requirement
 userRouter.route("/create/enquiry").post(user_controller.createEnquiry);
 userRouter.route("/all/enquiry").get(requireAuth, user_controller.allEnquiry);
+
+// Company profile
+// Basic details
+userRouter.route("/create/company/profile/general/detail").post(requireAuth, uploadFiles("uploads/companies/", [
+    { name: "companyLogo", maxCount: 1 },
+    { name: "profileBanner", maxCount: 1 },
+]),user_controller.createCompanyProfileGeneralDetail);
+
+// Contact Info
+userRouter.route("/create/company/profile/contact/info").post(requireAuth, user_controller.createCompanyContactInfo);
+userRouter.route("/create/company/profile/certification").post(requireAuth,uploadFiles("uploads/companies/", [
+    { name: "certificateFile", maxCount: 1 },
+]), user_controller.createCompanyCertification);
+
+userRouter.route("/create/company/document").post(requireAuth,uploadFiles("uploads/companies/", [
+    { name: "documentFile", maxCount: 1 },
+]), user_controller.createCompanyDocument);
+
+// Register Company
+userRouter.route("/create/company/profile/registration").post(requireAuth, user_controller.createCompanyRegistration);
+// office location
+userRouter.route("/create/company/office/location").post(requireAuth, user_controller.createCompanyLocation);
 
 module.exports = {userRouter}

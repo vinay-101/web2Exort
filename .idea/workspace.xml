@@ -4,11 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d1dc28d-63eb-4f88-a98a-9545ee1f54ba" name="Default Changelist" comment="add change password functionality and update profile details" />
+    <list default="true" id="7d1dc28d-63eb-4f88-a98a-9545ee1f54ba" name="Default Changelist" comment="refactor company profile form layout and improve UI components">
+      <change afterPath="$PROJECT_DIR$/Backend/middlewares/uploadFiles.middleware.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/migrations/20250215051245-create-company.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/models/user/Company.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/models/user/CompanyCertification.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/models/user/CompanyDocument.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/models/user/CompanyOfficeLocation.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/models/user/CompanyRegistration.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/controllers/user/user.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/controllers/user/user.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/middlewares/uploadCoverImage.middleware.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/routes/user.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/routes/user.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/validators/user.validator.js" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/validators/user.validator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/Services/userServices.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/Services/userServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/components/Profile/CompanyProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/components/Profile/CompanyProfile.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -25,6 +47,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;X:/MyProject/Web2Export&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -62,7 +85,16 @@
       <workItem from="1739033921218" duration="3410000" />
       <workItem from="1739066737191" duration="95000" />
       <workItem from="1739066891860" duration="14233000" />
-      <workItem from="1739084686102" duration="313000" />
+      <workItem from="1739084686102" duration="6087000" />
+      <workItem from="1739153024486" duration="465000" />
+      <workItem from="1739153534662" duration="109000" />
+      <workItem from="1739153676091" duration="5659000" />
+      <workItem from="1739283430422" duration="3345000" />
+      <workItem from="1739286914651" duration="9057000" />
+      <workItem from="1739417322182" duration="1758000" />
+      <workItem from="1739459028569" duration="4680000" />
+      <workItem from="1739583765055" duration="63000" />
+      <workItem from="1739594051504" duration="2977000" />
     </task>
     <task id="LOCAL-00001" summary="add change password functionality and update profile details">
       <option name="closed" value="true" />
@@ -81,6 +113,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ui fixes" />
     <MESSAGE value="add change password functionality and update profile details" />
-    <option name="LAST_COMMIT_MESSAGE" value="add change password functionality and update profile details" />
+    <MESSAGE value="refactor company profile form layout and improve UI components" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor company profile form layout and improve UI components" />
   </component>
 </project>
