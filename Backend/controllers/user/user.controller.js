@@ -11,7 +11,8 @@ const {
   changePasswordValidation,
   completeProfileValidation,
   updateProfileValidator,
-  enquirySchema, companyValidationSchema,
+  enquirySchema,
+  companyValidationSchema,
   companyInfoValidationSchema,
   companyCertificationValidationSchema,
   companyDocumentValidationSchema,
@@ -78,7 +79,13 @@ const signUpUser = async (req, res) => {
 
     return res
       .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `User ${CustomMessages.MESSAGE.userRegistersuccessfully}`, { user }));
+      .send(
+        new Response(
+          true,
+          `User ${CustomMessages.MESSAGE.userRegistersuccessfully}`,
+          { user }
+        )
+      );
   } catch (error) {
     return helpers.validationHandler(res, error);
   }
@@ -215,17 +222,14 @@ const LoginVerifyOtp = async (req, res) => {
     if (identity && otp) {
       const user = await User.findOne({
         where: {
-          [Op.or]: [
-            { email: identity },
-            { phoneNumber: identity }
-          ]
+          [Op.or]: [{ email: identity }, { phoneNumber: identity }],
         },
       });
 
-      if(!user){
+      if (!user) {
         return res
-        .status(HttpStatus.NOT_FOUND.code)
-        .send(new Response(false, `User not found`));
+          .status(HttpStatus.NOT_FOUND.code)
+          .send(new Response(false, `User not found`));
       }
 
       if (user) {
@@ -277,21 +281,21 @@ const forgetPasswordSendOtp = async (req, res) => {
   if (identity) {
     const user = await User.findOne({
       where: {
-        [Op.or]:[
+        [Op.or]: [
           {
             phoneNumber: identity,
           },
           {
-            email: identity
-          }
-        ]
+            email: identity,
+          },
+        ],
       },
     });
 
-    if(!user){
+    if (!user) {
       return res
-      .status(HttpStatus.NOT_FOUND.code)
-      .send(new Response(false, `User not found`));
+        .status(HttpStatus.NOT_FOUND.code)
+        .send(new Response(false, `User not found`));
     }
 
     if (user) {
@@ -337,14 +341,14 @@ const forgetPasswordVerifyOtp = async (req, res) => {
     if (identity && otp) {
       const user = await User.findOne({
         where: {
-          [Op.or]:[
+          [Op.or]: [
             {
               phoneNumber: identity,
             },
             {
               email: identity,
-            }
-          ]
+            },
+          ],
         },
       });
 
@@ -454,76 +458,86 @@ const resetForgetPassword = async (req, res) => {
 
 const changePassword = async (req, res) => {
   try {
-    const validationResult = await changePasswordValidation.validateAsync(req.body);
+    const validationResult = await changePasswordValidation.validateAsync(
+      req.body
+    );
     const { password, confirm_password, current_password } = validationResult;
     if (password && confirm_password) {
       if (password !== confirm_password) {
-          return res
-              .status(HttpStatus.BAD_REQUEST.code)
-              .send(
-                  new Response(false, `Password & Confirm password should match`)
-              );
-        }
-
-    const user = await User.findOne({
-      where:{
-        id: req.userId
+        return res
+          .status(HttpStatus.BAD_REQUEST.code)
+          .send(
+            new Response(false, `Password & Confirm password should match`)
+          );
       }
-    });
+
+      const user = await User.findOne({
+        where: {
+          id: req.userId,
+        },
+      });
 
       if (user) {
         if (!user.isVerified) {
-            return res
-                .status(HttpStatus.UNAUTHORIZED.code)
-                .send(
-                    new Response(false, CustomMessages.MESSAGE.accountNotVerified)
-                );
+          return res
+            .status(HttpStatus.UNAUTHORIZED.code)
+            .send(
+              new Response(false, CustomMessages.MESSAGE.accountNotVerified)
+            );
         }
-        const currentPassword = await bcrypt.compare(current_password, user.password);
+        const currentPassword = await bcrypt.compare(
+          current_password,
+          user.password
+        );
         if (currentPassword === false) {
-            return res.status(400).send(new Response(false, "Password not matched"))
+          return res
+            .status(400)
+            .send(new Response(false, "Password not matched"));
         }
 
         const isSamePassword = await bcrypt.compare(password, user.password);
         if (isSamePassword) {
-            return res.status(400).send(new Response(false, "Old password & New password can't be same"))
+          return res
+            .status(400)
+            .send(
+              new Response(false, "Old password & New password can't be same")
+            );
         }
 
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(password, salt);
         const updatePassword = await User.update(
-            {
-              password: hashPassword,
+          {
+            password: hashPassword,
+          },
+          {
+            where: {
+              id: req.userId,
             },
-            {
-              where: {
-                id: req.userId,
-              },
-            }
+          }
         );
         // await user.save();
         if (updatePassword) {
-            return res
-                .status(HttpStatus.UPDATED.code)
-                .send(new Response(true, `Password ${HttpStatus.UPDATED.message}`));
+          return res
+            .status(HttpStatus.UPDATED.code)
+            .send(new Response(true, `Password ${HttpStatus.UPDATED.message}`));
         }
       } else {
-          return res
-              .status(HttpStatus.BAD_REQUEST.code)
-              .send(new Response(false, `Wrong token`));
+        return res
+          .status(HttpStatus.BAD_REQUEST.code)
+          .send(new Response(false, `Wrong token`));
       }
     } else {
-        return res
-            .status(HttpStatus.BAD_REQUEST.code)
-            .send(
-                new Response(false, `Please enter Password & Confirm password both`)
-            );
-      }
+      return res
+        .status(HttpStatus.BAD_REQUEST.code)
+        .send(
+          new Response(false, `Please enter Password & Confirm password both`)
+        );
+    }
   } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
-
+};
 
 const getProfile = async (req, res) => {
   try {
@@ -538,20 +552,20 @@ const getProfile = async (req, res) => {
         "phoneNumber",
         "profileImage",
         "country",
-          "state",
-          "city",
-          "company",
-          "userType"
+        "state",
+        "city",
+        "company",
+        "userType",
       ],
     });
 
     user
       ? res
-        .status(HttpStatus.OK.code)
-        .send(new Response(true, `${HttpStatus.OK.message}`, user))
+          .status(HttpStatus.OK.code)
+          .send(new Response(true, `${HttpStatus.OK.message}`, user))
       : res
-        .status(HttpStatus.OK.code)
-        .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+          .status(HttpStatus.OK.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
   } catch (error) {
     return helpers.validationHandler(res, error);
   }
@@ -562,7 +576,7 @@ const updateProfile = async (req, res) => {
     const validationResult = await updateProfileValidator.validateAsync(
       req.body
     );
-    let { name, email, country, state, city, company} = validationResult;
+    let { name, email, country, state, city, company } = validationResult;
 
     let user = await User.findOne({
       where: {
@@ -570,54 +584,72 @@ const updateProfile = async (req, res) => {
       },
     });
 
-      // let profileImage = `users/${req.files.profile_img[0].filename}`;
+    // let profileImage = `users/${req.files.profile_img[0].filename}`;
     let updatedUser = user.update({
-        name,
-        email,
-        country,
-        state,
-        city,
-        company,
-        // phoneNumber: mobile_number,
-        // profileImage: profileImage,
-      });
-
+      name,
+      email,
+      country,
+      state,
+      city,
+      company,
+      // phoneNumber: mobile_number,
+      // profileImage: profileImage,
+    });
 
     updatedUser
       ? res
-        .status(HttpStatus.UPDATED.code)
-        .send(new Response(true, `Profile ${HttpStatus.UPDATED.message}`, user))
+          .status(HttpStatus.UPDATED.code)
+          .send(
+            new Response(true, `Profile ${HttpStatus.UPDATED.message}`, user)
+          )
       : res
-        .status(HttpStatus.OK.code)
-        .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+          .status(HttpStatus.OK.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
   } catch (error) {
     return helpers.validationHandler(res, error);
   }
 };
 
-
-const createEnquiry = async(req,res)=>{
-  try{
+const createEnquiry = async (req, res) => {
+  try {
     const validationResult = await enquirySchema.validateAsync(req.body);
-    const {userId, requirement, fullname, email, phoneNumber, companyName, userType } = validationResult;
+    const {
+      userId,
+      requirement,
+      fullname,
+      email,
+      phoneNumber,
+      companyName,
+      userType,
+    } = validationResult;
 
-    let enquiry = await Enquiry.create({userId: userId || null, requirement, fullname, email, phoneNumber, companyName, userType});
+    let enquiry = await Enquiry.create({
+      userId: userId || null,
+      requirement,
+      fullname,
+      email,
+      phoneNumber,
+      companyName,
+      userType,
+    });
 
     enquiry
-    ? res
-      .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `Enquiry ${HttpStatus.CREATED.message}`, enquiry))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-  }catch(error){
+      ? res
+          .status(HttpStatus.CREATED.code)
+          .send(
+            new Response(true, `Enquiry ${HttpStatus.CREATED.message}`, enquiry)
+          )
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-const allEnquiry = async(req,res)=>{
-  try{
-    let { page, size} = req.query;
+const allEnquiry = async (req, res) => {
+  try {
+    let { page, size } = req.query;
 
     if (!size) size = 5;
     else size = parseInt(size);
@@ -625,45 +657,66 @@ const allEnquiry = async(req,res)=>{
     else page = parseInt(page);
     let skip = size * (parseInt(page) - 1);
 
-    console.log("userId---->>>>>>",req.userId);
+    console.log("userId---->>>>>>", req.userId);
 
     let enquiry = await Enquiry.findAll({
-      where:{
-        userId: req.userId
+      where: {
+        userId: req.userId,
       },
       limit: size,
       offset: skip,
     });
 
     let totalEnquiry = await Enquiry.count({
-      where:{
-        userId: req.userId
-      }
+      where: {
+        userId: req.userId,
+      },
     });
 
     const data = {
       totalPages: Math.ceil(totalEnquiry / size),
       totalRecords: totalEnquiry,
       enquiry,
-    }
+    };
 
     enquiry
-    ? res
-      .status(HttpStatus.OK.code)
-      .send(new Response(true, `Enquiry ${HttpStatus.OK.message}`, data))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-
-  }catch(error){
+      ? res
+          .status(HttpStatus.OK.code)
+          .send(new Response(true, `Enquiry ${HttpStatus.OK.message}`, data))
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-const createCompanyProfileGeneralDetail = async(req,res)=>{
-  try{
-    const validationResult = await companyValidationSchema.validateAsync(req.body);
-    const {companyDescription, companyLogo, profileBanner, country, state, city, zipCode, streetAddress, primaryBusinessType, businessCategories, workingDays, alternateMobileNumber, alternateEmail, landlineNumber, faxNumber,companyName,  contactPerson, mobileNumber, primaryEmail } = validationResult;
+const createCompanyProfileGeneralDetail = async (req, res) => {
+  try {
+    const validationResult = await companyValidationSchema.validateAsync(
+      req.body
+    );
+    const {
+      companyDescription,
+      companyLogo,
+      profileBanner,
+      country,
+      state,
+      city,
+      zipCode,
+      streetAddress,
+      primaryBusinessType,
+      businessCategories,
+      workingDays,
+      alternateMobileNumber,
+      alternateEmail,
+      landlineNumber,
+      faxNumber,
+      companyName,
+      contactPerson,
+      mobileNumber,
+      primaryEmail,
+    } = validationResult;
     const files = req.files;
 
     let companyProfile = await Company.create({
@@ -679,51 +732,86 @@ const createCompanyProfileGeneralDetail = async(req,res)=>{
       alternateMobileNumber,
       alternateEmail,
       landlineNumber,
-      faxNumber
+      faxNumber,
     });
 
-    if(country && state && city && companyName && contactPerson && mobileNumber && primaryEmail){
+    if (
+      country &&
+      state &&
+      city &&
+      companyName &&
+      contactPerson &&
+      mobileNumber &&
+      primaryEmail
+    ) {
       let user = await User.findOne({
-        where:{
-          id: req.userId
-        }
+        where: {
+          id: req.userId,
+        },
       });
 
       await user.update({
         country,
         state,
         city,
-        company:companyName,
-        name:contactPerson,
-        phoneNumber:mobileNumber,
-        email:primaryEmail
+        company: companyName,
+        name: contactPerson,
+        phoneNumber: mobileNumber,
+        email: primaryEmail,
       });
     }
 
     companyProfile
-    ? res
-      .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `General details added successfully`, companyProfile))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-  }
-  catch (error) {
+      ? res
+          .status(HttpStatus.CREATED.code)
+          .send(
+            new Response(
+              true,
+              `General details added successfully`,
+              companyProfile
+            )
+          )
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-const createCompanyContactInfo = async(req,res)=>{
-  try{
-    const validationResult = await companyInfoValidationSchema.validateAsync(req.body);
-    const {yearOfEstablishment, ownershipType, majorMarket, termsOfDelivery, area, numberOfEmployees, numberOfProductLines, outputCapacity, outputCapacityUnit, averageLeadTime, averageLeadTimeUnit, gstNumber, panNumber, tanNumber, annualRevenue, exportPercentage, nearestPort } = validationResult;
+const createCompanyContactInfo = async (req, res) => {
+  try {
+    const validationResult = await companyInfoValidationSchema.validateAsync(
+      req.body
+    );
+    const {
+      yearOfEstablishment,
+      ownershipType,
+      majorMarket,
+      termsOfDelivery,
+      area,
+      numberOfEmployees,
+      numberOfProductLines,
+      outputCapacity,
+      outputCapacityUnit,
+      averageLeadTime,
+      averageLeadTimeUnit,
+      gstNumber,
+      panNumber,
+      tanNumber,
+      annualRevenue,
+      exportPercentage,
+      nearestPort,
+    } = validationResult;
     let companyDetails = await Company.findOne({
-      where:{
-        userId: req.userId
-      }
+      where: {
+        userId: req.userId,
+      },
     });
-    if(!companyDetails){
-      return res.status(HttpStatus.FORBIDDEN.code).send(new Response(false, `General details not found`));
+    if (!companyDetails) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, `General details not found`));
     }
 
     let companyContactInfo = await companyDetails.update({
@@ -743,177 +831,332 @@ const createCompanyContactInfo = async(req,res)=>{
       tanNumber,
       annualRevenue,
       exportPercentage,
-      nearestPort
+      nearestPort,
     });
 
-    companyContactInfo ? res
-      .status(HttpStatus.UPDATED.code)
-      .send(new Response(true, `Contact info added successfully`, companyContactInfo))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-
-  }catch (error){
+    companyContactInfo
+      ? res
+          .status(HttpStatus.UPDATED.code)
+          .send(
+            new Response(
+              true,
+              `Contact info added successfully`,
+              companyContactInfo
+            )
+          )
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-const createCompanyCertification = async(req,res)=>{
-  try{
-    const validationResult = await companyCertificationValidationSchema.validateAsync(req.body);
-    const {name, certificateFile} = validationResult;
-    console.log({name:name})
+const createCompanyCertification = async (req, res) => {
+  try {
+    const validationResult =
+      await companyCertificationValidationSchema.validateAsync(req.body);
+    const { name, certificateFile } = validationResult;
+    console.log({ name: name });
 
-    if(name == 'undefined'){
+    if (name == "undefined") {
       return res
-      .status(HttpStatus.BAD_REQUEST.code)
-      .send(new Response(false, `Name is required`));
+        .status(HttpStatus.BAD_REQUEST.code)
+        .send(new Response(false, `Name is required`));
     }
     let userId = req.userId;
     const comp = await Company.findOne({
-      where:{
-        userId
+      where: {
+        userId,
       },
-      attributes:['id', 'userId']
+      attributes: ["id", "userId"],
     });
 
-    if(!comp){
+    if (!comp) {
       return res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `Company not found`));
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, `Company not found`));
     }
 
-    const certification = await CompanyCertification.create({
-      companyId: comp.id,
-      name: name,
-      certificateFile: `companies/${req.files.certificateFile[0].filename}`
-    });
-
-    // give response
-    certification
-    ? res
-      .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `Certification added successfully`, certification))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-
-  }catch(error){
-    return helpers.validationHandler(res, error);
-  }
-}
-
-const createCompanyDocument = async(req,res)=>{
-  try{
-    const validationResult = await companyDocumentValidationSchema.validateAsync(req.body);
-    const {documentType, documentFile} = validationResult;
-
-    let userId = req.userId;
-    const comp = await Company.findOne({
+    let isCertification = await CompanyCertification.findOne({
       where:{
-        userId
-      },
-      attributes:['id', 'userId']
+        companyId: comp.id,
+      }
     });
 
-    if(!comp){
-      return res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `Company not found`));
+    if(!isCertification){
+      const certification = await CompanyCertification.create({
+        companyId: comp.id,
+        name: name,
+        certificateFile: `companies/${req.files.certificateFile[0].filename}`,
+      });
+  
+      // give response
+      certification
+        ? res
+            .status(HttpStatus.CREATED.code)
+            .send(
+              new Response(
+                true,
+                `Certification added successfully`,
+                certification
+              )
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    }else{
+      const certification = await isCertification.update({name:name,certificateFile: `companies/${req.files.certificateFile[0].filename}`});
+
+      // give response
+      certification
+        ? res
+            .status(HttpStatus.UPDATED.code)
+            .send(
+              new Response(
+                true,
+                `Certification updated successfully`,
+                certification
+              )
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
     }
 
-    const certification = await CompanyDocument.create({
-      companyId: comp.id,
-      documentType: documentType,
-      documentFile: `companies/${req.files.documentFile[0].filename}`
-    });
 
-    // give response
-    certification
-    ? res
-      .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `Document added successfully`, certification))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-
-  }catch(error){
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-const createCompanyRegistration = async(req,res)=>{
-  try{
-    const validationResult = await companyRegistrationValidationSchema.validateAsync(req.body);
-    const {registrationLocation, registrationDate, registrationNumber, faxNumber} = validationResult;
+const createCompanyDocument = async (req, res) => {
+  try {
+    const validationResult =
+      await companyDocumentValidationSchema.validateAsync(req.body);
+    const { documentType, documentFile } = validationResult;
 
     let userId = req.userId;
     const comp = await Company.findOne({
-      where:{
-        userId
+      where: {
+        userId,
       },
-      attributes:['id', 'userId']
+      attributes: ["id", "userId"],
     });
 
-    const registration = await CompanyRegistration.create({
-      companyId: comp.id,
-      registrationLocation: registrationLocation,
-      registrationDate: registrationDate,
-      registrationNumber: registrationNumber,
-      faxNumber: faxNumber,
+    if (!comp) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, `Company not found`));
+    }
+
+    let isCompLocation = await CompanyDocument.findOne({
+      where: {
+        companyId: comp.id,
+        documentType: documentType,
+      },
     });
 
-    // give response
-    registration
-    ? res
-      .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `Registrations details added successfully`, registration))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    if (!isCompLocation) {
+      const certification = await CompanyDocument.create({
+        companyId: comp.id,
+        documentType: documentType,
+        documentFile: `companies/${req.files.documentFile[0].filename}`,
+      });
 
-  }catch(error){
+      // give response
+      certification
+        ? res
+            .status(HttpStatus.CREATED.code)
+            .send(
+              new Response(true, `Document added successfully`, certification)
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    } else {
+      const certification = await isCompLocation.update({
+        documentFile: `companies/${req.files.documentFile[0].filename}`,
+      });
+
+      // give response
+      certification
+        ? res
+            .status(HttpStatus.UPDATED.code)
+            .send(
+              new Response(true, `Document updated successfully`, certification)
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+
+    }
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-const createCompanyLocation = async(req,res)=>{
-  try{
-    const validationResult = await officeLocationValidationSchema.validateAsync(req.body);
-    const {locationType, country, state, zipcode, streetAddress} = validationResult;
+const createCompanyRegistration = async (req, res) => {
+  try {
+    const validationResult =
+      await companyRegistrationValidationSchema.validateAsync(req.body);
+    const {
+      registrationLocation,
+      registrationDate,
+      registrationNumber,
+      faxNumber,
+    } = validationResult;
 
     let userId = req.userId;
     const comp = await Company.findOne({
-      where:{
-        userId
+      where: {
+        userId,
       },
-      attributes:['id', 'userId']
+      attributes: ["id", "userId"],
     });
+
+    if (!comp) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, `Company profile not found.`));
+    }
+
+    let isRegister = await CompanyRegistration.findOne({
+      where: {
+        companyId: comp.id,
+      },
+    });
+
+    if (!isRegister) {
+      const registration = await CompanyRegistration.create({
+        companyId: comp.id,
+        registrationLocation: registrationLocation,
+        registrationDate: registrationDate,
+        registrationNumber: registrationNumber,
+        faxNumber: faxNumber,
+      });
+
+      // give response
+      registration
+        ? res
+            .status(HttpStatus.CREATED.code)
+            .send(
+              new Response(
+                true,
+                `Registrations updated successfully`,
+                registration
+              )
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    } else {
+      const registration = await isRegister.update({
+        registrationLocation: registrationLocation,
+        registrationDate: registrationDate,
+        registrationNumber: registrationNumber,
+        faxNumber: faxNumber,
+      });
+
+      // give response
+      registration
+        ? res
+            .status(HttpStatus.CREATED.code)
+            .send(
+              new Response(
+                true,
+                `Registrations details added successfully`,
+                registration
+              )
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    }
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+const createCompanyLocation = async (req, res) => {
+  try {
+    const validationResult = await officeLocationValidationSchema.validateAsync(
+      req.body
+    );
+    const { locationType, country, state, zipcode, streetAddress } =
+      validationResult;
+
+    let userId = req.userId;
+    const comp = await Company.findOne({
+      where: {
+        userId,
+      },
+      attributes: ["id", "userId"],
+    });
+
+    if (!comp) {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(false, `Company profile not found.`));
+    }
+
     const companyId = comp.id;
-    const companyLocation = await CompanyOfficeLocation.create({
-      companyId,
-      locationType,
-      country,
-      state,
-      zipcode,
-      streetAddress
+    let isCompLocation = await CompanyOfficeLocation.findOne({
+      where: {
+        companyId,
+      },
     });
 
-    // give response
-    companyLocation
-    ? res
-      .status(HttpStatus.CREATED.code)
-      .send(new Response(true, `${locationType} added successfully`, companyLocation))
-    : res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    if (!isCompLocation) {
+      let companyLocation = await CompanyOfficeLocation.create({
+        companyId,
+        locationType,
+        country,
+        state,
+        zipcode,
+        streetAddress,
+      });
 
-  }catch(error){
+      companyLocation
+        ? res
+            .status(HttpStatus.CREATED.code)
+            .send(
+              new Response(
+                true,
+                `${locationType} added successfully`,
+                companyLocation
+              )
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    } else {
+      let companyLocation = await isCompLocation.update({
+        locationType,
+        country,
+        state,
+        zipcode,
+        streetAddress,
+      });
+
+      companyLocation
+        ? res
+            .status(HttpStatus.CREATED.code)
+            .send(
+              new Response(
+                true,
+                `${locationType} Updated successfully`,
+                companyLocation
+              )
+            )
+        : res
+            .status(HttpStatus.FORBIDDEN.code)
+            .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+    }
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
-
-
+};
 
 module.exports = {
   signUpUser,
@@ -933,5 +1176,5 @@ module.exports = {
   createCompanyCertification,
   createCompanyDocument,
   createCompanyRegistration,
-  createCompanyLocation
+  createCompanyLocation,
 };

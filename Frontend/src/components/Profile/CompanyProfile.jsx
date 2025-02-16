@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import handleApiResponse from "../../helpers/responseHandler.js";
 import userService from "../../Services/userServices.js";
-import toast from "react-hot-toast";
 
 const CompanyProfileForm = () => {
   const [activeTab, setActiveTab] = useState("generalDetails");
@@ -107,70 +106,66 @@ const CompanyProfileForm = () => {
       }
     );
 
+  // handle office location
+  const handleHeadOfficeSubmit = handleApiResponse(
+    async (e) => {
+      e.preventDefault();
 
-    // handle office location
-    const handleHeadOfficeSubmit = handleApiResponse(
-      async (e) => {
-        e.preventDefault();
-    
-        // Create FormData object from the form
-        const formData = new FormData(e.target);
-    
-        // Prepare the data for the API
-        const data = {
-          locationType: "Head Office", // Specify the location type
-          country: formData.get("officeLocation"),
-          state: formData.get("officeState"),
-          zipcode: formData.get("officeZipcode"),
-          streetAddress: formData.get("officeAddress"),
-        };
-    
-        // Call the API
-        return await userService.createOfficeLocation(data);
-      },
-      (response) => {
-        // Success callback
-        console.log("Head Office details saved successfully:", response);
-        toast.success("Head Office details saved successfully!");
-      },
-      (error) => {
-        // Error callback
-        console.error("Head Office submission failed:", error);
-        toast.error(error.message || "Head Office submission failed!");
-      }
-    );
+      // Create FormData object from the form
+      const formData = new FormData(e.target);
 
+      // Prepare the data for the API
+      const data = {
+        locationType: "Head", // Specify the location type
+        country: formData.get("officeLocation"),
+        state: formData.get("officeState"),
+        zipcode: formData.get("officeZipcode"),
+        streetAddress: formData.get("officeAddress"),
+      };
 
-    const handleBranchSubmit = handleApiResponse(
-      async (e) => {
-        e.preventDefault();
-    
-        // Create FormData object from the form
-        const formData = new FormData(e.target);
-    
-        // Prepare the data for the API
-        const data = {
-          locationType: "Branch", // Specify the location type
-          country: formData.get("branchLocation"),
-          state: formData.get("branchState"),
-          zipcode: formData.get("branchZipcode"),
-          streetAddress: formData.get("branchAddress"),
-        };
-    
-        // Call the API
-        return await userService.createOfficeLocation(data);
-      },
-      (response) => {
-        // Success callback
-        console.log("Branch details saved successfully:", response);
-        toast.success("Branch details saved successfully!");
-      },
-      (error) => {
-        // Error callback
-        console.error("Branch submission failed:", error);
-        toast.error(error.message || "Branch submission failed!");
-      }
-    );
+      // Reset the form
+      e.target.reset();
+      // Call the API
+      return await userService.createOfficeLocation(data);
+    },
+    (response) => {
+      // Success callback
+      console.log("Head Office details saved successfully:", response);
+    },
+    (error) => {
+      // Error callback
+      console.error("Head Office submission failed:", error);
+    }
+  );
+
+  const handleBranchSubmit = handleApiResponse(
+    async (e) => {
+      e.preventDefault();
+
+      // Create FormData object from the form
+      const formData = new FormData(e.target);
+
+      // Prepare the data for the API
+      const data = {
+        locationType: "Branch", // Specify the location type
+        country: formData.get("branchLocation"),
+        state: formData.get("branchState"),
+        zipcode: formData.get("branchZipcode"),
+        streetAddress: formData.get("branchAddress"),
+      };
+      e.target.reset();
+      // Call the API
+      return await userService.createOfficeLocation(data);
+    },
+    (response) => {
+      // Success callback
+      console.log("Branch details saved successfully:", response);
+    },
+    (error) => {
+      // Error callback
+      console.error("Branch submission failed:", error);
+    }
+  );
 
   return (
     <div className="container col-md-10">
@@ -659,294 +654,333 @@ const CompanyProfileForm = () => {
             )}
 
             {activeTab === "certification" && (
-             <div>
-             {/* Certification Section */}
-             <div className="card mb-4">
-               <div className="card-body">
-                 <h3 className="mb-4">Certification</h3>
-                 <div className="form-row">
-                   <div className="form-group col-md-12">
-                     <label>Recommended format: </label>
-                     <label>Size: Less than 5MB</label>
-                   </div>
-                 <form className="form-row col-md-12">
-                   <div className="form-group col-md-6">
-                     <label>Name</label>
-                     <input
-                       type="text"
-                       className="form-control"
-                       placeholder="Enter here..."
-                       name="name"
-                     />
-                   </div>
-                   <div className="form-group col-md-6">
-                     <label>Upload Certificate</label>
-                     <div className="custom-file">
-                       <input
-                         type="file"
-                         className="custom-file-input"
-                         id="companyLogo"
-                         name="certificateFile"
-                         onChange={handleCertificateFileChange}
-                       />
-                       <label className="custom-file-label" htmlFor="companyLogo">
-                         Choose file
-                       </label>
-                     </div>
-                   </div>
-                   </form>
-                   <div className="form-group col-md-12">
-                     <label>Upload Documents (PDF | Less than 5MB)</label>
-                   </div>
-           
-                   <div className="form-group col-md-6">
-                     <label>Company Registration Certificate</label>
-                     <div className="custom-file">
-                       <input
-                         type="file"
-                         className="custom-file-input"
-                         id="companyLogo"
-                         onChange={handleDocumentFileChange("Registration")} // Pass document type
-                       />
-                       <label className="custom-file-label" htmlFor="companyLogo">
-                         Choose file
-                       </label>
-                     </div>
-                   </div>
-           
-                   <div className="form-group col-md-6">
-                     <label>Tax Certificate</label>
-                     <div className="custom-file">
-                       <input
-                         type="file"
-                         className="custom-file-input"
-                         id="companyLogo"
-                         onChange={handleDocumentFileChange("Tax")}
-                       />
-                       <label className="custom-file-label" htmlFor="companyLogo">
-                         Choose file
-                       </label>
-                     </div>
-                   </div>
-           
-                   <div className="form-group col-md-6">
-                     <label>Utility Bill</label>
-                     <div className="custom-file">
-                       <input
-                         type="file"
-                         className="custom-file-input"
-                         id="companyLogo"
-                         onChange={handleDocumentFileChange("Utility")}
-                       />
-                       <label className="custom-file-label" htmlFor="companyLogo">
-                         Choose file
-                       </label>
-                     </div>
-                   </div>
-           
-                   <div className="form-group col-md-6">
-                     <label>Passport/Driving License</label>
-                     <div className="custom-file">
-                       <input
-                         type="file"
-                         className="custom-file-input"
-                         id="companyLogo"
-                         onChange={handleDocumentFileChange("Identification")}
-                       />
-                       <label className="custom-file-label" htmlFor="companyLogo">
-                         Choose file
-                       </label>
-                     </div>
-                   </div>
-           
-                   <div className="form-group col-md-6">
-                     <label>Business License</label>
-                     <div className="custom-file">
-                       <input
-                         type="file"
-                         className="custom-file-input"
-                         id="companyLogo"
-                         onChange={handleDocumentFileChange("Business")}
-                       />
-                       <label className="custom-file-label" htmlFor="companyLogo">
-                         Choose file
-                       </label>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           
-             {/* Registration Information Section */}
-             <div className="card mb-4">
-               <div className="card-body">
-                 <h3 className="mb-4">Registration Information</h3>
-                 <form onSubmit={handleRegistrationSubmit} className="form-row">
-                   <div className="form-group col-md-6">
-                     <label>Location of Registration *</label>
-                     <select className="form-control" name="registrationLocation">
-                       <option value="">Select country</option>
-                       <option value="1">USA</option>
-                       <option value="2">Canada</option>
-                       <option value="3">UK</option>
-                       {/* Add more options as needed */}
-                     </select>
-                   </div>
-                   <div className="form-group col-md-6">
-                     <label>Registration Date *</label>
-                     <input
-                       type="date"
-                       className="form-control"
-                       name="registrationDate"
-                       placeholder="Please enter registration date"
-                     />
-                   </div>
-                   <div className="form-group col-md-6">
-                     <label>Registration Number *</label>
-                     <input
-                       type="text"
-                       className="form-control"
-                       name="registrationNumber"
-                       placeholder="Enter here..."
-                     />
-                   </div>
-                   <div className="form-group col-md-6">
-                     <label>FAX Number</label>
-                     <input
-                       type="text"
-                       className="form-control"
-                       name="faxNumber"
-                       placeholder="Enter here..."
-                     />
-                   </div>
-                   {/* Form Actions - Buttons */}
-                   <div className="form-actions d-flex justify-content-end w-100 mt-3">
-                     <button type="submit" className="btn btn-primary mr-2">
-                       Save
-                     </button>
-                     <button type="button" className="btn btn-secondary">
-                       Cancel
-                     </button>
-                   </div>
-                 </form>
-               </div>
-             </div>
-           </div>
+              <div>
+                {/* Certification Section */}
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <h3 className="mb-4">Certification</h3>
+                    <div className="form-row">
+                      <div className="form-group col-md-12">
+                        <label>Recommended format: </label>
+                        <label>Size: Less than 5MB</label>
+                      </div>
+                      <form className="form-row col-md-12">
+                        <div className="form-group col-md-6">
+                          <label>Name</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter here..."
+                            name="name"
+                          />
+                        </div>
+                        <div className="form-group col-md-6">
+                          <label>Upload Certificate</label>
+                          <div className="custom-file">
+                            <input
+                              type="file"
+                              className="custom-file-input"
+                              id="companyLogo"
+                              name="certificateFile"
+                              onChange={handleCertificateFileChange}
+                            />
+                            <label
+                              className="custom-file-label"
+                              htmlFor="companyLogo"
+                            >
+                              Choose file
+                            </label>
+                          </div>
+                        </div>
+                      </form>
+                      <div className="form-group col-md-12">
+                        <label>Upload Documents (PDF | Less than 5MB)</label>
+                      </div>
+
+                      <div className="form-group col-md-6">
+                        <label>Company Registration Certificate</label>
+                        <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="companyLogo"
+                            onChange={handleDocumentFileChange("Registration")} // Pass document type
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="companyLogo"
+                          >
+                            Choose file
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="form-group col-md-6">
+                        <label>Tax Certificate</label>
+                        <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="companyLogo"
+                            onChange={handleDocumentFileChange("Tax")}
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="companyLogo"
+                          >
+                            Choose file
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="form-group col-md-6">
+                        <label>Utility Bill</label>
+                        <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="companyLogo"
+                            onChange={handleDocumentFileChange("Utility")}
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="companyLogo"
+                          >
+                            Choose file
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="form-group col-md-6">
+                        <label>Passport/Driving License</label>
+                        <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="companyLogo"
+                            onChange={handleDocumentFileChange(
+                              "Identification"
+                            )}
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="companyLogo"
+                          >
+                            Choose file
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="form-group col-md-6">
+                        <label>Business License</label>
+                        <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="companyLogo"
+                            onChange={handleDocumentFileChange("Business")}
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="companyLogo"
+                          >
+                            Choose file
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Registration Information Section */}
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <h3 className="mb-4">Registration Information</h3>
+                    <form
+                      onSubmit={handleRegistrationSubmit}
+                      className="form-row"
+                    >
+                      <div className="form-group col-md-6">
+                        <label>Location of Registration *</label>
+                        <select
+                          className="form-control"
+                          name="registrationLocation"
+                        >
+                          <option value="">Select country</option>
+                          <option value="1">USA</option>
+                          <option value="2">Canada</option>
+                          <option value="3">UK</option>
+                          {/* Add more options as needed */}
+                        </select>
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Registration Date *</label>
+                        <input
+                          type="date"
+                          className="form-control"
+                          name="registrationDate"
+                          placeholder="Please enter registration date"
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Registration Number *</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="registrationNumber"
+                          placeholder="Enter here..."
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>FAX Number</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="faxNumber"
+                          placeholder="Enter here..."
+                        />
+                      </div>
+                      {/* Form Actions - Buttons */}
+                      <div className="form-actions d-flex justify-content-end w-100 mt-3">
+                        <button type="submit" className="btn btn-primary mr-2">
+                          Save
+                        </button>
+                        <button type="button" className="btn btn-secondary">
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             )}
 
             {activeTab === "officeLocation" && (
-           <div>
-           {/* Head Office Section */}
-           <div className="card mb-4">
-             <div className="card-body">
-               <h3 className="mb-4">Head Office</h3>
-               <form onSubmit={handleHeadOfficeSubmit} className="form-row">
-                 <div className="form-group col-md-6">
-                   <label>Office location *</label>
-                   <select className="form-control" name="officeLocation" required>
-                     <option value="">Select country</option>
-                     <option value="1">USA</option>
-                     <option value="2">Canada</option>
-                     <option value="3">UK</option>
-                   </select>
-                 </div>
-                 <div className="form-group col-md-6">
-                   <label>State *</label>
-                   <input
-                     type="text"
-                     className="form-control"
-                     placeholder="State (optional)"
-                     required
-                     name="officeState"
-                   />
-                 </div>
-                 <div className="form-group col-md-6">
-                   <label>Zipcode *</label>
-                   <input
-                     type="text"
-                     className="form-control"
-                     placeholder="Enter here..."
-                     name="officeZipcode"
-                     required
-                   />
-                 </div>
-                 <div className="form-group col-md-6">
-                   <label>Street Address *</label>
-                   <textarea
-                     className="form-control"
-                     placeholder="Enter here..."
-                     name="officeAddress"
-                     required
-                   ></textarea>
-                 </div>
-                 <div className="form-actions text-right">
-                   <button type="submit" className="btn btn-primary mr-2">
-                     Save
-                   </button>
-                   <button type="button" className="btn btn-secondary">
-                     Cancel
-                   </button>
-                 </div>
-               </form>
-             </div>
-           </div>
-         
-           {/* Branches Section */}
-           <div className="card mb-4">
-             <div className="card-body">
-               <h3 className="mb-4">Branches</h3>
-               <p>Add your branch details (If any)</p>
-               <form onSubmit={handleBranchSubmit} className="form-row">
-                 <div className="form-group col-md-6">
-                   <label>Office location *</label>
-                   <select className="form-control" name="branchLocation" required>
-                     <option value="">Select country</option>
-                     <option value="1">USA</option>
-                     <option value="2">Canada</option>
-                     <option value="3">UK</option>
-                   </select>
-                 </div>
-                 <div className="form-group col-md-6">
-                   <label>State *</label>
-                   <input
-                     type="text"
-                     className="form-control"
-                     placeholder="State"
-                     required
-                     name="branchState"
-                   />
-                 </div>
-                 <div className="form-group col-md-6">
-                   <label>Zipcode *</label>
-                   <input
-                     type="text"
-                     className="form-control"
-                     placeholder="Enter here..."
-                     name="branchZipcode"
-                     required
-                   />
-                 </div>
-                 <div className="form-group col-md-6">
-                   <label>Street Address *</label>
-                   <textarea
-                     className="form-control"
-                     placeholder="Enter here..."
-                     name="branchAddress"
-                     required
-                   ></textarea>
-                 </div>
-                 <div className="form-actions text-right">
-                   <button type="submit" className="btn btn-primary mr-2">
-                     Save
-                   </button>
-                   <button type="button" className="btn btn-secondary">
-                     Cancel
-                   </button>
-                 </div>
-               </form>
-             </div>
-           </div>
-         </div>
+              <div>
+                {/* Head Office Section */}
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <h3 className="mb-4">Head Office</h3>
+                    <form
+                      onSubmit={handleHeadOfficeSubmit}
+                      className="form-row"
+                    >
+                      <div className="form-group col-md-6">
+                        <label>Office location *</label>
+                        <select
+                          className="form-control"
+                          name="officeLocation"
+                          required
+                        >
+                          <option value="">Select country</option>
+                          <option value="1">USA</option>
+                          <option value="2">Canada</option>
+                          <option value="3">UK</option>
+                        </select>
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>State *</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="State *"
+                          required
+                          name="officeState"
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Zipcode *</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter here..."
+                          name="officeZipcode"
+                          required
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Street Address *</label>
+                        <textarea
+                          className="form-control"
+                          placeholder="Enter here..."
+                          name="officeAddress"
+                          required
+                        ></textarea>
+                      </div>
+                      {/* Right-aligned buttons */}
+                      <div className="form-actions d-flex justify-content-end w-100 mt-3">
+                        <button type="submit" className="btn btn-primary mr-2">
+                          Save
+                        </button>
+                        <button type="button" className="btn btn-secondary">
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                {/* Branches Section */}
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <h3 className="mb-4">Branches</h3>
+                    <p>Add your branch details (If any)</p>
+                    <form onSubmit={handleBranchSubmit} className="form-row">
+                      <div className="form-group col-md-6">
+                        <label>Office location *</label>
+                        <select
+                          className="form-control"
+                          name="branchLocation"
+                          required
+                        >
+                          <option value="">Select country</option>
+                          <option value="1">USA</option>
+                          <option value="2">Canada</option>
+                          <option value="3">UK</option>
+                        </select>
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>State *</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="State"
+                          required
+                          name="branchState"
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Zipcode *</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter here..."
+                          name="branchZipcode"
+                          required
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Street Address *</label>
+                        <textarea
+                          className="form-control"
+                          placeholder="Enter here..."
+                          name="branchAddress"
+                          required
+                        ></textarea>
+                      </div>
+                      {/* Right-aligned buttons */}
+                      <div className="form-actions d-flex justify-content-end w-100 mt-3">
+                        <button type="submit" className="btn btn-primary mr-2">
+                          Save
+                        </button>
+                        <button type="button" className="btn btn-secondary">
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
