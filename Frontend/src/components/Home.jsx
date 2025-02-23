@@ -8,13 +8,16 @@ import BrandPartner from "./BrandPartner";
 import Footer from "./Footer";
 import LeftSidebar from "./LoginComponents/ProductPageLeftside";
 import RightContent from "./LoginComponents/ProductPageRightside";
+import TopArea from "../pages/TopArea";
+import CategorySlider from "./CategorySlider";
 
 const Home = () => {
   return (
     <>
-      <Navbar />
-      <SliderAreaTop />
-     
+      {/* <Navbar /> */}
+      {/* <SliderAreaTop /> */}
+      <TopArea/>
+      <CategorySlider />
       <SliderAreaMiddleProduct />
       <SliderAreaDownProductOne />
       <Testimonial />
