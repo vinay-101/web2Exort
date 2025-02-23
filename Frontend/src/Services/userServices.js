@@ -112,6 +112,12 @@ const userService = {
         }
     }),
 
+    showCompanyData: (data)=> axiosClient.get(`/users/company/profile?type=${data}`, {
+        headers:{
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
 
 
 };

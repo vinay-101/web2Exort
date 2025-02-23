@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import handleApiResponse from "../../helpers/responseHandler.js";
 import userService from "../../Services/userServices.js";
-
+import Select from "react-select";
+import {
+  businessCategories,
+  businessTypesOptions,
+  majorMarket,
+  workingDaysOptions,
+} from "../../helpers/data.js";
+import "../../assets/profile/dropdown.css";
 const CompanyProfileForm = () => {
   const [activeTab, setActiveTab] = useState("generalDetails");
+  const [companyData, setCompanyData] = useState(null);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -167,6 +175,29 @@ const CompanyProfileForm = () => {
     }
   );
 
+  // populate data for tab change
+  useEffect(() => {
+    async function showCompanyData() {
+      const response = await userService.showCompanyData(activeTab);
+      if (response.data.success === true) {
+        setCompanyData(response.data.data);
+      }
+    }
+    showCompanyData();
+  }, [activeTab]);
+
+  // Multi select options
+  // 1. Business type
+  const [selectedBusinessType, setSelectedBusinessType] = useState([]);
+  // 2. Working days
+  const [selectedWorkingDays, setSelectedWorkingDays] = useState([]);
+  // 3. Business Categories
+  const [selectedBusinessCategories, setSelectedBusinessCategories] = useState(
+    []
+  );
+  // 4. Major Market
+  const [selectedMajorMarket, setSelectedMajorMarket] = useState([]);
+
   return (
     <div className="container col-md-10">
       <section className="row justify-content-center">
@@ -270,6 +301,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter company name"
                           name="companyName"
+                          defaultValue={companyData?.user?.company}
                         />
                       </div>
 
@@ -281,6 +313,7 @@ const CompanyProfileForm = () => {
                           placeholder="Enter here..."
                           rows="3"
                           name="companyDescription"
+                          defaultValue={companyData?.companyDescription}
                         ></textarea>
                       </div>
 
@@ -300,6 +333,16 @@ const CompanyProfileForm = () => {
                           >
                             Choose file
                           </label>
+                          {companyData?.companyLogo && (
+                            <img
+                              className="my-1 mb-5"
+                              src={`${import.meta.env.VITE_BACKEND_BASEURL}/${
+                                companyData?.companyLogo
+                              }`}
+                              alt="Company Logo"
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                          )}
                         </div>
                       </div>
 
@@ -319,6 +362,16 @@ const CompanyProfileForm = () => {
                           >
                             Choose file
                           </label>
+                          {companyData?.profileBanner && (
+                            <img
+                              className="my-1 mb-5"
+                              src={`${import.meta.env.VITE_BACKEND_BASEURL}/${
+                                companyData.profileBanner
+                              }`}
+                              alt="Profile Banner"
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                          )}
                         </div>
                       </div>
 
@@ -354,6 +407,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="zipCode"
+                          defaultValue={companyData?.zipCode}
                         />
                       </div>
 
@@ -365,37 +419,76 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="streetAddress"
+                          defaultValue={companyData?.streetAddress}
                         />
                       </div>
 
                       {/* Primary Business Type */}
                       <div className="form-group col-md-6">
                         <label>Primary Business Type</label>
-                        <select
-                          className="form-control"
+                        <Select
                           name="primaryBusinessType"
-                        >
-                          <option>Select...</option>
-                        </select>
+                          options={businessTypesOptions}
+                          isMulti
+                          value={selectedBusinessType}
+                          onChange={setSelectedBusinessType}
+                          placeholder="Select business types"
+                        />
                       </div>
 
                       {/* Business Categories */}
                       <div className="form-group col-md-6">
                         <label>Business Categories</label>
-                        <select
+                        <Select
+                          name="businessCategories"
+                          options={businessCategories}
+                          isMulti
+                          value={selectedBusinessCategories}
+                          onChange={setSelectedBusinessCategories}
+                          placeholder="Select business types"
+                        />
+                        {/* <select
                           className="form-control"
                           name="businessCategories"
                         >
-                          <option>Select...</option>
-                        </select>
+                          <option value="1">Retail</option>
+                          <option value="2">Wholesale</option>
+                          <option value="3">Manufacturing</option>
+                          <option value="4">Services</option>
+                          <option value="5">Technology</option>
+                          <option value="6">Healthcare</option>
+                          <option value="7">Education</option>
+                          <option value="8">Finance</option>
+                          <option value="9">Real Estate</option>
+                          <option value="10">Construction</option>
+                          <option value="11">Agriculture</option>
+                          <option value="12">Entertainment</option>
+                          <option value="13">Hospitality</option>
+                          <option value="14">Transportation</option>
+                          <option value="15">Logistics</option>
+                        </select> */}
                       </div>
 
                       {/* Working Days */}
                       <div className="form-group col-md-6">
                         <label>Working Days</label>
-                        <select className="form-control" name="workingDays">
-                          <option>Select...</option>
-                        </select>
+                        <Select
+                          name="workingDays"
+                          options={workingDaysOptions}
+                          isMulti
+                          value={selectedWorkingDays}
+                          onChange={setSelectedWorkingDays}
+                          placeholder="Select business types"
+                        />
+                        {/* <select className="form-control" name="workingDays">
+                          <option value="Monday">Monday</option>
+                          <option value="Tuesday">Tuesday</option>
+                          <option value="Wednesday">Wednesday</option>
+                          <option value="Thursday">Thursday</option>
+                          <option value="Friday">Friday</option>
+                          <option value="Saturday">Saturday</option>
+                          <option value="Sunday">Sunday</option>
+                        </select> */}
                       </div>
                     </div>
                   </div>
@@ -414,6 +507,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter name"
                           name="contactPerson"
+                          defaultValue={companyData?.user?.name}
                         />
                       </div>
 
@@ -425,6 +519,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="+91 98765 43210"
                           name="mobileNumber"
+                          defaultValue={companyData?.user?.phoneNumber}
                         />
                       </div>
 
@@ -436,6 +531,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="+1 (555) 123-4567"
                           name="alternateMobileNumber"
+                          defaultChecked={companyData?.alternateMobileNumber}
                         />
                       </div>
 
@@ -447,6 +543,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="example@gmail.com"
                           name="primaryEmail"
+                          defaultValue={companyData?.user?.email}
                         />
                       </div>
 
@@ -458,6 +555,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="alternateEmail"
+                          defaultValue={companyData?.alternateEmail}
                         />
                       </div>
 
@@ -469,6 +567,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="landlineNumber"
+                          defaultValue={companyData?.landlineNumber}
                         />
                       </div>
 
@@ -480,6 +579,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="faxNumber"
+                          defaultValue={companyData?.faxNumber}
                         />
                       </div>
                     </div>
@@ -511,21 +611,33 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           type="date"
                           name="yearOfEstablishment"
+                          defaultValue={companyData?.yearOfEstablishment}
                         />
                       </div>
                       <div className="form-group col-md-6">
                         <label>Ownership type *</label>
                         <select className="form-control" name="ownershipType">
-                          <option>Select</option>
-                          {/* Add options dynamically or statically */}
+                          <option value="Pvt Ltd">Pvt Ltd</option>
+                          <option value="LLC">LLC</option>
+                          <option value="Sole Proprietorship">
+                            Sole Proprietorship
+                          </option>
+                          <option value="Inc">Inc</option>
+                          <option value="Others">Others</option>
                         </select>
                       </div>
                       <div className="form-group col-md-6">
                         <label>Major market *</label>
-                        <select className="form-control" name="majorMarket">
-                          <option>Select...</option>
-                          {/* Add options dynamically or statically */}
-                        </select>
+                        <Select
+                          name="majorMarket"
+                          options={majorMarket}
+                          isMulti
+                          value={selectedMajorMarket}
+                          onChange={setSelectedMajorMarket}
+                          placeholder="Select major market"
+                        />
+                        {/* <select className="form-control" name="majorMarket">
+                        </select> */}
                       </div>
                       <div className="form-group col-md-6">
                         <label>Terms of delivery *</label>
@@ -540,8 +652,18 @@ const CompanyProfileForm = () => {
                       <div className="form-group col-md-6">
                         <label>Area</label>
                         <select className="form-control" name="area">
-                          <option>Select</option>
-                          {/* Add options dynamically or statically */}
+                          <option value="1000-3000">
+                            1000-3000 square meter
+                          </option>
+                          <option value="3000-8000">
+                            3000-8000 square meter
+                          </option>
+                          <option value="below-1000">
+                            below - 1000 square meter
+                          </option>
+                          <option value="above-8000">
+                            above - 8000 square meter
+                          </option>
                         </select>
                       </div>
                       <div className="form-group col-md-6">
@@ -562,21 +684,70 @@ const CompanyProfileForm = () => {
                           name="numberOfProductLines"
                         />
                       </div>
-                      <div className="form-group col-md-6">
-                        <label>Output capacity</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter here..."
-                          name="outputCapacity"
-                        />
+                      <div className="form-group row col-md-6">
+                        {/* Output Capacity Input */}
+                        <div className="col-md-6">
+                          <label htmlFor="outputCapacity">
+                            Output Capacity
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="outputCapacity"
+                            placeholder="Enter here..."
+                            name="outputCapacity"
+                          />
+                        </div>
+
+                        {/* Output Capacity Unit Dropdown */}
+                        <div className="col-md-6">
+                          <label htmlFor="outputCapacityUnit">
+                            Output capacity unit
+                          </label>
+                          <select
+                            className="form-control"
+                            id="outputCapacityUnit"
+                            name="outputCapacityUnit"
+                          >
+                            <option value="Bags">Bags</option>
+                            <option value="Carton">Carton</option>
+                            <option value="Dozen">Dozen</option>
+                            <option value="Feet">Feet</option>
+                            <option value="Kilogram">Kilogram</option>
+                            <option value="Meter">Meter</option>
+                            <option value="Metric Ton">Metric Ton</option>
+                            <option value="Pieces">Pieces</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
                       </div>
-                      <div className="form-group col-md-6">
-                        <label>Average lead time</label>
-                        <select className="form-control" name="averageLeadTime">
-                          <option>Select</option>
-                          {/* Add options dynamically or statically */}
-                        </select>
+
+                      <div className="form-group row col-md-6">
+                        <div className="col-md-6">
+                          <label htmlFor="leadTime">
+                            Average lead time
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="leadTime"
+                            placeholder="Enter here..."
+                            name="averageLeadTime"
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <label>Average lead unit</label>
+                          <select
+                            className="form-control"
+                            name="averageLeadTimeUnit"
+                          >
+                            <option value="Day">Day</option>
+                            <option value="Week">Week</option>
+                            <option value="Month">Month</option>
+                            <option value="Quarter">Quarter</option>
+                            <option value="Year">Year</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>

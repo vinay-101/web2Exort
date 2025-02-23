@@ -1,0 +1,70 @@
+/* Custom styles for react-multi-select-component */
+.custom-multi-select {
+    width: 100%;
+    font-family: Arial, sans-serif;
+  }
+  
+  .custom-multi-select .dropdown-container {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: white;
+    
+  }
+  
+  .custom-multi-select .dropdown-heading {
+    font-size: 14px;
+    color: #495057;
+  }
+  
+  .custom-multi-select .dropdown-content {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    margin-top: 8px;
+    background-color: white;
+
+  }
+  
+  .custom-multi-select .panel-content {
+    max-height: 200px;
+    overflow-y: auto;
+    
+  }
+  
+  .custom-multi-select .search {
+    padding: 8px;
+    border-bottom: 1px solid #ced4da;
+  }
+  
+  .custom-multi-select .select-item {
+    padding: 8px;
+    font-size: 14px;
+    color: #495057;
+  }
+  
+  .custom-multi-select .select-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .custom-multi-select .selected {
+    background-color: #e9ecef;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin: 4px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .custom-multi-select .selected-item {
+    font-size: 14px;
+    color: #495057;
+  }
+  
+  .custom-multi-select .selected-item-remove {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #6c757d;
+  }
+  
+  .custom-multi-select .selected-item-remove:hover {
+    color: #dc3545;
+  }
