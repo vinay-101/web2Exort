@@ -46,4 +46,7 @@ userRouter.route("/create/company/profile/registration").post(requireAuth, user_
 // office location
 userRouter.route("/create/company/office/location").post(requireAuth, user_controller.createCompanyLocation);
 
+// Get Company Profile
+userRouter.route("/company/profile").get(requireAuth, user_controller.getCompanyProfile);
+
 module.exports = {userRouter}

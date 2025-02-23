@@ -879,18 +879,18 @@ const createCompanyCertification = async (req, res) => {
     }
 
     let isCertification = await CompanyCertification.findOne({
-      where:{
+      where: {
         companyId: comp.id,
-      }
+      },
     });
 
-    if(!isCertification){
+    if (!isCertification) {
       const certification = await CompanyCertification.create({
         companyId: comp.id,
         name: name,
         certificateFile: `companies/${req.files.certificateFile[0].filename}`,
       });
-  
+
       // give response
       certification
         ? res
@@ -905,8 +905,11 @@ const createCompanyCertification = async (req, res) => {
         : res
             .status(HttpStatus.FORBIDDEN.code)
             .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-    }else{
-      const certification = await isCertification.update({name:name,certificateFile: `companies/${req.files.certificateFile[0].filename}`});
+    } else {
+      const certification = await isCertification.update({
+        name: name,
+        certificateFile: `companies/${req.files.certificateFile[0].filename}`,
+      });
 
       // give response
       certification
@@ -923,8 +926,6 @@ const createCompanyCertification = async (req, res) => {
             .status(HttpStatus.FORBIDDEN.code)
             .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
     }
-
-
   } catch (error) {
     return helpers.validationHandler(res, error);
   }
@@ -989,7 +990,6 @@ const createCompanyDocument = async (req, res) => {
         : res
             .status(HttpStatus.FORBIDDEN.code)
             .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
-
     }
   } catch (error) {
     return helpers.validationHandler(res, error);
@@ -1158,6 +1158,88 @@ const createCompanyLocation = async (req, res) => {
   }
 };
 
+const getCompanyProfile = async (req, res) => {
+  try {
+    const { type } = req.query;
+    if(!type){
+      return res.status(HttpStatus.FORBIDDEN.code).send(new Response(false, `Type not found.`));
+    }
+    let userId = req.userId;
+    let details;
+
+    let comp = await Company.findOne({
+      where: {
+        userId,
+      },
+      attributes: ["id", "userId"],
+    });
+
+    if (type === "generalDetails" || type === "companyInfo") {
+
+      details = await Company.findByPk(comp.id);
+
+      // get profile register details
+      let user = await User.findOne({
+        where:{
+          id: comp.userId
+        },
+        attributes: { exclude: ['password', 'userStatus', 'isVerified', 'loginOtp', 'accountActivatedAt', 'forgetPasswordToken', 'roles', 'terms'] }
+      })
+
+      details.setDataValue('user', user);
+
+    } else if (type === "certification") {
+
+      details = await CompanyCertification.findAll({
+        where: {
+          companyId: comp.id,
+        },
+      });
+
+      // documents 
+      let documents = await CompanyDocument.findAll({
+        where: {
+          companyId: comp.id,
+        },
+      });
+
+      // registration details
+      let registration = await CompanyRegistration.findOne({
+        where: {
+          companyId: comp.id,
+        },
+      });
+
+      // set into details object
+      details = {
+        certifications: details,
+        documents,
+        registration,
+      }
+
+      
+    }else if(type === "officeLocation"){
+      details = await CompanyOfficeLocation.findAll({
+        where: {
+          companyId: comp.id,
+        },
+      });
+
+    }
+
+    // give response
+    details
+      ? res
+          .status(HttpStatus.OK.code)
+          .send(new Response(true, `${HttpStatus.OK.message}`, details))
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
 module.exports = {
   signUpUser,
   userLogin,
@@ -1177,4 +1259,5 @@ module.exports = {
   createCompanyDocument,
   createCompanyRegistration,
   createCompanyLocation,
+  getCompanyProfile,
 };

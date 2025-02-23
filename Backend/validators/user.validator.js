@@ -2,35 +2,25 @@ const Joi = require("joi");
 const { CustomMessages } = require("../helper/statusCode");
 // const { joi } = require("joi-sequelize/lib/functions");
 
-
 const signupValidation = Joi.object({
   name: Joi.string()
     .required()
     .messages({ "string.empty": "Full name is required." }),
-  
-  email: Joi.string()
-    .required()
-    .email()
-    .messages({
-      "string.empty": "Email address is required.",
-      "string.email": "Please provide a valid email address.",
-    }),
 
-  password: Joi.string()
-    .required()
-    .min(8)
-    .messages({
-      "string.empty": "Password is required.",
-      "string.min": "Password must be at least 8 characters long.",
-    }),
+  email: Joi.string().required().email().messages({
+    "string.empty": "Email address is required.",
+    "string.email": "Please provide a valid email address.",
+  }),
 
-  confirmPassword: Joi.string()
-    .valid(Joi.ref("password"))
-    .required()
-    .messages({
-      "any.only": "Password and Confirm Password must match.",
-      "string.empty": "Confirm Password is required.",
-    }),
+  password: Joi.string().required().min(8).messages({
+    "string.empty": "Password is required.",
+    "string.min": "Password must be at least 8 characters long.",
+  }),
+
+  confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
+    "any.only": "Password and Confirm Password must match.",
+    "string.empty": "Confirm Password is required.",
+  }),
 
   phoneNumber: Joi.string()
     .required()
@@ -56,13 +46,10 @@ const signupValidation = Joi.object({
     .required()
     .messages({ "string.empty": "Company is required." }),
 
-  userType: Joi.string()
-    .valid("Seller", "Buyer")
-    .required()
-    .messages({
-      "string.empty": "You must select a role (Seller or Buyer).",
-      "any.only": "Invalid role. Must be either Seller or Buyer.",
-    }),
+  userType: Joi.string().valid("Seller", "Buyer").required().messages({
+    "string.empty": "You must select a role (Seller or Buyer).",
+    "any.only": "Invalid role. Must be either Seller or Buyer.",
+  }),
 
   terms: Joi.boolean()
     .valid(true)
@@ -73,38 +60,39 @@ const signupValidation = Joi.object({
 module.exports = signupValidation;
 
 const completeProfileValidation = Joi.object({
-    about: Joi.string().required(),
-    mobile_number: Joi.string().required(),
-    facebook_url: Joi.string().optional(),
-    linkedin_url: Joi.string().optional(),
-    twitter_url: Joi.string().optional(),
-    website: Joi.string().required(),
-    userId:Joi.number().integer().required(),
+  about: Joi.string().required(),
+  mobile_number: Joi.string().required(),
+  facebook_url: Joi.string().optional(),
+  linkedin_url: Joi.string().optional(),
+  twitter_url: Joi.string().optional(),
+  website: Joi.string().required(),
+  userId: Joi.number().integer().required(),
 });
-
 
 const forgetPasswordValidation = Joi.object({
-    password: Joi.string().required(),
-    confirm_password: Joi.valid(Joi.ref("password")).required().error(new Error("PASSWORD AND CONFIRM PASSWORD SHOULD BE MATCH.")),
-    forget_password_token: Joi.string().required()
-})
-
-let changePasswordValidation = Joi.object({
-    password: Joi.string().required(),
-    confirm_password: Joi.valid(Joi.ref("password")).required().error(new Error("PASSWORD AND CONFIRM PASSWORD SHOULD BE MATCH.")),
-    current_password: Joi.string().required()
-})
-
-
-const updateProfileValidator = Joi.object({
-    name: Joi.string().optional(),
-    email:Joi.string().optional().email(),
-    country: Joi.number().integer().optional(),
-    state: Joi.number().integer().optional(),
-    city: Joi.number().integer().optional(),
-    company: Joi.string().optional(),
+  password: Joi.string().required(),
+  confirm_password: Joi.valid(Joi.ref("password"))
+    .required()
+    .error(new Error("PASSWORD AND CONFIRM PASSWORD SHOULD BE MATCH.")),
+  forget_password_token: Joi.string().required(),
 });
 
+let changePasswordValidation = Joi.object({
+  password: Joi.string().required(),
+  confirm_password: Joi.valid(Joi.ref("password"))
+    .required()
+    .error(new Error("PASSWORD AND CONFIRM PASSWORD SHOULD BE MATCH.")),
+  current_password: Joi.string().required(),
+});
+
+const updateProfileValidator = Joi.object({
+  name: Joi.string().optional(),
+  email: Joi.string().optional().email(),
+  country: Joi.number().integer().optional(),
+  state: Joi.number().integer().optional(),
+  city: Joi.number().integer().optional(),
+  company: Joi.string().optional(),
+});
 
 const enquirySchema = Joi.object({
   userId: Joi.number().optional(),
@@ -113,158 +101,171 @@ const enquirySchema = Joi.object({
   email: Joi.string().email().required(),
   phoneNumber: Joi.string().required(),
   companyName: Joi.string().required(),
-  userType: Joi.string().valid('Seller', 'Buyer').required(),
+  userType: Joi.string().valid("Seller", "Buyer").required(),
 });
 
 // Company Validator
 const companyValidationSchema = Joi.object({
-    // Company description and images
-    companyName: Joi.string().optional(),
-    companyDescription: Joi.string().required(),
-    companyLogo: Joi.string().allow('', null),
-    profileBanner: Joi.string().allow('', null),
+  // Company description and images
+  companyName: Joi.string().optional(),
+  companyDescription: Joi.string().required(),
+  companyLogo: Joi.string().allow("", null),
+  profileBanner: Joi.string().allow("", null),
 
-    // Address information
-    country: Joi.number().integer().optional(),
-    state: Joi.number().integer().optional(),
-    city: Joi.number().integer().optional(),
-    zipCode: Joi.string().required(),
-    streetAddress: Joi.string().required(),
+  // Address information
+  country: Joi.number().integer().optional(),
+  state: Joi.number().integer().optional(),
+  city: Joi.number().integer().optional(),
+  zipCode: Joi.string().required(),
+  streetAddress: Joi.string().required(),
 
-    // Business and operation details
-    primaryBusinessType: Joi.string().required(),
-    businessCategories: Joi.string().required(),
-    workingDays: Joi.string().allow('', null),
-    contactPerson: Joi.string().optional(),
+  // Business and operation details
+  primaryBusinessType: Joi.string()
+    .valid(
+      "Manufacturer",
+      "Companies",
+      "Trader",
+      "Distributor",
+      "Reseller",
+      "Wholesaler",
+      "Service Provider"
+    )
+    .required(),
+  businessCategories: Joi.string().required(),
+  workingDays: Joi.string().valid("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday").allow("", null),
+  contactPerson: Joi.string().optional(),
 
-
-    // Alternate contact details
-    mobileNumber: Joi.string().optional(),
-    primaryEmail: Joi.string().email().optional(),
-    alternateMobileNumber: Joi.string().allow('', null),
-    alternateEmail: Joi.string().email().allow('', null),
-    landlineNumber: Joi.string().allow('', null),
-    faxNumber: Joi.string().allow('', null),
+  // Alternate contact details
+  mobileNumber: Joi.string().optional(),
+  primaryEmail: Joi.string().email().optional(),
+  alternateMobileNumber: Joi.string().allow("", null),
+  alternateEmail: Joi.string().email().allow("", null),
+  landlineNumber: Joi.string().allow("", null),
+  faxNumber: Joi.string().allow("", null),
 });
 
 const companyInfoValidationSchema = Joi.object({
-    // Basic company information
-    yearOfEstablishment: Joi.date().iso().required(),
-        ownershipType: Joi.string()
-        .valid("Pvt Ltd", "LLC", "Sole Proprietorship", "Inc", "Others")
-        .required(),
-    majorMarket: Joi.string().required(),
-    termsOfDelivery: Joi.string().required(),
-    area: Joi.string()
-        .valid(
-            "1000-3000 square meter",
-            "3000-8000 square meter",
-            "below - 1000 square meter",
-            "above - 8000 square meter"
-        )
-        .allow(null),
+  // Basic company information
+  yearOfEstablishment: Joi.date().iso().required(),
+  ownershipType: Joi.string()
+    .valid("Pvt Ltd", "LLC", "Sole Proprietorship", "Inc", "Others")
+    .required(),
+  majorMarket: Joi.string().required(),
+  termsOfDelivery: Joi.string().required(),
+  area: Joi.string()
+    .valid(
+      "1000-3000 square meter",
+      "3000-8000 square meter",
+      "below - 1000 square meter",
+      "above - 8000 square meter"
+    )
+    .allow(null),
 
-    // Operational numbers
-    numberOfEmployees: Joi.number().integer().allow(null),
-    numberOfProductLines: Joi.number().integer().allow(null),
-    outputCapacity: Joi.number().integer().allow(null),
-    outputCapacityUnit: Joi.string()
-        .valid("Bags", "Carton", "Dozen", "Feet", "Kilogram", "Meter", "Metric Ton", "Pieces", "Other")
-        .allow(null),
-    averageLeadTime: Joi.number().integer().allow(null),
-    averageLeadTimeUnit: Joi.string()
-        .valid("Day", "Week", "Month", "Quarter", "Year")
-        .allow(null),
+  // Operational numbers
+  numberOfEmployees: Joi.number().integer().allow(null),
+  numberOfProductLines: Joi.number().integer().allow(null),
+  outputCapacity: Joi.number().integer().allow(null),
+  outputCapacityUnit: Joi.string()
+    .valid(
+      "Bags",
+      "Carton",
+      "Dozen",
+      "Feet",
+      "Kilogram",
+      "Meter",
+      "Metric Ton",
+      "Pieces",
+      "Other"
+    )
+    .allow(null),
+  averageLeadTime: Joi.number().integer().allow(null),
+  averageLeadTimeUnit: Joi.string()
+    .valid("Day", "Week", "Month", "Quarter", "Year")
+    .allow(null),
 
-    // Trade information
-    gstNumber: Joi.string().allow('', null),
-    panNumber: Joi.string().allow('', null),
-    tanNumber: Joi.string().allow('', null),
-    annualRevenue: Joi.string()
-        .valid(
-            "USD $2.5 Million - USD $5 Million",
-            "USD $5 Million - USD $10 Million",
-            "above - USD $10 Million",
-            "below - USD $2.5 Million"
-        )
-        .required(),
-    exportPercentage: Joi.number().precision(2).allow(null),
-    nearestPort: Joi.number().integer().required(),
+  // Trade information
+  gstNumber: Joi.string().allow("", null),
+  panNumber: Joi.string().allow("", null),
+  tanNumber: Joi.string().allow("", null),
+  annualRevenue: Joi.string()
+    .valid(
+      "USD $2.5 Million - USD $5 Million",
+      "USD $5 Million - USD $10 Million",
+      "above - USD $10 Million",
+      "below - USD $2.5 Million"
+    )
+    .required(),
+  exportPercentage: Joi.number().precision(2).allow(null),
+  nearestPort: Joi.number().integer().required(),
 });
 
 const companyCertificationValidationSchema = Joi.object({
-    // The ID of the company that owns this certification.
-    // companyId: Joi.number().integer().required(),
+  // The ID of the company that owns this certification.
+  // companyId: Joi.number().integer().required(),
 
-    // The name of the certification.
-    name: Joi.string().trim().min(1).required(),
+  // The name of the certification.
+  name: Joi.string().trim().min(1).required(),
 
-    // The file path or URL for the certificate file.
-    certificateFile: Joi.string().trim().min(1).optional()
+  // The file path or URL for the certificate file.
+  certificateFile: Joi.string().trim().min(1).optional(),
 });
 
-
 const companyDocumentValidationSchema = Joi.object({
-    // companyId: Joi.number().integer().required(),
-    documentType: Joi.string()
-        .valid('Registration', 'Tax', 'Utility', 'Identification', 'Business')
-        .required(),
-    documentFile: Joi.string().trim().min(1).optional()
-})
+  // companyId: Joi.number().integer().required(),
+  documentType: Joi.string()
+    .valid("Registration", "Tax", "Utility", "Identification", "Business")
+    .required(),
+  documentFile: Joi.string().trim().min(1).optional(),
+});
 
 const companyRegistrationValidationSchema = Joi.object({
-    // The ID of the company that owns this registration record.
-    // companyId: Joi.number().integer().required(),
+  // The ID of the company that owns this registration record.
+  // companyId: Joi.number().integer().required(),
 
-    // Location of the registration. This field is required.
-    registrationLocation: Joi.number().integer().required(),
+  // Location of the registration. This field is required.
+  registrationLocation: Joi.number().integer().required(),
 
-    // The registration date must be a valid ISO date string (YYYY-MM-DD).
-    registrationDate: Joi.date().iso().required(),
+  // The registration date must be a valid ISO date string (YYYY-MM-DD).
+  registrationDate: Joi.date().iso().required(),
 
-    // The registration number is required.
-    registrationNumber: Joi.string().trim().min(1).required(),
+  // The registration number is required.
+  registrationNumber: Joi.string().trim().min(1).required(),
 
-    // Fax number is optional and can be empty or null.
-    faxNumber: Joi.string().trim().allow('', null)
+  // Fax number is optional and can be empty or null.
+  faxNumber: Joi.string().trim().allow("", null),
 });
 
 const officeLocationValidationSchema = Joi.object({
-    // The ID of the company that this office location belongs to.
-    // companyId: Joi.number().integer().required(),
+  // The ID of the company that this office location belongs to.
+  // companyId: Joi.number().integer().required(),
 
-    // The location type should be either 'Head' or 'Branch'.
-    locationType: Joi.string()
-        .valid('Head', 'Branch')
-        .required(),
+  // The location type should be either 'Head' or 'Branch'.
+  locationType: Joi.string().valid("Head", "Branch").required(),
 
-    // The country is required.
-    country: Joi.string().trim().min(1).required(),
+  // The country is required.
+  country: Joi.string().trim().min(1).required(),
 
-    // The state is optional.
-    state: Joi.string().trim().allow('', null),
+  // The state is optional.
+  state: Joi.string().trim().allow("", null),
 
-    // The zipcode is required.
-    zipcode: Joi.string().trim().min(1).required(),
+  // The zipcode is required.
+  zipcode: Joi.string().trim().min(1).required(),
 
-    // The street address is required.
-    streetAddress: Joi.string().trim().min(1).required()
+  // The street address is required.
+  streetAddress: Joi.string().trim().min(1).required(),
 });
 
-
 module.exports = {
-    changePasswordValidation,
-    completeProfileValidation,
-    enquirySchema,
-    forgetPasswordValidation,
-    signupValidation,
-    updateProfileValidator,
-    companyValidationSchema,
-    companyInfoValidationSchema,
-    companyCertificationValidationSchema,
-    companyDocumentValidationSchema,
-    companyRegistrationValidationSchema,
-    officeLocationValidationSchema,
-
+  changePasswordValidation,
+  completeProfileValidation,
+  enquirySchema,
+  forgetPasswordValidation,
+  signupValidation,
+  updateProfileValidator,
+  companyValidationSchema,
+  companyInfoValidationSchema,
+  companyCertificationValidationSchema,
+  companyDocumentValidationSchema,
+  companyRegistrationValidationSchema,
+  officeLocationValidationSchema,
 };
-
