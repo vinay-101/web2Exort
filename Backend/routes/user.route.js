@@ -49,4 +49,7 @@ userRouter.route("/create/company/office/location").post(requireAuth, user_contr
 // Get Company Profile
 userRouter.route("/company/profile").get(requireAuth, user_controller.getCompanyProfile);
 
+// Delete Certificate
+userRouter.route("/delete/certificate/:id").delete(requireAuth, user_controller.deleteCertificate);
+
 module.exports = {userRouter}

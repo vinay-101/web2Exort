@@ -616,7 +616,7 @@ const CompanyProfileForm = () => {
                       </div>
                       <div className="form-group col-md-6">
                         <label>Ownership type *</label>
-                        <select className="form-control" name="ownershipType">
+                        <select className="form-control" name="ownershipType" defaultValue={companyData.ownershipType || ""}>
                           <option value="Pvt Ltd">Pvt Ltd</option>
                           <option value="LLC">LLC</option>
                           <option value="Sole Proprietorship">
@@ -635,13 +635,14 @@ const CompanyProfileForm = () => {
                           value={selectedMajorMarket}
                           onChange={setSelectedMajorMarket}
                           placeholder="Select major market"
+                          defaultValue={companyData?.majorMarket}
                         />
                         {/* <select className="form-control" name="majorMarket">
                         </select> */}
                       </div>
                       <div className="form-group col-md-6">
                         <label>Terms of delivery *</label>
-                        <select className="form-control" name="termsOfDelivery">
+                        <select className="form-control" name="termsOfDelivery" defaultValue={companyData?.termsOfDelivery}>
                           <option>DAP - Delivery at place</option>
                           <option>DDP - Delivered Duty Paid</option>
                           <option>FAS - Free Alongside Ship</option>
@@ -651,17 +652,17 @@ const CompanyProfileForm = () => {
                       </div>
                       <div className="form-group col-md-6">
                         <label>Area</label>
-                        <select className="form-control" name="area">
-                          <option value="1000-3000">
+                        <select className="form-control" name="area" defaultValue={companyData?.area}>
+                          <option value="1000-3000 square meter">
                             1000-3000 square meter
                           </option>
-                          <option value="3000-8000">
+                          <option value="3000-8000 square meter">
                             3000-8000 square meter
                           </option>
-                          <option value="below-1000">
+                          <option value="below - 1000 square meter">
                             below - 1000 square meter
                           </option>
-                          <option value="above-8000">
+                          <option value="above - 8000 square meter">
                             above - 8000 square meter
                           </option>
                         </select>
@@ -673,6 +674,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="numberOfEmployees"
+                          defaultValue={companyData?.numberOfEmployees}
                         />
                       </div>
                       <div className="form-group col-md-6">
@@ -682,6 +684,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="numberOfProductLines"
+                          defaultValue={companyData?.numberOfProductLines}
                         />
                       </div>
                       <div className="form-group row col-md-6">
@@ -696,6 +699,7 @@ const CompanyProfileForm = () => {
                             id="outputCapacity"
                             placeholder="Enter here..."
                             name="outputCapacity"
+                            defaultValue={companyData?.outputCapacity}
                           />
                         </div>
 
@@ -708,6 +712,7 @@ const CompanyProfileForm = () => {
                             className="form-control"
                             id="outputCapacityUnit"
                             name="outputCapacityUnit"
+                            defaultValue={companyData?.outputCapacityUnit}
                           >
                             <option value="Bags">Bags</option>
                             <option value="Carton">Carton</option>
@@ -724,15 +729,14 @@ const CompanyProfileForm = () => {
 
                       <div className="form-group row col-md-6">
                         <div className="col-md-6">
-                          <label htmlFor="leadTime">
-                            Average lead time
-                          </label>
+                          <label htmlFor="leadTime">Average lead time</label>
                           <input
                             type="text"
                             className="form-control"
                             id="leadTime"
                             placeholder="Enter here..."
                             name="averageLeadTime"
+                            defaultValue={companyData?.averageLeadTime}
                           />
                         </div>
                         <div className="col-md-6">
@@ -740,6 +744,7 @@ const CompanyProfileForm = () => {
                           <select
                             className="form-control"
                             name="averageLeadTimeUnit"
+                            defaultValue={companyData?.averageLeadTimeUnit}
                           >
                             <option value="Day">Day</option>
                             <option value="Week">Week</option>
@@ -765,6 +770,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="gstNumber"
+                          defaultValue={companyData?.gstNumber}
                         />
                       </div>
                       <div className="form-group col-md-6">
@@ -774,6 +780,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="panNumber"
+                          defaultValue={companyData?.panNumber}
                         />
                       </div>
                       <div className="form-group col-md-6">
@@ -783,13 +790,24 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="tanNumber"
+                          defaultValue={companyData?.tanNumber}
                         />
                       </div>
                       <div className="form-group col-md-6">
                         <label>Annual revenue *</label>
-                        <select className="form-control" name="annualRevenue">
-                          <option>Select</option>
-                          {/* Add options dynamically or statically */}
+                        <select className="form-control" name="annualRevenue" defaultValue={companyData?.annualRevenue}>
+                          <option value="USD $2.5 Million - USD $5 Million">
+                            USD $2.5 Million - USD $5 Million
+                          </option>
+                          <option value="USD $5 Million - USD $10 Million">
+                            USD $5 Million - USD $10 Million
+                          </option>
+                          <option value="above - USD $10 Million">
+                            above - USD $10 Million
+                          </option>
+                          <option value="below - USD $2.5 Million">
+                            below - USD $2.5 Million
+                          </option>
                         </select>
                       </div>
                       <div className="form-group col-md-6">
@@ -799,13 +817,42 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="exportPercentage"
+                          defaultValue={companyData?.exportPercentage}
                         />
                       </div>
                       <div className="form-group col-md-6">
                         <label>Nearest port</label>
-                        <select className="form-control" name="nearestPort">
-                          <option>Please select</option>
-                          {/* Add options dynamically or statically */}
+                        <select className="form-control" name="nearestPort" defaultValue={companyData?.nearestPort}>
+                          <option value="Mumbai">Mumbai Port</option>
+                          <option value="Nhava Sheva">
+                            Nhava Sheva (JNPT)
+                          </option>
+                          <option value="Mundra">Mundra Port</option>
+                          <option value="Kandla">
+                            Kandla Port (Deendayal Port)
+                          </option>
+                          <option value="Visakhapatnam">
+                            Visakhapatnam Port
+                          </option>
+                          <option value="1">Chennai Port</option>
+                          <option value="2">Kolkata Port</option>
+                          <option value="3">Haldia Port</option>
+                          <option value="4">Cochin Port (Kochi)</option>
+                          <option value="5">New Mangalore Port</option>
+                          <option value="6">
+                            V.O. Chidambaranar Port (Tuticorin)
+                          </option>
+                          <option value="7">Paradip Port</option>
+                          <option value="8">Hazira Port</option>
+                          <option value="9">Pipavav Port</option>
+                          <option value="10">
+                            Krishnapatnam Port
+                          </option>
+                          <option value="11">
+                            Ennore Port (Kamarajar Port)
+                          </option>
+                          <option value="12">Karaikal Port</option>
+                          <option value="13">Gopalpur Port</option>
                         </select>
                       </div>
                     </div>
@@ -835,6 +882,7 @@ const CompanyProfileForm = () => {
                         <label>Recommended format: </label>
                         <label>Size: Less than 5MB</label>
                       </div>
+                      
                       <form className="form-row col-md-12">
                         <div className="form-group col-md-6">
                           <label>Name</label>
@@ -976,8 +1024,8 @@ const CompanyProfileForm = () => {
                         <select
                           className="form-control"
                           name="registrationLocation"
+                          defaultValue={companyData?.registration?.registrationLocation}
                         >
-                          <option value="">Select country</option>
                           <option value="1">USA</option>
                           <option value="2">Canada</option>
                           <option value="3">UK</option>
@@ -991,6 +1039,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           name="registrationDate"
                           placeholder="Please enter registration date"
+                          defaultValue={companyData?.registration?.registrationDate}
                         />
                       </div>
                       <div className="form-group col-md-6">
@@ -1000,6 +1049,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           name="registrationNumber"
                           placeholder="Enter here..."
+                          defaultValue={companyData?.registration?.registrationNumber}
                         />
                       </div>
                       <div className="form-group col-md-6">
@@ -1009,6 +1059,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           name="faxNumber"
                           placeholder="Enter here..."
+                          defaultValue={companyData?.registration?.faxNumber}
                         />
                       </div>
                       {/* Form Actions - Buttons */}
@@ -1041,9 +1092,9 @@ const CompanyProfileForm = () => {
                         <select
                           className="form-control"
                           name="officeLocation"
+                          defaultValue= {companyData[0]?.country}
                           required
                         >
-                          <option value="">Select country</option>
                           <option value="1">USA</option>
                           <option value="2">Canada</option>
                           <option value="3">UK</option>
@@ -1057,6 +1108,7 @@ const CompanyProfileForm = () => {
                           placeholder="State *"
                           required
                           name="officeState"
+                          defaultValue={companyData[0]?.state}
                         />
                       </div>
                       <div className="form-group col-md-6">
@@ -1066,6 +1118,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="officeZipcode"
+                          defaultValue={companyData[0]?.zipcode}
                           required
                         />
                       </div>
@@ -1076,6 +1129,7 @@ const CompanyProfileForm = () => {
                           placeholder="Enter here..."
                           name="officeAddress"
                           required
+                          defaultValue={companyData[0]?.streetAddress}
                         ></textarea>
                       </div>
                       {/* Right-aligned buttons */}
@@ -1102,6 +1156,7 @@ const CompanyProfileForm = () => {
                         <select
                           className="form-control"
                           name="branchLocation"
+                          defaultValue={companyData[1]?.country}
                           required
                         >
                           <option value="">Select country</option>
@@ -1118,6 +1173,7 @@ const CompanyProfileForm = () => {
                           placeholder="State"
                           required
                           name="branchState"
+                          defaultValue={companyData[1]?.state}
                         />
                       </div>
                       <div className="form-group col-md-6">
@@ -1127,6 +1183,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="branchZipcode"
+                          defaultValue={companyData[1]?.zipcode}
                           required
                         />
                       </div>
@@ -1136,6 +1193,7 @@ const CompanyProfileForm = () => {
                           className="form-control"
                           placeholder="Enter here..."
                           name="branchAddress"
+                          defaultValue={companyData[1]?.streetAddress}
                           required
                         ></textarea>
                       </div>

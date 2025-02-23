@@ -1240,6 +1240,37 @@ const getCompanyProfile = async (req, res) => {
   }
 };
 
+const deleteCertificate = async(req,res)=>{
+  try{
+    let id = req.params.id;
+    let userId = req.userId;
+
+    let certificate = await CompanyCertification.findOne({
+      where:{
+        id:Number(id)
+      }
+    });
+
+    if(!certificate){
+      return res.status(HttpStatus.FORBIDDEN.code).send(new Response(false, `Certificate not found.`));
+    }
+
+    let deleteCertificate = await certificate.destroy();
+
+    // give response
+    deleteCertificate
+      ? res
+          .status(HttpStatus.OK.code)
+          .send(new Response(true, `Certificate deleted successfully`, deleteCertificate))
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(new Response(false, `${HttpStatus.FORBIDDEN.message}`));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
 module.exports = {
   signUpUser,
   userLogin,
@@ -1260,4 +1291,5 @@ module.exports = {
   createCompanyRegistration,
   createCompanyLocation,
   getCompanyProfile,
+  deleteCertificate,
 };
