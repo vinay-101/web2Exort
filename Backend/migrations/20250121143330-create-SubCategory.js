@@ -18,6 +18,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      image:{
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,

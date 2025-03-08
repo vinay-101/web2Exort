@@ -2,7 +2,7 @@
 import "../assets/style.css";
 
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -86,8 +86,8 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="header-auth">
-        <a href="#">Sign Up</a>
-        <a href="#">Login</a>
+        <Link to="/signup">Signup</Link>
+        <Link to="/login">Login</Link>
       </div>
     </div>
   );

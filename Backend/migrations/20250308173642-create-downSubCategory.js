@@ -3,20 +3,30 @@ const { Sequelize } = require("sequelize");
 
 module.exports = {
   up: function (queryInterface, DataTypes) {
-    return queryInterface.createTable("categories", {
+    return queryInterface.createTable("downSubCategories", {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
+      categoryId: {
+        // belongs to category
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      subCategoryId: {
+        // belongs to subcategory
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      image:{
+      image: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -30,6 +40,6 @@ module.exports = {
   },
 
   down: function (queryInterface, DataTypes) {
-    return queryInterface.dropTable("categories");
+    return queryInterface.dropTable("downSubCategories");
   },
 };

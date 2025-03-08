@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Add Faq' }) %>
+
+    <body class="hold-transition sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <h3 class="display-5 my-4 text-center text-primary">Category Management</h3>
+                                <div class="container mt-4">
+                                    <!-- Categories Section -->
+                                    <div class="card shadow-sm mb-4">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="card-title mb-0">Categories</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="mainForm">
+                                                <div class="form-group">
+                                                    <select class="form-control main-select" id="mainSelect"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mainImage">Upload Image</label>
+                                                    <input type="file" class="form-control-file" id="mainImage" accept="image/*" required>
+                                                    <img id="mainPreview" class="img-thumbnail mt-2" style="display: none; max-width: 100px;">
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Add New Category</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Sub-Categories Section -->
+                                    <div class="card shadow-sm mb-4">
+                                        <div class="card-header bg-info text-white">
+                                            <h5 class="card-title mb-0">Sub-Category</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="subForm">
+                                                <div class="form-group">
+                                                    <select class="form-control category-select" id="categorySelectForSub"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="form-control sub-select" id="subSelect"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="subImage">Upload Image</label>
+                                                    <input type="file" class="form-control-file" id="subImage" accept="image/*" required>
+                                                    <img id="subPreview" class="img-thumbnail mt-2" style="display: none; max-width: 100px;">
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Add New Sub-Category</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Micro-Categories Section -->
+                                    <div class="card shadow-sm mb-4">
+                                        <div class="card-header bg-warning text-white">
+                                            <h5 class="card-title mb-0">Micro-Category</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="microForm">
+                                                <div class="form-group">
+                                                    <select class="form-control category-select" id="categorySelectForMicro"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="form-control sub-category-select" id="subCategorySelectForMicro"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="form-control micro-select" id="microSelect"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="microImage">Upload Image</label>
+                                                    <input type="file" class="form-control-file" id="microImage" accept="image/*" required>
+                                                    <img id="microPreview" class="img-thumbnail mt-2" style="display: none; max-width: 100px;">
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Add New Micro-Category</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Categories List -->
+                                    <div class="card shadow-sm">
+                                        <div class="card-header bg-secondary text-white">
+                                            <h5 class="card-title mb-0">Categories List</h5>
+                                        </div>
+                                        <div class="card-body" id="categoriesList">
+                                            <p class="text-muted">No categories added yet.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+
+        <%- include("partials/_scripts.ejs") %>
+        <script>
+            class CategoryManager {
+                constructor() {
+                    this.categories = [];
+                    this.subCategories = [];
+                    this.microCategories = [];
+                    this.init();
+                }
+    
+                init() {
+                    // Initialize creation fields with direct typing
+                    this.initSelect('#mainSelect', 'Type new category...', true);
+                    this.initSelect('#subSelect', 'Type new sub-category...', true);
+                    this.initSelect('#microSelect', 'Type new micro-category...', true);
+    
+                    // Initialize selection fields with existing options
+                    this.initSelect('#categorySelectForSub', 'Select category...', false);
+                    this.initSelect('#categorySelectForMicro', 'Select category...', false);
+                    this.initSelect('#subCategorySelectForMicro', 'Select sub-category...', false);
+    
+                    // Form submission handlers
+                    document.getElementById('mainForm').addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.addCategory('main');
+                    });
+    
+                    document.getElementById('subForm').addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.addCategory('sub');
+                    });
+    
+                    document.getElementById('microForm').addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.addCategory('micro');
+                    });
+    
+                    // Image preview handlers
+                    document.getElementById('mainImage').addEventListener('change', (e) => {
+                        this.previewImage(e.target, 'mainPreview');
+                    });
+    
+                    document.getElementById('subImage').addEventListener('change', (e) => {
+                        this.previewImage(e.target, 'subPreview');
+                    });
+    
+                    document.getElementById('microImage').addEventListener('change', (e) => {
+                        this.previewImage(e.target, 'microPreview');
+                    });
+    
+                    // Change handlers for updating dependent selects
+                    $('#categorySelectForSub').on('change', () => this.updateSubCategorySelect());
+                    $('#categorySelectForMicro').on('change', () => this.updateMicroCategorySelects());
+                    $('#subCategorySelectForMicro').on('change', () => this.updateMicroSelect());
+
+                    // Fetch categories on page load
+                    this.fetchCategories();
+                }
+    
+                initSelect(selector, placeholder, isCreationField) {
+                    $(selector).select2({
+                        placeholder: placeholder,
+                        allowClear: true,
+                        tags: isCreationField,
+                        data: isCreationField ? [] : undefined,
+                        createTag: isCreationField ? function(params) {
+                            return {
+                                id: params.term,
+                                text: params.term,
+                                newOption: true
+                            };
+                        } : undefined
+                    });
+                }
+    
+                previewImage(input, previewId) {
+                    const file = input.files[0];
+                    const preview = document.getElementById(previewId);
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+    
+                addCategory(type) {
+                    let name, image, selectId, previewId, formId, parentCatName, parentSubCatName;
+    
+                    if (type === 'main') {
+                        name = $('#mainSelect').val();
+                        image = document.getElementById('mainImage').files[0];
+                        selectId = 'mainSelect';
+                        previewId = 'mainPreview';
+                        formId = 'mainForm';
+                    } else if (type === 'sub') {
+                        parentCatName = $('#categorySelectForSub').val();
+                        name = $('#subSelect').val();
+                        image = document.getElementById('subImage').files[0];
+                        selectId = 'subSelect';
+                        previewId = 'subPreview';
+                        formId = 'subForm';
+                    } else if (type === 'micro') {
+                        parentCatName = $('#categorySelectForMicro').val();
+                        parentSubCatName = $('#subCategorySelectForMicro').val();
+                        name = $('#microSelect').val();
+                        image = document.getElementById('microImage').files[0];
+                        selectId = 'microSelect';
+                        previewId = 'microPreview';
+                        formId = 'microForm';
+                    }
+    
+                    if (!name || !image) {
+                        alert('Please provide a name and image.');
+                        return;
+                    }
+    
+                    if (type === 'sub' && !parentCatName) {
+                        alert('Please select a category for the sub-category.');
+                        return;
+                    }
+    
+                    if (type === 'micro' && (!parentCatName || !parentSubCatName)) {
+                        alert('Please select both a category and sub-category for the micro-category.');
+                        return;
+                    }
+    
+                    const formData = new FormData();
+                    formData.append('name', name);
+                    formData.append('image', image);
+    
+                    if (type === 'sub') {
+                        formData.append('category', parentCatName);
+                    } else if (type === 'micro') {
+                        formData.append('category', parentCatName);
+                        formData.append('subCategory', parentSubCatName);
+                    }
+    
+                    fetch('/category/create', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status) {
+                            alert(data.msg);
+                            this.fetchCategories();
+                            document.getElementById(formId).reset();
+                            document.getElementById(previewId).style.display = 'none';
+                            $('#' + selectId).val(null).trigger('change');
+                        } else {
+                            alert(data.msg);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Something went wrong!');
+                    });
+                }
+    
+                fetchCategories() {
+                    fetch('/category')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.categories = data.categories || [];
+                        this.subCategories = data.subCategory || [];
+                        this.microCategories = data.microCategory || [];
+                        this.render();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to fetch categories.');
+                    });
+                }
+    
+                render() {
+                    const container = document.getElementById('categoriesList');
+                    container.innerHTML = '';
+    
+                    if (this.categories.length === 0) {
+                        container.innerHTML = '<p class="text-muted">No categories added yet.</p>';
+                        return;
+                    }
+    
+                    this.categories.forEach(category => {
+                        const subCats = this.subCategories.filter(sub => sub.category === category.name);
+                        container.innerHTML += `
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center">
+                                    <img src="${category.image}" class="img-thumbnail mr-3" style="max-width: 80px;">
+                                    <strong>${category.name}</strong>
+                                </div>
+                                <div class="ml-4">
+                                    ${subCats.map(sub => {
+                                        const microCats = this.microCategories.filter(micro => micro.subCategory === sub.name);
+                                        return `
+                                            <div class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="${sub.image}" class="img-thumbnail mr-3" style="max-width: 80px;">
+                                                    ${sub.name}
+                                                </div>
+                                                <div class="ml-4">
+                                                    ${microCats.map(micro => `
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <img src="${micro.image}" class="img-thumbnail mr-3" style="max-width: 80px;">
+                                                            ${micro.name}
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    });
+    
+                    this.updateCategorySelects();
+                }
+    
+                updateCategorySelects() {
+                    this.updateSelectOptions('#categorySelectForSub', this.categories.map(c => c.name));
+                    this.updateSelectOptions('#categorySelectForMicro', this.categories.map(c => c.name));
+                }
+    
+                updateSubCategorySelect() {
+                    const selectedCategory = $('#categorySelectForSub').val();
+                    if (selectedCategory) {
+                        const subCats = this.subCategories.filter(s => s.category === selectedCategory);
+                        this.updateSelectOptions('#subSelect', subCats.map(s => s.name));
+                    } else {
+                        this.updateSelectOptions('#subSelect', []);
+                    }
+                }
+    
+                updateMicroCategorySelects() {
+                    const selectedCategory = $('#categorySelectForMicro').val();
+                    if (selectedCategory) {
+                        const subCats = this.subCategories.filter(s => s.category === selectedCategory);
+                        this.updateSelectOptions('#subCategorySelectForMicro', subCats.map(s => s.name));
+                    } else {
+                        this.updateSelectOptions('#subCategorySelectForMicro', []);
+                    }
+                }
+    
+                updateMicroSelect() {
+                    const selectedCategory = $('#categorySelectForMicro').val();
+                    const selectedSubCategory = $('#subCategorySelectForMicro').val();
+                    if (selectedCategory && selectedSubCategory) {
+                        const microCats = this.microCategories.filter(m => m.subCategory === selectedSubCategory && m.category === selectedCategory);
+                        this.updateSelectOptions('#microSelect', microCats.map(m => m.name));
+                    } else {
+                        this.updateSelectOptions('#microSelect', []);
+                    }
+                }
+    
+                updateSelectOptions(selector, options) {
+                    if (!['#mainSelect', '#subSelect', '#microSelect'].includes(selector)) {
+                        $(selector).empty().select2({
+                            data: options.map(opt => ({ id: opt, text: opt })),
+                            placeholder: $(selector).data('placeholder') || 'Select...',
+                            allowClear: true,
+                            tags: false
+                        });
+                    }
+                }
+            }
+    
+            const manager = new CategoryManager();
+        </script>
+    </body>
+</html>

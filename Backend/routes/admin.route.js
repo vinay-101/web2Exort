@@ -2,6 +2,7 @@ const express = require("express");
 const adminRouter = express.Router();
 const admin_controller = require("../controllers/admin/admin.controller");
 const { ensureAdmin } = require("../middlewares/admin.middleware");
+const { uploadFiles } = require("../middlewares/uploadFiles.middleware");
 // const { imageUpload } = require("../middlewares/uploadImage.middleware");
 // const { productImages } = require("../middlewares/uploadCoverImage.middleware");
 // const { bannerUpload } = require("../middlewares/uploadBanner.middleware");
@@ -197,6 +198,14 @@ adminRouter.route("/user/activate/:id").get(ensureAdmin,admin_controller.userAct
 // // CHANGE PASSWORD
 // adminRouter.route("/reset/password").get(ensureAdmin,admin_controller.getChangePassword);
 // adminRouter.route("/reset/password").post(ensureAdmin,admin_controller.resetPassword);
+
+// Enquiry
+adminRouter.route("/enquiry/all").get(ensureAdmin,admin_controller.enquiryAll);
+adminRouter.route("/enquiry/delete/:id").get(ensureAdmin,admin_controller.deleteEnquiry)
+
+// Category Management
+adminRouter.route("/category").get(ensureAdmin,admin_controller.showCategoryPage);
+adminRouter.route("/category/create").post(uploadFiles("uploads/companies/",{ name: "image", maxCount: 1 }),admin_controller.createCategory);
 
 module.exports = {
   adminRouter,

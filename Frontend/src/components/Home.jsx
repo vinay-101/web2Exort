@@ -10,12 +10,15 @@ import LeftSidebar from "./LoginComponents/ProductPageLeftside";
 import RightContent from "./LoginComponents/ProductPageRightside";
 import TopArea from "../pages/TopArea";
 import CategorySlider from "./CategorySlider";
+import EnquiryReloadHome from "./EnquiryReloadHome";
+
 
 const Home = () => {
   return (
     <>
       {/* <Navbar /> */}
       {/* <SliderAreaTop /> */}
+      <EnquiryReloadHome />
       <TopArea/>
       <CategorySlider />
       <SliderAreaMiddleProduct />

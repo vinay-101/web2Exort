@@ -13,6 +13,9 @@ const uuid = require("uuid").v4;
 const { HttpStatus } = require("../../helper/statusCode");
 const html_to_pdf = require("html-pdf-node");
 const { Parser } = require("@json2csv/plainjs");
+const Enquiry = require("../../models/user/Enquiry");
+const SubCategory = require("../../models/product/SubCategory");
+const DownSubCategory = require("../../models/product/DownSubcategory");
 
 const adminPage = async (req, res) => {
   const { admin } = req.cookies;
@@ -86,21 +89,21 @@ const showLoginPage = async (req, res) => {
 
 const unreadCounters = async (req, res) => {
   try {
-    let feedbackCount = await Feedback.count({});
-    let contactUsCount = await ContactUs.count({
-      where: {
-        isRead: "true",
-      },
-    });
-    let orderCounter = await Order.count({
-      where: {
-        readStatus: false,
-      },
-    });
+    // let feedbackCount = await Feedback.count({});
+    // let contactUsCount = await ContactUs.count({
+    //   where: {
+    //     isRead: "true",
+    //   },
+    // });
+    // let orderCounter = await Order.count({
+    //   where: {
+    //     readStatus: false,
+    //   },
+    // });
     const response = {
-      feedbackCount: feedbackCount || 0,
-      contactUsCount: contactUsCount || 0,
-      orderCounter: orderCounter || 0,
+      feedbackCount:  0,
+      contactUsCount:  0,
+      orderCounter:  0,
     };
 
     return res
@@ -3582,6 +3585,72 @@ let resetPassword = async (req, res) => {
   }
 };
 
+
+let enquiryAll = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    let data = await Enquiry.findAll({
+      order:[['id', "DESC"]]
+    });
+    // return res.send(purpose_to_visit)
+
+    return res.render("enquries", { admin, data });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const deleteEnquiry = async (req, res) => {
+  try {
+    let id = req.params.id;
+    if (!id) {
+      return res.redirect(req.get("referer"));
+    }
+    await Enquiry.destroy({
+      where: {
+        id: id,
+      },
+    });
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+
+const showCategoryPage = async(req,res)=>{
+  try{
+    const {admin} = req.cookies;
+    let categories = await Category.findAll({});
+
+    let subCategory = await SubCategory.findAll({});
+    let microCategory = await DownSubCategory.findAll({});
+
+    return res.render("categories", {admin, categories, subCategory, microCategory});
+  }catch(error){
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+}
+
+// create category
+const createCategory = async(req,res)=>{
+  try{
+    const name = req.body.name;
+    let image = req.file ? `/${req.file.filename}` : null;
+
+   let createCategory =  await Category.create({name,image});
+   createCategory ? res.status(201).json({status:true, msg:"Category created successfully!"}):
+    res.status(400).json({status:false, msg:"Something went wrong!"});
+  }catch(error){
+    console.log(error);
+   return res.status(500).send({status:false, msg:"Something went wrong!"});
+  }
+}
+ 
+
 const logout = async (req, res) => {
   res.clearCookie("admin");
   res.locals.admin = null;
@@ -3710,4 +3779,8 @@ module.exports = {
   transactionAll,
   getChangePassword,
   resetPassword,
+  enquiryAll,
+  deleteEnquiry,
+  showCategoryPage,
+  createCategory
 };

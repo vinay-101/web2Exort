@@ -616,7 +616,7 @@ const CompanyProfileForm = () => {
                       </div>
                       <div className="form-group col-md-6">
                         <label>Ownership type *</label>
-                        <select className="form-control" name="ownershipType" defaultValue={companyData.ownershipType || ""}>
+                        <select className="form-control" name="ownershipType" defaultValue={companyData?.ownershipType || ""}>
                           <option value="Pvt Ltd">Pvt Ltd</option>
                           <option value="LLC">LLC</option>
                           <option value="Sole Proprietorship">
@@ -1092,7 +1092,7 @@ const CompanyProfileForm = () => {
                         <select
                           className="form-control"
                           name="officeLocation"
-                          defaultValue= {companyData[0]?.country}
+                          defaultValue= {companyData[0]?.country ? companyData[0]?.country : '' }
                           required
                         >
                           <option value="1">USA</option>

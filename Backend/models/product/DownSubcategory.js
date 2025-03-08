@@ -1,13 +1,21 @@
 const { DataTypes, Sequelize, literal } = require("sequelize");
 const sequelize = require("../../helper/db.config");
 
-const Category = sequelize.define(
-  "categories",
+const DownSubCategory = sequelize.define(
+  "downSubCategories",
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false,
+    },
+    categoryId: { // belongs to category
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    subCategoryId: { // belongs to subcategory
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     name: {
@@ -24,4 +32,4 @@ const Category = sequelize.define(
   }
 );
 
-module.exports = Category;
+module.exports = DownSubCategory;

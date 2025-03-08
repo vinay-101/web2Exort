@@ -10,11 +10,15 @@ const SubCategory = sequelize.define(
       autoIncrement: true,
       allowNull: false,
     },
-    categoryId: {
+    categoryId: { // belongs to category
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    image: {
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -1,5 +1,6 @@
 const { DataTypes, Sequelize, literal } = require("sequelize");
 const sequelize = require("../../helper/db.config");
+const User = require("./User");
 
 // Post Requirement table
 const Enquiry = sequelize.define(
@@ -46,5 +47,7 @@ const Enquiry = sequelize.define(
     timestamps: true,
   }
 );
+
+// User.belongsTo(Enquiry, { foreignKey: "userId" });
 
 module.exports = Enquiry;

@@ -12,6 +12,7 @@ const session = require("express-session");
 const { userRouter } = require("./routes/user.route");
 const { productRouter } = require('./routes/product.route');
 const { adminRouter } = require('./routes/admin.route');
+// const DownSubCategory  = require('./models/product/DownSubcategory')
 
 app.use(cors({
   origin: "http://localhost:5173", // React app origin
@@ -32,6 +33,10 @@ sequelize.authenticate().then(() => {
 }).catch((error) => {
   console.error("Unable to connect to the database: ", error);
 });
+
+// sequelize.sync({ alter: true }) // Same as `force: false`
+//   .then(() => console.log("Database connected and tables are ready"))
+//   .catch(err => console.error("Database sync error:", err));
 
 app.use(
   session({

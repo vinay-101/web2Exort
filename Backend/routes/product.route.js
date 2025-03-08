@@ -21,4 +21,8 @@ productRouter.route('/category/all').get(product_controller.allCategory);
 productRouter.route("/create/sub-cateogry").post(product_controller.createSubCategory);
 productRouter.route("/sub-category/all").get(product_controller.allSubCategory);
 
+// DownSubCategory
+productRouter.route("/create/down-sub-category").post(product_controller.createDownSubCategory);
+productRouter.route("/down-sub-category/all").get(product_controller.allDownSubCategory);
+
 module.exports = {productRouter}

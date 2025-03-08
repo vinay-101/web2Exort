@@ -7,6 +7,7 @@ const InquiryForm = ({ enquiryHeading }) => {
   const handleSubmit = handleApiResponse(
     async (e) => {
       e.preventDefault();
+      let userId = AuthService.getUserId();
 
       let formData = new FormData();
       formData.append("requirement", e.target.requirement.value);
@@ -15,7 +16,10 @@ const InquiryForm = ({ enquiryHeading }) => {
       formData.append("phoneNumber", e.target.phoneNumber.value);
       formData.append("companyName", e.target.companyName.value);
       formData.append("userType", e.target.userType.value);
-     AuthService.getAccessToken() ?  formData.append("userId", AuthService.getUserId()) : null
+      if(userId){
+        AuthService.getAccessToken() ?  formData.append("userId", AuthService.getUserId()) : null
+      }
+     
 
       // Reset the form
       e.target.reset();

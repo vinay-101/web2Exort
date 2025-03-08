@@ -11,6 +11,7 @@ const ProductSpecification = require("../../models/product/ProductSpecifiation")
 const Response = require("../../helper/response");
 const Category = require("../../models/product/Category");
 const SubCategory = require("../../models/product/SubCategory");
+const DownSubCategory = require("../../models/product/DownSubcategory");
 
 const createProduct = async (req, res) => {
   try {
@@ -622,6 +623,36 @@ const allSubCategory = async (req, res) => {
   }
 };
 
+const createDownSubCategory = async(req,res)=>{
+  try{
+    const {name, categoryId, subCategoryId} = req.body;
+    let downSubCategory = await DownSubCategory.create({name, categoryId, subCategoryId});
+    return res
+      .status(HttpStatus.CREATED.code)
+      .send(
+        new Response(true, `DownSubCategory ${HttpStatus.CREATED.message}`, downSubCategory)
+      );
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const allDownSubCategory = async(req,res)=>{
+  try{
+    const downSubCategory = await DownSubCategory.findAll({
+      attributes: ["id", "categoryId", "subCategoryId", "name"],
+    });
+
+    return res
+      .status(HttpStatus.OK.code)
+      .send(new Response(true, `DownSubCategory ${HttpStatus.OK.message}`, downSubCategory));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -633,4 +664,6 @@ module.exports = {
   allCategory,
   createSubCategory,
   allSubCategory,
+  createDownSubCategory,
+  allDownSubCategory,
 };
