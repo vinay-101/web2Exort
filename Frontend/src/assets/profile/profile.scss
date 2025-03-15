@@ -989,3 +989,168 @@
   }
 }
 
+
+// catalog css
+.catalog-page{
+  /* Header */
+  /* Header */
+header {
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Sidebar */
+.sidebar {
+  height: 100vh;
+  background: #f8f9fa; /* Match body background */
+}
+
+/* Enquiry Card */
+.company-card {
+  border: none;
+  border-radius: 8px;
+  background: white;
+  margin: 15px; /* Consistent margin */
+}
+
+.fixed-card {
+  // position: fixed;
+  // top: 200px; /* Below header */
+  // left: 15px;
+  // width: calc(25% - 30px); /* Adjust for margins */
+  max-height: calc(100vh - 80px); /* Fit within viewport */
+  // z-index: 1000;
+  // overflow-y: auto;
+  width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.bg-primary {
+  background: #007bff;
+  padding: 15px;
+}
+
+.company-card .card-body {
+  padding: 20px;
+}
+
+.company-name {
+  color: #333;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.btn-primary {
+  background: #007bff;
+  border: none;
+  padding: 10px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+/* Product Listing */
+.main-content {
+  background: #f8f9fa; /* Match body background */
+}
+
+.product-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  background: white;
+  transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  padding-top: 66.67%; /* 3:2 aspect ratio */
+}
+
+.product-img-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.product-card .card-body {
+  padding: 15px;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #007bff;
+}
+
+.btn-outline-primary {
+  border: 1px solid #007bff;
+  color: #007bff;
+  padding: 8px 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background: #007bff;
+  color: white;
+}
+
+/* Pagination */
+.pagination .page-link {
+  color: #007bff;
+  border: 1px solid #e0e0e0;
+  margin: 0 2px;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-item.active .page-link {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.pagination .page-item:not(.active) .page-link:hover {
+  background: #f0f0f0;
+  border-color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    height: auto;
+    padding-bottom: 20px;
+  }
+
+  .fixed-card {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin: 15px 0;
+    left: 0;
+    top: 0;
+  }
+
+  .col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+}
+

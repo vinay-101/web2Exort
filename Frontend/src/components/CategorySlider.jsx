@@ -1,28 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../assets/swiper.scss';
-
-
+import productService from '../Services/productService';
 
 const CategorySlider = () => {
-  const categories = [
-    { icon: 'fa-search', label: 'Accessories', link: '/accessories' },
-    { icon: 'fa-laptop', label: 'Computers', link: '/computers' },
-    { icon: 'fa-shopping-bag', label: 'Other Items', link: '/other' },
-    { icon: 'fa-mobile', label: 'Mobiles', link: '/mobiles' },
-    { icon: 'fa fa-clock-o', label: 'Watches', link: '/watches' },
-    { icon: 'fa-headphones', label: 'Audio', link: '/audio' },
-    { icon: 'fa-camera', label: 'Cameras', link: '/cameras' },
-    { icon: 'fa-gamepad', label: 'Gaming', link: '/gaming' },
-    { icon: 'fa-tv', label: 'Electronics', link: '/electronics' },
-    { icon: 'fa-shoe-prints', label: 'Footwear', link: '/footwear' },
-  ];
+  const [categories, setCategories] = useState([]);
+  // Configurable constants
+  const ITEMS_PER_ROW = 4; // Number of items per row
+  const ROWS_PER_SLIDE = 2; // Number of rows per slide
+  const ITEMS_PER_SLIDE = ITEMS_PER_ROW * ROWS_PER_SLIDE;
 
-  // Split into slides with 8 items each (4 per row, 2 rows)
-  const chunkSize = 8;
-  const slides = [];
-  for (let i = 0; i < categories.length; i += chunkSize) {
-    slides.push(categories.slice(i, i + chunkSize));
+  // Fetch categories
+  async function fetchCategories() {
+    try {
+      const res = await productService.fetchCategories();
+      console.log('res', res);
+      setCategories(res.data.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
   }
+    
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  console.log("All Categories", categories);
+
+  // Function to split array into chunks
+  const chunkArray = (array, size) => {
+    const result = [];
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size));
+    }
+    return result;
+  };
+
+  // Prepare slides
+  const slides = chunkArray(categories, ITEMS_PER_SLIDE);
+
+  // Component to render a single category item
+  const CategoryItem = ({ category }) => (
+    <div className="col-6 col-md-3 mb-3">
+      <a href={category.link || '#'} className="category-link">
+        <div className="category-card h-100">
+          <img 
+            style={{ 
+              width: "100px", 
+              height: "100px", 
+              objectFit: "contain", 
+              objectPosition: "center", 
+              borderRadius: "10px"
+            }} 
+            src={`http://localhost:5000/${category.image}`} 
+            alt="category_image"
+          />
+          <span className="category-label">
+            {category.label || category.name}
+          </span>
+        </div>
+      </a>
+    </div>
+  );
 
   return (
     <div className="container-fluid px-0 py-5">
@@ -32,40 +70,23 @@ const CategorySlider = () => {
         space-between="0"
         className="mySwiper"
       >
-        {slides.map((slideCategories, index) => {
-          // Split each slide into two rows of 4
-          const firstRow = slideCategories.slice(0, 4);
-          const secondRow = slideCategories.slice(4, 8);
+        {slides.map((slideCategories, slideIndex) => {
+          // Split slide categories into rows
+          const rows = chunkArray(slideCategories, ITEMS_PER_ROW);
 
           return (
-            <swiper-slide key={index}>
+            <swiper-slide key={slideIndex}>
               <div className="container-fluid px-3">
-                {/* First Row */}
-                <div className="row mb-3">
-                  {firstRow.map((category, idx) => (
-                    <div key={idx} className="col-6 col-md-3 mb-3">
-                      <a href={category.link} className="category-link">
-                        <div className="category-card h-100">
-                          <i className={`fa ${category.icon} category-icon`}></i>
-                          <span className="category-label">{category.label}</span>
-                        </div>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-                {/* Second Row */}
-                <div className="row">
-                  {secondRow.map((category, idx) => (
-                    <div key={idx} className="col-6 col-md-3 mb-3">
-                      <a href={category.link} className="category-link">
-                        <div className="category-card h-100">
-                          <i className={`fa ${category.icon} category-icon`}></i>
-                          <span className="category-label">{category.label}</span>
-                        </div>
-                      </a>
-                    </div>
-                  ))}
-                </div>
+                {rows.map((rowCategories, rowIndex) => (
+                  <div key={rowIndex} className="row mb-3">
+                    {rowCategories.map((category, itemIndex) => (
+                      <CategoryItem 
+                        key={`${slideIndex}-${rowIndex}-${itemIndex}`} 
+                        category={category} 
+                      />
+                    ))}
+                  </div>
+                ))}
               </div>
             </swiper-slide>
           );

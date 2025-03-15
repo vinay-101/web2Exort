@@ -19,6 +19,7 @@ import CompanyProfilePage from "./Pages/CompanyProfilePage";
 import EnquiryPage from "./Pages/EnquiryPage";
 import MyRequirementPage from "./Pages/MyRequirementPage";
 import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute component
+import CataloguePage from "./pages/CataloguePage";
 
 const App = () => {
   return (
@@ -33,7 +34,7 @@ const App = () => {
           <Route path="signup" element={<Signup />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
-
+          <Route path="member/:slug" element={<CataloguePage />}/>
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="user/profile" element={<DashboardPage />} />

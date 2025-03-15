@@ -43,7 +43,22 @@ const productService = {
             Authorization: `Bearer ${AuthService.getAccessToken()}`
           }
     }),
-      
+
+    // fetch all categories
+    fetchCategories: () => axiosClient.get('/products/category/all'),
+     
+    // Fetch dashboard data
+    fetchDashboardData: () => axiosClient.get('/products/dashboard/data', {
+        headers: {
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    fetchCatalogue: (slug) => axiosClient.get(`/products/catalogue/member/${slug}`, {
+        headers: {
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
 
 }
 
