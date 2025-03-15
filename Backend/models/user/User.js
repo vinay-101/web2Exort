@@ -1,6 +1,6 @@
 const { DataTypes, Sequelize, literal } = require("sequelize");
 const sequelize = require("../../helper/db.config");
-
+const SequelizeSlugify = require('sequelize-slugify');
 const User = sequelize.define(
   "users",
   {
@@ -90,10 +90,15 @@ const User = sequelize.define(
       values: ["Admin", "Super-Admin", "User"],
       defaultValue: "User",
     },
-    terms:{
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
+    terms: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    slug: {            // based on company name
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: true,
     },
     // loggedInTime:{           // for later use
     //   type:DataTypes.DATE,
@@ -105,4 +110,12 @@ const User = sequelize.define(
   }
 );
 
+SequelizeSlugify.slugifyModel(User, {
+  source: ['company'], // Field(s) to generate slug from
+  // suffixSource: ['year'], // Optional: Additional fields to make slugs unique
+  slugOptions: { lower: true }, // Convert slug to lowercase
+  overwrite: true, // Update slug if source changes
+  column: 'slug', // Column to store the slug
+  incrementalSeparator: '-', // Separator for incremental suffixes (e.g., name-1)
+});
 module.exports = User;

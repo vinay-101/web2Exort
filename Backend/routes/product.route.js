@@ -25,4 +25,10 @@ productRouter.route("/sub-category/all").get(product_controller.allSubCategory);
 productRouter.route("/create/down-sub-category").post(product_controller.createDownSubCategory);
 productRouter.route("/down-sub-category/all").get(product_controller.allDownSubCategory);
 
+// Dashboard
+productRouter.route("/dashboard/data").get(requireAuth, product_controller.dashboard);
+
+// Catalogue
+productRouter.route("/catalogue/member/:slug").get(requireAuth, product_controller.allCatalogue);  //list
+
 module.exports = {productRouter}

@@ -3,6 +3,7 @@ const sequelize = require("../../helper/db.config");
 const Category = require("./Category");
 const ProductImage = require("./ProductImage");
 const ProductSpecification = require("./ProductSpecifiation");
+const SequelizeSlugify = require('sequelize-slugify');
 
 const Product = sequelize.define(
   "products",
@@ -140,6 +141,11 @@ const Product = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    slug:{
+      type:DataTypes.STRING,
+      unique:true,
+      allowNull:true
+    },
     status:{            // for approval of product
       type:DataTypes.BOOLEAN,
       defaultValue:false
@@ -153,5 +159,15 @@ const Product = sequelize.define(
 Product.belongsTo(Category, { foreignKey: "categoryId" });
 Product.hasMany(ProductImage, { foreignKey: "productId" });
 Product.hasMany(ProductSpecification, { foreignKey: "productId" });
+
+// Apply sequelize-slugify to the model
+SequelizeSlugify.slugifyModel(Product, {
+  source: ['title'], // Field(s) to generate slug from
+  // suffixSource: ['year'], // Optional: Additional fields to make slugs unique
+  slugOptions: { lower: true }, // Convert slug to lowercase
+  overwrite: true, // Update slug if source changes
+  column: 'slug', // Column to store the slug
+  incrementalSeparator: '-', // Separator for incremental suffixes (e.g., name-1)
+});
 
 module.exports = Product;

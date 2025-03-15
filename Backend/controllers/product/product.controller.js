@@ -12,6 +12,7 @@ const Response = require("../../helper/response");
 const Category = require("../../models/product/Category");
 const SubCategory = require("../../models/product/SubCategory");
 const DownSubCategory = require("../../models/product/DownSubcategory");
+const User = require("../../models/user/User");
 
 const createProduct = async (req, res) => {
   try {
@@ -598,7 +599,7 @@ const allCategory = async (req, res) => {
         );
     } else {
       category = await Category.findAll({
-        attributes: ["id", "name"],
+        attributes: ["id", "name", "image"],
       });
     }
 
@@ -653,6 +654,92 @@ const allDownSubCategory = async(req,res)=>{
   }
 }
 
+const dashboard = async (req, res) => {
+  
+  try{
+    const totalEnquires = 0;
+    const totalProduct = await Product.count({
+      where:{
+        userId: req.userId
+      }
+    });
+
+    let user = await User.findOne({
+      where:{
+        id: req.userId
+      },
+      attributes:['company', 'slug']
+    });
+
+    const data = {
+      totalEnquires,
+      totalProduct,
+      companySlug: user.slug,
+    }
+
+    return res
+      .status(HttpStatus.OK.code)
+      .send(new Response(true, `Dashboard ${HttpStatus.OK.message}`, data));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+
+const allCatalogue = async(req,res)=>{
+  try{
+    let slug = req.params.slug;
+    // console.log("slug", slug)
+    let user = await User.findOne({
+      where:{
+        slug
+      },
+      attributes:['id', 'state', 'city', 'company', "country"]
+    });
+
+    if(!user){
+      return res
+      .status(HttpStatus.FORBIDDEN.code)
+      .send(new Response(true, `User not found`));
+    }
+
+    console.log("user", user)
+
+    let products = await Product.findAll({
+      where:{
+        userId: user.id,
+        status: true
+      },
+      include:[
+        {
+          model: ProductImage,
+          attributes:['id', 'image']
+        },
+        {
+          model: Category,
+          attributes:['id', 'name']
+        }
+      ]
+    });
+
+    let data = {
+      products,
+      user: user
+    }
+
+    products ? res
+    .status(HttpStatus.OK.code)
+    .send(new Response(true, `Products ${HttpStatus.OK.message}`, products)) : 
+    res
+      .status(HttpStatus.FORBIDDEN.code)
+      .send(new Response(true, `Dashboard ${HttpStatus.FORBIDDEN.message}`));
+
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -666,4 +753,6 @@ module.exports = {
   allSubCategory,
   createDownSubCategory,
   allDownSubCategory,
+  dashboard,
+  allCatalogue,
 };

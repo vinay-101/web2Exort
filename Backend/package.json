@@ -30,6 +30,7 @@
     "nodemailer-express-handlebars": "^6.1.0",
     "sequelize": "^6.33.0",
     "sequelize-auto-migrations": "^1.0.3",
+    "sequelize-slugify": "^1.6.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

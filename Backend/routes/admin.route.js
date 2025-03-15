@@ -205,8 +205,13 @@ adminRouter.route("/enquiry/delete/:id").get(ensureAdmin,admin_controller.delete
 
 // Category Management
 adminRouter.route("/category").get(ensureAdmin,admin_controller.showCategoryPage);
-adminRouter.route("/category/create").post(uploadFiles("uploads/companies/",{ name: "image", maxCount: 1 }),admin_controller.createCategory);
+adminRouter.route("/category/create").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),admin_controller.createCategory);
 
+
+// Sub category
+adminRouter.route("/create/sub/category").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),admin_controller.createSubCategory);
+
+adminRouter.route("/create/micro/category").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),admin_controller.createMicroCategory);
 module.exports = {
   adminRouter,
 };

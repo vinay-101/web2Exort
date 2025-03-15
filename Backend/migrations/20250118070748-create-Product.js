@@ -137,6 +137,11 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      slug: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: true,
+      },
       status: {
         // for approval of product
         type: DataTypes.BOOLEAN,

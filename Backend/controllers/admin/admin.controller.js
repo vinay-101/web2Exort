@@ -3628,6 +3628,8 @@ const showCategoryPage = async(req,res)=>{
     let subCategory = await SubCategory.findAll({});
     let microCategory = await DownSubCategory.findAll({});
 
+    // return res.send({categories, subCategory, microCategory})
+
     return res.render("categories", {admin, categories, subCategory, microCategory});
   }catch(error){
     console.log(error);
@@ -3637,11 +3639,12 @@ const showCategoryPage = async(req,res)=>{
 
 // create category
 const createCategory = async(req,res)=>{
+  console.log("Hit create category api's")
   try{
-    const name = req.body.name;
-    let image = req.file ? `/${req.file.filename}` : null;
+    const name = req.body.categoryName;
+    console.log(name, req.files.image[0].filename)
 
-   let createCategory =  await Category.create({name,image});
+   let createCategory =  await Category.create({name,image:`categories/${req.files.image[0].filename}`});
    createCategory ? res.status(201).json({status:true, msg:"Category created successfully!"}):
     res.status(400).json({status:false, msg:"Something went wrong!"});
   }catch(error){
@@ -3649,7 +3652,47 @@ const createCategory = async(req,res)=>{
    return res.status(500).send({status:false, msg:"Something went wrong!"});
   }
 }
- 
+
+const createSubCategory = async (req, res) => {
+  try {
+    const { categoryId, name } = req.body;
+
+    let category = await SubCategory.create({ categoryId, name, image:`categories/${req.files.image[0].filename}`});
+    return res
+      .status(HttpStatus.CREATED.code)
+      .send(
+        new Response(
+          true,
+          `SubCategory ${HttpStatus.CREATED.message}`,
+          category
+        )
+      );
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+
+const createMicroCategory = async (req, res) => {
+  try {
+    const { name, categoryId, subCategoryId } = req.body;
+
+    let category = await DownSubCategory.create({ categoryId, subCategoryId, name, image:`categories/${req.files.image[0].filename}`});
+    return res
+      .status(HttpStatus.CREATED.code)
+      .send(
+        new Response(
+          true,
+          `SubCategory ${HttpStatus.CREATED.message}`,
+          category
+        )
+      );
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+
 
 const logout = async (req, res) => {
   res.clearCookie("admin");
@@ -3782,5 +3825,7 @@ module.exports = {
   enquiryAll,
   deleteEnquiry,
   showCategoryPage,
-  createCategory
+  createCategory,
+  createSubCategory,
+  createMicroCategory
 };
