@@ -3,6 +3,7 @@ const adminRouter = express.Router();
 const admin_controller = require("../controllers/admin/admin.controller");
 const { ensureAdmin } = require("../middlewares/admin.middleware");
 const { uploadFiles } = require("../middlewares/uploadFiles.middleware");
+const { uploadMiddleware } = require("../middlewares/upload.middleware");
 // const { imageUpload } = require("../middlewares/uploadImage.middleware");
 // const { productImages } = require("../middlewares/uploadCoverImage.middleware");
 // const { bannerUpload } = require("../middlewares/uploadBanner.middleware");
@@ -204,7 +205,7 @@ adminRouter.route("/enquiry/all").get(ensureAdmin,admin_controller.enquiryAll);
 adminRouter.route("/enquiry/delete/:id").get(ensureAdmin,admin_controller.deleteEnquiry)
 
 // Category Management
-adminRouter.route("/category").get(ensureAdmin,admin_controller.showCategoryPage);
+adminRouter.route("/category/show/create").get(ensureAdmin,admin_controller.showCategoryPage);
 adminRouter.route("/category/create").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),admin_controller.createCategory);
 
 
@@ -212,6 +213,43 @@ adminRouter.route("/category/create").post(uploadFiles("uploads/categories/",[{ 
 adminRouter.route("/create/sub/category").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),admin_controller.createSubCategory);
 
 adminRouter.route("/create/micro/category").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),admin_controller.createMicroCategory);
+// show all category listing
+adminRouter.route("/category/all").get(ensureAdmin,admin_controller.showAllCategory);
+adminRouter.route("/category/update/:id").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]), ensureAdmin,admin_controller.updateCategory);
+adminRouter.route("/category/delete/:id").get(ensureAdmin,admin_controller.deleteCategory);
+
+// SubCategory
+adminRouter.route("/subcategory/all/:id").get(ensureAdmin,admin_controller.showAllSubCategory);
+adminRouter.route("/subcategory/update/:id").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),ensureAdmin,admin_controller.updateSubCategory);
+adminRouter.route("/subcategory/delete/:id").get(ensureAdmin,admin_controller.deleteSubCategory);
+
+// MicroCategory
+adminRouter.route("/microcategory/all/:id").get(ensureAdmin,admin_controller.showAllMicroCategory);
+adminRouter.route("/microcategory/update/:id").post(uploadFiles("uploads/categories/",[{ name: "image", maxCount: 1 }]),ensureAdmin,admin_controller.updateMicroCategory);
+adminRouter.route("/microcategory/delete/:id").get(ensureAdmin,admin_controller.deleteMicroCategory);
+
+// Lead
+adminRouter.route("/lead/create").post(ensureAdmin,admin_controller.createLead);
+adminRouter.route("/lead/create/new").get(ensureAdmin,admin_controller.createLeadPage);
+adminRouter.route("/lead/list").get(ensureAdmin,admin_controller.leadList);
+adminRouter.route("/lead/delete/:id").get(ensureAdmin,admin_controller.deleteLead);
+adminRouter.route("/lead/update/:id").post(ensureAdmin,admin_controller.updateLead);
+adminRouter.route("/lead/update/:id").get(ensureAdmin,admin_controller.updateLeadPage);
+adminRouter.route("/lead/:id").get(ensureAdmin,admin_controller.showLead);
+
+// Add product to user
+adminRouter.route("/user/add-product/:id").post(ensureAdmin, uploadMiddleware, admin_controller.addProductToUser);
+// render add product page
+adminRouter.route("/add/product/:id").get(ensureAdmin,admin_controller.addProductPage);
+
+//Subscription
+adminRouter.route("/subscription/create").get(ensureAdmin,admin_controller.subscriptionCreatePage);
+adminRouter.route("/subscription/create").post(ensureAdmin,admin_controller.subscriptionCreate);
+adminRouter.route("/subscription/list").get(ensureAdmin,admin_controller.subscriptionList);
+adminRouter.route("/subscription/delete/:id").get(ensureAdmin,admin_controller.deleteSubscription);
+adminRouter.route("/subscription/update/:id").post(ensureAdmin,admin_controller.updateSubscription);
+
+
 module.exports = {
   adminRouter,
 };

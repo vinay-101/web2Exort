@@ -1,0 +1,145 @@
+
+.product_wrapper{
+    body {
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    .section-header {
+        border-bottom: 1px solid #006838;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        color: #333;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+    
+    .card {
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
+        margin-bottom: 15px;
+    }
+    
+    .card:hover {
+        transform: translateY(-3px);
+    }
+    
+    .card-img-container {
+        height: 120px;
+        overflow: hidden;
+    }
+    
+    .card-img-top {
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+    }
+    
+    .card-body {
+        padding: 12px;
+    }
+    
+    .card-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #006838;
+        font-size: 1rem;
+    }
+    
+    .category-items {
+        font-size: 12px;
+        color: #555;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+    
+    .see-more-link {
+        color: #006838;
+        font-size: 12px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+    
+    .see-more-link:hover {
+        text-decoration: underline;
+        color: #004d2b;
+    }
+    
+    .icon-arrow {
+        font-size: 14px;
+        color: #006838;
+    }
+    
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1632&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 30px 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    
+    .hero-content {
+        max-width: 500px;
+    }
+    
+    .hero-title {
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .hero-text {
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    .btn-view-all {
+        background-color: #ff6b35;
+        color: white;
+        border-radius: 3px;
+        padding: 5px 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        border: none;
+    }
+    
+    .btn-view-all:hover {
+        background-color: #e55a29;
+        color: white;
+    }
+    
+    .container-fluid {
+        padding: 15px;
+    }
+    
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+    
+    .col-lg-3, .col-md-6, .col-sm-6 {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 20px 15px;
+        }
+        
+        .hero-title {
+            font-size: 1.1rem;
+        }
+        
+        .hero-text {
+            font-size: 0.8rem;
+        }
+    }
+}

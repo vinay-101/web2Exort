@@ -52,4 +52,10 @@ userRouter.route("/company/profile").get(requireAuth, user_controller.getCompany
 // Delete Certificate
 userRouter.route("/delete/certificate/:id").delete(requireAuth, user_controller.deleteCertificate);
 
+// creae subscription
+userRouter.route("/create/subscription").post(requireAuth, user_controller.createSubscription);
+
+// get all subscription
+userRouter.route("/subscription/plans").get(requireAuth, user_controller.getAllSubscription);
+
 module.exports = {userRouter}

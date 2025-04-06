@@ -26,6 +26,10 @@ const Product = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    microCategoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     // name: {
     //   type: DataTypes.STRING,
     //   allowNull: false,

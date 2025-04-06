@@ -8,7 +8,7 @@ import debounce from "lodash.debounce";
 const AddProduct = () => {
   // Jodit Editor
   const editor = useRef(null);
-  const [content, setContent] = useState("");
+  // const [content, setContent] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
   const [dropdownData, setDropdownData] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -42,7 +42,6 @@ const AddProduct = () => {
     ],
     removeButtons: ['image', 'file'],
   }), []);
-
 
   // Product Specifications
   const [specifications, setSpecifications] = useState([
@@ -103,7 +102,11 @@ const AddProduct = () => {
 
   // Debounced function for fetching based on user input
   const handleProductDropdown = debounce((value) => {
-    fetchDropdownData(value);
+    if (value) {
+      fetchDropdownData(value);
+    } else {
+      fetchDropdownData(); // Fetch all categories if input is cleared
+    }
   }, 300);
 
   // Effect to trigger API call on inputValue change
@@ -139,14 +142,28 @@ const AddProduct = () => {
       e.preventDefault();
       const formData = new FormData(formRef.current);
 
-      // // Add images
+      // Basic validation
+      if (!inputValue || !selectedCategoryId) {
+        alert("Please select a category");
+        return;
+      }
+
+      if (!formData.get("title")) {
+        alert("Please enter a product name");
+        return;
+      }
+
+      if (selectedImages.length === 0) {
+        alert("Please upload at least one image");
+        return;
+      }
+
+      // Add images
       selectedImages.forEach((image, index) => {
         formData.append('images', image.file); 
       });
 
-
       // Add category ID
-      console.log("selectedCategoryId", selectedCategoryId);
       formData.append("categoryId", selectedCategoryId);
 
       // Add specifications
@@ -156,11 +173,21 @@ const AddProduct = () => {
       }));
       formData.append("specifications", JSON.stringify(specs));
 
+      // Add Jodit Editor content
+      // formData.append("description", content);
+
       return await productService.createProduct(formData);
     },
     (data) => {
-      // Optionally handle success response
-      console.log("Product created successfully:", data);
+      formRef.current.reset(); // Reset the form
+      setSelectedImages([]); // Clear selected images
+      setSpecifications([{ id: Date.now(), attribute: "", value: "" }]); // Reset specifications
+      setInputValue(""); // Clear category input
+      setSelectedCategoryId(null); // Clear selected category ID
+    },
+    (error) => {
+      // Handle error response
+      console.error("Error creating product:", error);
     }
   );
 
@@ -177,7 +204,7 @@ const AddProduct = () => {
                 type="text"
                 className="form-control"
                 id="productName"
-                // name="categoryId"
+                // name="categoryName"
                 placeholder="Enter product name"
                 value={inputValue}
                 onChange={handleChange}
@@ -216,7 +243,6 @@ const AddProduct = () => {
                 type="file"
                 id="productImages"
                 className="form-control-file"
-                // name="images"
                 multiple
                 accept="image/*"
                 onChange={handleImageChange}
@@ -251,15 +277,6 @@ const AddProduct = () => {
                 placeholder="Enter model number"
               />
             </div>
-            {/* <div className="form-group col-md-6">
-              <label htmlFor="productKeyword">Product Keyword</label>
-              <input
-                type="text"
-                className="form-control"
-                id="productKeyword"
-                placeholder="Enter keywords"
-              />
-            </div> */}
             <div className="form-group col-md-6">
               <label htmlFor="productPrice">Price (INR)</label>
               <input
@@ -320,9 +337,10 @@ const AddProduct = () => {
             <JoditEditor
               ref={editor}
               config={config}
-              value={content}
+              // value={content}
+              // onChange={(newContent) => setContent(newContent)}
               name="description"
-              tabIndex={1} // tabIndex of textarea
+              tabIndex={1}
             />
           </div>
         </div>

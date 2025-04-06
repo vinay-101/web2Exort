@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/_headerLinks.ejs", {title: 'Create Subscription' }) %>
+
+    <body class="hold-transition sidebar-mini">
+
+        <div class="wrapper">
+            <!-- Navbar -->
+            <%- include("partials/_headerNavbar.ejs") %>
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include("partials/_sidebar.ejs") %>
+
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-12">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">Create Subscription</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div><!-- /.container-fluid -->
+                        </section>
+
+                        <!-- Main content -->
+                        <div class="container">
+                            <!-- <h1 class="display-5" style="margin-bottom: 30px;"> Create Coupon</h1> -->
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="mb-0">Create Subscription</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <form id="subscriptionForm" action="/admin/subscription/create" method="POST">
+                                                    <div class="form-group">
+                                                        <label for="name">Subscription Name</label>
+                                                        <input type="text" class="form-control" id="name" name="name" required>
+                                                    </div>
+                                        
+                                                    <div class="form-group">
+                                                        <label for="price">Price</label>
+                                                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                                                    </div>
+                                        
+                                                    <div class="form-group">
+                                                        <label for="duration">Duration (days)</label>
+                                                        <input type="number" class="form-control" id="duration" name="duration" required>
+                                                    </div>
+                                        
+                                                    <div class="form-group">
+                                                        <label for="features">Features</label>
+                                                        <textarea class="form-control" id="features" name="features" rows="4" required></textarea>
+                                                    </div>
+                                        
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-switch">
+                                                            <input type="checkbox" class="custom-control-input" id="isActive" name="isActive" checked>
+                                                            <label class="custom-control-label" for="isActive">Active Status</label>
+                                                        </div>
+                                                    </div>
+                                        
+                                                    <button type="submit" class="btn btn-primary">Create Subscription</button>
+                                                    <a href="/admin/dashboard" class="btn btn-secondary">Cancel</a>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.content -->
+                    </div>
+                    <!-- /.content-wrapper -->
+
+                    <!-- footer  -->
+                    <%- include("partials/_footer.ejs") %>
+
+                        <!-- Control Sidebar -->
+                        <aside class="control-sidebar control-sidebar-dark">
+                            <!-- Control sidebar content goes here -->
+                        </aside>
+                        <!-- /.control-sidebar -->
+        </div>
+
+        <%- include("partials/_scripts.ejs") %>
+
+            <script>
+                document.getElementById('subscriptionForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    const subscriptionData = {
+                        name: document.getElementById('name').value,
+                        price: document.getElementById('price').value,
+                        duration: document.getElementById('duration').value,
+                        features: document.getElementById('features').value,
+                        isActive: document.getElementById('isActive').checked
+                    };
+
+                    axios.post('/admin/subscription/create', subscriptionData)
+                        .then(response => {
+                            alert('Subscription created successfully!');
+                            window.location.href = '/admin/subscription/list';
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            alert('Error creating subscription. Please try again.');
+                        });
+                });
+            </script>
+
+    </body>
+
+</html>

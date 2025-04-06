@@ -55963,3 +55963,49 @@ a.text-muted:hover {
 .cke_notifications_area {
   display: none;
 }
+
+
+/* Add product  */
+
+.card {
+      margin-bottom: 20px;
+      border-radius: 0;
+    }
+    .card-header {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+    .custom-file-label::after {
+      content: "Browse";
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+    .description-editor {
+      border: 1px solid #ced4da;
+      min-height: 150px;
+    }
+    .toolbar {
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #ced4da;
+    }
+    .toolbar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+      color: #6c757d;
+    }
+    .editor-content {
+      padding: 10px;
+      min-height: 100px;
+    }
+    .specification-row {
+      margin-bottom: 10px;
+    }

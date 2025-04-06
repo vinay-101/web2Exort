@@ -31,4 +31,8 @@ productRouter.route("/dashboard/data").get(requireAuth, product_controller.dashb
 // Catalogue
 productRouter.route("/catalogue/member/:slug").get(requireAuth, product_controller.allCatalogue);  //list
 
+// Leads
+productRouter.route("/leads/all").get(requireAuth, product_controller.allLeads);
+productRouter.route("/home/leads/all").get(product_controller.homeLeads);
+
 module.exports = {productRouter}

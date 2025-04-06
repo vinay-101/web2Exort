@@ -13,6 +13,7 @@ const Category = require("../../models/product/Category");
 const SubCategory = require("../../models/product/SubCategory");
 const DownSubCategory = require("../../models/product/DownSubcategory");
 const User = require("../../models/user/User");
+const Lead = require("../../models/user/Lead");
 
 const createProduct = async (req, res) => {
   try {
@@ -119,7 +120,6 @@ const createProduct = async (req, res) => {
   }
 };
 
-
 // const createProduct = async (req, res) => {
 //   try {
 //     const validationResult = await productSchema.validateAsync(req.body);
@@ -147,7 +147,6 @@ const createProduct = async (req, res) => {
 //       nearestPort,
 //       specifications,
 //     } = validationResult;
-
 
 //     // if(!req.file){
 //     //   return res
@@ -343,20 +342,20 @@ const allProduct = async (req, res) => {
 
     let products;
     let total;
-    if (type == 'Featured') {
+    if (type == "Featured") {
       products = await Product.findAll({
         where: {
           userId: req.userId,
           isFeatured: true,
         },
-        include:[
+        include: [
           {
             model: ProductImage,
-            attributes:['id', 'image']
+            attributes: ["id", "image"],
           },
           {
-            model: Category
-          }
+            model: Category,
+          },
         ],
         limit: size,
         offset: skip,
@@ -374,15 +373,15 @@ const allProduct = async (req, res) => {
           userId: req.userId,
           isFeatured: false,
         },
-        include:[
+        include: [
           {
             model: ProductImage,
-            attributes:['id', 'image']
+            attributes: ["id", "image"],
           },
           {
             model: Category,
-            attributes:['id', 'name']
-          }
+            attributes: ["id", "name"],
+          },
         ],
         limit: size,
         offset: skip,
@@ -397,18 +396,18 @@ const allProduct = async (req, res) => {
     }
 
     let featuredProductCount = await Product.count({
-      where:{
+      where: {
         userId: req.userId,
         isFeatured: true,
-      }
+      },
     });
 
     let productsCount = await Product.count({
-      where:{
+      where: {
         userId: req.userId,
         isFeatured: false,
-      }
-    })
+      },
+    });
 
     const data = {
       totalPages: Math.ceil(total / size),
@@ -441,17 +440,17 @@ const viewProduct = async (req, res) => {
         id: Number(productId),
         userId: req.userId,
       },
-      include:[
+      include: [
         {
           model: ProductSpecification,
         },
         {
           model: ProductImage,
-          attributes:['id', 'image']
+          attributes: ["id", "image"],
         },
         {
-          model: Category
-        }
+          model: Category,
+        },
       ],
     });
 
@@ -519,10 +518,15 @@ const makeFeature = async (req, res) => {
         .send(new Response(false, "ProductId not found."));
     }
 
-    if(product.status === false){
+    if (product.status === false) {
       return res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(false, "Currently your product is inactive, wait for admin approval.")); 
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(
+          new Response(
+            false,
+            "Currently your product is inactive, wait for admin approval."
+          )
+        );
     }
 
     if (product.isFeatured === false) {
@@ -534,9 +538,7 @@ const makeFeature = async (req, res) => {
     product
       ? res
           .status(HttpStatus.UPDATED.code)
-          .send(
-            new Response(true, `Product has been featured`, product)
-          )
+          .send(new Response(true, `Product has been featured`, product))
       : res
           .status(HttpStatus.FORBIDDEN.code)
           .send(new Response(true, `Product ${HttpStatus.FORBIDDEN.message}`));
@@ -585,10 +587,10 @@ const allCategory = async (req, res) => {
     let category;
     if (scope) {
       category = await Category.findAll({
-        where:{
-          name:{
+        where: {
+          name: {
             [Op.like]: `%${scope}%`,
-          }
+          },
         },
         attributes: ["id", "name"],
       });
@@ -624,121 +626,233 @@ const allSubCategory = async (req, res) => {
   }
 };
 
-const createDownSubCategory = async(req,res)=>{
-  try{
-    const {name, categoryId, subCategoryId} = req.body;
-    let downSubCategory = await DownSubCategory.create({name, categoryId, subCategoryId});
+const createDownSubCategory = async (req, res) => {
+  try {
+    const { name, categoryId, subCategoryId } = req.body;
+    let downSubCategory = await DownSubCategory.create({
+      name,
+      categoryId,
+      subCategoryId,
+    });
     return res
       .status(HttpStatus.CREATED.code)
       .send(
-        new Response(true, `DownSubCategory ${HttpStatus.CREATED.message}`, downSubCategory)
+        new Response(
+          true,
+          `DownSubCategory ${HttpStatus.CREATED.message}`,
+          downSubCategory
+        )
       );
-
-  }catch(error){
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-const allDownSubCategory = async(req,res)=>{
-  try{
+const allDownSubCategory = async (req, res) => {
+  try {
     const downSubCategory = await DownSubCategory.findAll({
       attributes: ["id", "categoryId", "subCategoryId", "name"],
     });
 
     return res
       .status(HttpStatus.OK.code)
-      .send(new Response(true, `DownSubCategory ${HttpStatus.OK.message}`, downSubCategory));
-
-  }catch(error){
+      .send(
+        new Response(
+          true,
+          `DownSubCategory ${HttpStatus.OK.message}`,
+          downSubCategory
+        )
+      );
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
 const dashboard = async (req, res) => {
-  
-  try{
+  try {
     const totalEnquires = 0;
     const totalProduct = await Product.count({
-      where:{
-        userId: req.userId
-      }
+      where: {
+        userId: req.userId,
+      },
     });
 
     let user = await User.findOne({
-      where:{
-        id: req.userId
+      where: {
+        id: req.userId,
       },
-      attributes:['company', 'slug']
+      attributes: ["company", "slug"],
     });
 
     const data = {
       totalEnquires,
       totalProduct,
       companySlug: user.slug,
-    }
+    };
 
     return res
       .status(HttpStatus.OK.code)
       .send(new Response(true, `Dashboard ${HttpStatus.OK.message}`, data));
-
-  }catch(error){
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
 
-
-const allCatalogue = async(req,res)=>{
-  try{
+const allCatalogue = async (req, res) => {
+  try {
     let slug = req.params.slug;
     // console.log("slug", slug)
     let user = await User.findOne({
-      where:{
-        slug
+      where: {
+        slug,
       },
-      attributes:['id', 'state', 'city', 'company', "country"]
+      attributes: ["id", "state", "city", "company", "country"],
     });
 
-    if(!user){
+    if (!user) {
       return res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(true, `User not found`));
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(true, `User not found`));
     }
 
-    console.log("user", user)
+    console.log("user", user);
 
     let products = await Product.findAll({
-      where:{
+      where: {
         userId: user.id,
-        status: true
+        status: true,
       },
-      include:[
+      include: [
         {
           model: ProductImage,
-          attributes:['id', 'image']
+          attributes: ["id", "image"],
         },
         {
           model: Category,
-          attributes:['id', 'name']
-        }
-      ]
+          attributes: ["id", "name"],
+        },
+      ],
     });
 
     let data = {
       products,
-      user: user
-    }
+      user: user,
+    };
 
-    products ? res
-    .status(HttpStatus.OK.code)
-    .send(new Response(true, `Products ${HttpStatus.OK.message}`, products)) : 
-    res
-      .status(HttpStatus.FORBIDDEN.code)
-      .send(new Response(true, `Dashboard ${HttpStatus.FORBIDDEN.message}`));
-
-  }catch(error){
+    products
+      ? res
+          .status(HttpStatus.OK.code)
+          .send(
+            new Response(true, `Products ${HttpStatus.OK.message}`, products)
+          )
+      : res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(
+            new Response(true, `Dashboard ${HttpStatus.FORBIDDEN.message}`)
+          );
+  } catch (error) {
     return helpers.validationHandler(res, error);
   }
-}
+};
+
+const allLeads = async (req, res) => {
+  try {
+    let { page, size, type } = req.query;
+
+    if (!size) size = 7;
+    else size = parseInt(size);
+    if (!page) page = 1;
+    else page = parseInt(page);
+    let skip = size * (parseInt(page) - 1);
+
+    if (type != "Buyer" && type != "Seller") {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(true, `Invalid lead type`));
+    }
+
+    let leads;
+    if (type == "Buyer") {
+      leads = await Lead.findAll({
+        where: {
+          leadType: "Buyer",
+          status: true,
+        },
+        order: [["createdAt", "DESC"]],
+        limit: size,
+        offset: skip,
+        attributes: ["id", "country", "title", "createdAt"],
+      });
+    } else {
+      leads = await Lead.findAll({
+        where: {
+          leadType: "Seller",
+          status: true,
+        },
+        order: [["createdAt", "DESC"]],
+        limit: size,
+        offset: skip,
+        attributes: ["id", "country", "title", "createdAt"],
+      });
+    }
+
+    let total = await Lead.count();
+
+    let data = {
+      totalPages: Math.ceil(total / size),
+      totalRecords: total,
+      totalCount: total,
+      leads: leads,
+    };
+
+    return res
+      .status(HttpStatus.OK.code)
+      .send(new Response(true, `Leads ${HttpStatus.OK.message}`, data));
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+const homeLeads = async (req, res) => {
+  try {
+    let { type } = req.query;
+
+    if (type != "Buyer" && type != "Seller") {
+      return res
+        .status(HttpStatus.FORBIDDEN.code)
+        .send(new Response(true, `Invalid lead type`));
+    }
+
+    let leads;
+    if (type == "Buyer") {
+      leads = await Lead.findAll({
+        where: {
+          leadType: "Buyer",
+          status: true,
+        },
+        order: [["createdAt", "DESC"]],
+        limit: 15,
+        attributes: ["id", "country", "title", 'leadType', "createdAt"],
+      });
+    } else {
+      leads = await Lead.findAll({
+        where: {
+          leadType: "Seller",
+          status: true,
+        },
+        order: [["createdAt", "DESC"]],
+        limit: 15,
+        attributes: ["id", "country", "title", "leadType", "createdAt"],
+      });
+    }
+
+    return res
+      .status(HttpStatus.OK.code)
+      .send(new Response(true, `Leads ${HttpStatus.OK.message}`, leads));
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
 
 module.exports = {
   createProduct,
@@ -755,4 +869,6 @@ module.exports = {
   allDownSubCategory,
   dashboard,
   allCatalogue,
+  allLeads,
+  homeLeads
 };

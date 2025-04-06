@@ -20,6 +20,7 @@ import EnquiryPage from "./Pages/EnquiryPage";
 import MyRequirementPage from "./Pages/MyRequirementPage";
 import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute component
 import CataloguePage from "./pages/CataloguePage";
+import LeadHome from "./pages/LeadHome";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="member/:slug" element={<CataloguePage />}/>
+          <Route path="lead-home" element={<LeadHome/>}/>
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="user/profile" element={<DashboardPage />} />

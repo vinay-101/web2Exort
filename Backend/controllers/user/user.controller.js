@@ -18,6 +18,7 @@ const {
   companyDocumentValidationSchema,
   companyRegistrationValidationSchema,
   officeLocationValidationSchema,
+  userSubscriptionValidationSchema,
 } = require("../../validators/user.validator");
 const { HttpStatus, CustomMessages } = require("../../helper/statusCode");
 const Response = require("../../helper/response");
@@ -27,6 +28,8 @@ const CompanyCertification = require("../../models/user/CompanyCertification");
 const CompanyDocument = require("../../models/user/CompanyDocument");
 const CompanyRegistration = require("../../models/user/CompanyRegistration");
 const CompanyOfficeLocation = require("../../models/user/CompanyOfficeLocation");
+const UserSubscription = require("../../models/user/UserSubscription");
+const Subscription = require("../../models/user/Subscription");
 
 const createJWT = (user) => {
   return jwt.sign(user, process.env.SECRETKEY, {
@@ -1271,6 +1274,65 @@ const deleteCertificate = async(req,res)=>{
   }
 }
 
+const createSubscription = async(req,res)=>{
+  try {
+      const validationResult = await userSubscriptionValidationSchema.validateAsync(req.body);
+      const { subscriptionId } = validationResult;
+
+      let subs = await Subscription.findOne({
+          where: { id: subscriptionId }
+      });
+
+      if(!subs){
+          return res.status(HttpStatus.FORBIDDEN.code).send(new Response(false, `Subscription not found.`));
+      }
+
+      let userSubs = await UserSubscription.findOne({
+          where: { userId: req.userId }
+      });
+
+      if(userSubs){
+          return res.status(HttpStatus.FORBIDDEN.code).send(new Response(false, `You already have a subscription.`));
+      }
+
+      const endDate = helpers.calculateEndDate(subs.duration);
+
+      const subscription = await UserSubscription.create({
+          userId: req.userId,
+          subscriptionId,
+          startDate: new Date(),
+          endDate,
+          status:"active"
+      });
+
+      res.status(HttpStatus.CREATED.code).send(
+          new Response(true, "Subscription created successfully", subscription)
+      );
+      
+  } catch(error) {
+      return helpers.validationHandler(res, error);
+  }
+}
+
+const getAllSubscription = async(req,res)=>{
+  try {
+      const subscriptions = await Subscription.findAll({
+        attributes: ['id', 'name', 'price', 'duration', 'features'],
+        where: {
+          isActive: true
+        },
+        order: [['price', 'ASC']]
+      });
+
+      res.status(HttpStatus.OK.code).send(
+          new Response(true, "Subscriptions retrieved successfully", subscriptions)
+      );
+      
+  } catch(error) {
+      return helpers.validationHandler(res, error);
+  }
+}
+
 module.exports = {
   signUpUser,
   userLogin,
@@ -1292,4 +1354,6 @@ module.exports = {
   createCompanyLocation,
   getCompanyProfile,
   deleteCertificate,
+  createSubscription,
+  getAllSubscription,
 };

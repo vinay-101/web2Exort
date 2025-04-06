@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("partials/_headerLinks.ejs", {title: 'Create Product' }) %>
+
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include("partials/_headerNavbar.ejs") %>
+      <!-- /.navbar -->
+
+      <!-- Main Sidebar Container -->
+      <%- include("partials/_sidebar.ejs") %>
+
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-12">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active">Create Product</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <div class="container">
+          <!-- <h1 class="display-5" style="margin-bottom: 30px;"> Create Coupon</h1> -->
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-md-10">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="mb-0">Create Product</h4>
+                  </div>
+                  <div class="container-fluid py-4">
+                    <form id="addProductForm" enctype="multipart/form-data">
+                      <!-- Basic Information -->
+                      <div class="card">
+                        <div class="card-header">Basic Information</div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="categoryId">Product Category</label>
+                              <select
+                                class="form-control"
+                                id="categoryId"
+                                name="categoryId"
+                                required
+                              >
+                                <option value="">
+                                  Select product category
+                                </option>
+                                <% categories.forEach(category => { %>
+                                <option value="<%= category.id %>">
+                                  <%= category.name %>
+                                </option>
+                                <% }); %>
+                              </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="title">Name</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="title"
+                                name="title"
+                                placeholder="Enter product name"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="subCategoryId"
+                                >Product Subcategory</label
+                              >
+                              <select
+                                class="form-control"
+                                id="subCategoryId"
+                                name="subCategoryId"
+                                required
+                              >
+                                <option value="">Select Subcategory</option>
+                                <% subCategories.forEach(value => { %>
+                                <option
+                                  value="<%= value.id %>"
+                                  data-category="<%= value.categoryId %>"
+                                >
+                                  <%= value.name %>
+                                </option>
+                                <% }) %>
+                              </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="microCategoryId"
+                                >Product Micro-category</label
+                              >
+                              <select
+                                class="form-control"
+                                id="microCategoryId"
+                                name="microCategoryId"
+                              >
+                                <option value="">Select Micro-category</option>
+                                <% microCategories.forEach((value) => { %>
+                                <option
+                                  value="<%= value.id %>"
+                                  data-subcategory="<%= value.subCategoryId %>"
+                                >
+                                  <%= value.name %>
+                                </option>
+                                <% }) %>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="model">Model Number</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="model"
+                                name="model"
+                                placeholder="Enter model number"
+                              />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="price">Price (USD)</label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                class="form-control"
+                                id="price"
+                                name="price"
+                                placeholder="Enter price"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="brochure"
+                                >Product Brochure (PDF/Doc file)</label
+                              >
+                              <div class="custom-file">
+                                <input
+                                  type="file"
+                                  class="custom-file-input"
+                                  id="brochure"
+                                  name="brochure"
+                                  accept=".pdf,.doc,.docx"
+                                  required
+                                />
+                                <label class="custom-file-label" for="brochure"
+                                  >Choose file</label
+                                >
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="material">Product Material</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="material"
+                                name="material"
+                                placeholder="Select product material"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="coi">Place of Origin</label>
+                              <!-- <input type="text" class="form-control" id="coi" name="coi" placeholder="Country"> -->
+                              <select
+                                class="form-control"
+                                id="coi"
+                                name="coi"
+                                id="coi"
+                              >
+                                <option value="">Select Country</option>
+                                <option value="1">India</option>
+                                <option value="2">China</option>
+                                <option value="3">USA</option>
+                                <option value="4">UK</option>
+                                <option value="5">Australia</option>
+                                <option value="6">Canada</option>
+                                <option value="7">Other</option>
+                              </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="brand">Brand</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="brand"
+                                name="brand"
+                                placeholder="Enter brand"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Detailed Description -->
+                      <div class="card">
+                        <div class="card-header">Detailed Description</div>
+                        <div class="card-body">
+                          <textarea
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            rows="5"
+                            placeholder="Enter product description"
+                          ></textarea>
+                        </div>
+                      </div>
+
+                      <!-- Product Specification -->
+                      <div class="card">
+                        <div class="card-header">Product Specification</div>
+                        <div class="card-body">
+                          <div id="specifications-container">
+                            <div class="row specification-row">
+                              <div class="col-md-5">
+                                <input
+                                  type="text"
+                                  class="form-control spec-key"
+                                  placeholder="Attribute (e.g., Color)"
+                                />
+                              </div>
+                              <div class="col-md-5">
+                                <input
+                                  type="text"
+                                  class="form-control spec-value"
+                                  placeholder="Value (e.g., Red)"
+                                />
+                              </div>
+                              <div class="col-md-2">
+                                <button
+                                  type="button"
+                                  class="btn btn-danger remove-spec"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            id="add-specification"
+                            class="btn btn-success mt-2"
+                          >
+                            Add Specification
+                          </button>
+                          <input
+                            type="hidden"
+                            name="specifications"
+                            id="specifications"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- Trade Information -->
+                      <div class="card">
+                        <div class="card-header">Trade Information</div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="unitType">Unit Type</label>
+                              <select
+                                class="form-control"
+                                id="unitType"
+                                name="unitType"
+                                required
+                              >
+                                <option value="">Select</option>
+                                <option value="Bags">Bags</option>
+                                <option value="Carton">Carton</option>
+                                <option value="Dozen">Dozen</option>
+                                <option value="Feet">Feet</option>
+                                <option value="Kilogram">Kilogram</option>
+                                <option value="Meter">Meter</option>
+                                <option value="Metric Ton">Metric Ton</option>
+                                <option value="Pieces">Pieces</option>
+                                <option value="Other">Other</option>
+                              </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="minQuantity">Min Quantity</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="minQuantity"
+                                name="minQuantity"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="maxQuantity">Max Quantity</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="maxQuantity"
+                                name="maxQuantity"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12 mb-3">
+                              <label>Accepted Payment</label>
+                              <div class="form-check">
+                                <!-- Razorpay, CcAvenue, PayPal -->
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="acceptedPayment"
+                                  value="Razorpay"
+                                  id="bankTransfer"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="bankTransfer"
+                                  >Razorpay</label
+                                >
+                              </div>
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="acceptedPayment"
+                                  value="CcAvenue"
+                                  id="creditCard"
+                                />
+                                <label class="form-check-label" for="creditCard"
+                                  >CcAvenue</label
+                                >
+                              </div>
+                            </div>
+                          </div>
+                          <!-- [Manufacturer, Companies, Trader, Distributor, Reseller, Wholesaler, Service Provider] -->
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="businessType">Business Type</label>
+                              <select
+                                class="form-control"
+                                id="businessType"
+                                name="businessType"
+                              >
+                                <option value="">Select</option>
+                                <option value="Manufacturer">
+                                  Manufacturer
+                                </option>
+                                <option value="Companies">Companies</option>
+                                <option value="Trader">Trader</option>
+                                <option value="Distributor">Distributor</option>
+                                <option value="Reseller">Reseller</option>
+                                <option value="Wholesaler">Wholesaler</option>
+                                <option value="Service Provider">
+                                  Service Provider
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="processLeadTime"
+                                >Processing Time</label
+                              >
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="processLeadTime"
+                                name="processLeadTime"
+                              />
+                            </div>
+                            <!-- [Day, Week, Month, Quarter, Year] -->
+                            <div class="col-md-6 mb-3">
+                              <label for="processLeadTimeUnit">Time Unit</label>
+                              <select
+                                class="form-control"
+                                id="processLeadTimeUnit"
+                                name="processLeadTimeUnit"
+                              >
+                                <option value="Day">Day</option>
+                                <option value="Week">Week</option>
+                                <option value="Month">Month</option>
+                                <option value="Quarter">Quarter</option>
+                                <option value="Year">Year</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Packaging Information -->
+                      <div class="card">
+                        <div class="card-header">Packaging Information</div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-4 mb-3">
+                              <label for="packageType">Package</label>
+                              <select
+                                class="form-control"
+                                id="packageType"
+                                name="packageType"
+                              >
+                                <option value="">Select</option>
+                                <option value="Bag">Bag</option>
+                                <option value="Carton box">Carton box</option>
+                                <option value="bottle">Bottle</option>
+                                <option value="Customised">Customized</option>
+                              </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                              <label for="packageQuantity">Quantity</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="packageQuantity"
+                                name="packageQuantity"
+                              />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                              <label for="packageUnit">Unit</label>
+                              <select
+                                class="form-control"
+                                id="packageUnit"
+                                name="packageUnit"
+                              >
+                                <option value="">Select</option>
+                                <option value="Pieces">Pieces</option>
+                                <option value="Kgs">Kgs</option>
+                                <option value="Litters">Litters</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Logistics Information -->
+                      <div class="card">
+                        <div class="card-header">Logistics Information</div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="deliveryTime"
+                                >Delivery Time (Days)</label
+                              >
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="deliveryTime"
+                                name="deliveryTime"
+                              />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="nearestPort">Nearest Port</label>
+                              <select
+                                class="form-control"
+                                id="nearestPort"
+                                name="nearestPort"
+                              >
+                                <option value="">Select</option>
+                                <option value="1">Port 1</option>
+                                <option value="2">Port 2</option>
+                                <option value="2">Port 3</option>
+                                <!-- Add your port options here if needed -->
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Product Images -->
+                      <div class="card">
+                        <div class="card-header">Product Images</div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-12 mb-3">
+                              <div class="custom-file">
+                                <input
+                                  type="file"
+                                  class="custom-file-input"
+                                  id="images"
+                                  name="images"
+                                  multiple
+                                  accept="image/*"
+                                  required
+                                />
+                                <label class="custom-file-label" for="images"
+                                  >Choose images</label
+                                >
+                              </div>
+                              <small class="form-text text-muted"
+                                >Upload multiple product images (maximum
+                                5).</small
+                              >
+                            </div>
+                          </div>
+                          <div class="row mt-3" id="image-preview-container">
+                            <!-- Image previews will be shown here -->
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="text-right">
+                        <button type="submit" class="btn btn-primary">
+                          Save
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+
+      <!-- footer  -->
+      <%- include("partials/_footer.ejs") %>
+
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+      </aside>
+      <!-- /.control-sidebar -->
+    </div>
+
+    <%- include("partials/_scripts.ejs") %>
+
+    <script>
+      $(document).ready(function () {
+        //   const userId = window.location.pathname.split("/").pop();
+        const userId = "<%= userId %>";
+
+        // Store original options for filtering
+        const subCategoryOptions = $("#subCategoryId").find("option").clone();
+        const microCategoryOptions = $("#microCategoryId")
+          .find("option")
+          .clone();
+
+        // File input handling
+        $(".custom-file-input").on("change", function () {
+          const fileName = $(this).val().split("\\").pop();
+          $(this)
+            .next(".custom-file-label")
+            .html(fileName || "Choose file");
+        });
+
+        // Dynamic category filtering
+        $("#categoryId").change(function () {
+          const categoryId = $(this).val();
+          $("#subCategoryId").html(
+            '<option value="">Select Subcategory</option>'
+          );
+          $("#microCategoryId").html(
+            '<option value="">Select Micro-category</option>'
+          );
+
+          if (categoryId) {
+            subCategoryOptions.each(function () {
+              if ($(this).data("category") == categoryId) {
+                $(this).clone().appendTo("#subCategoryId");
+              }
+            });
+          }
+        });
+
+        $("#subCategoryId").change(function () {
+          const subCategoryId = $(this).val();
+          $("#microCategoryId").html(
+            '<option value="">Select Micro-category</option>'
+          );
+
+          if (subCategoryId) {
+            microCategoryOptions.each(function () {
+              if ($(this).data("subcategory") == subCategoryId) {
+                $(this).clone().appendTo("#microCategoryId");
+              }
+            });
+          }
+        });
+
+        // Specification handling
+        $("#add-specification").click(function () {
+          const newRow = `
+              <div class="row specification-row mb-2">
+                <div class="col-md-5">
+                  <input type="text" class="form-control spec-key" placeholder="Attribute (e.g., Color)">
+                </div>
+                <div class="col-md-5">
+                  <input type="text" class="form-control spec-value" placeholder="Value (e.g., Red)">
+                </div>
+                <div class="col-md-2">
+                  <button type="button" class="btn btn-danger remove-spec">Remove</button>
+                </div>
+              </div>`;
+          $("#specifications-container").append(newRow);
+        });
+
+        $(document).on("click", ".remove-spec", function () {
+          $(this).closest(".specification-row").remove();
+        });
+
+        // Image preview
+        $("#images").change(function () {
+          $("#image-preview-container").html("");
+          const files = this.files;
+          if (files.length > 5) {
+            alert("Maximum 5 images allowed");
+            $(this).val("");
+            return;
+          }
+
+          for (let i = 0; i < files.length; i++) {
+            if (files[i].type.match("image.*")) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                $("#image-preview-container").append(`
+                    <div class="col-md-2 mb-3">
+                      <img src="${e.target.result}" class="img-fluid border" alt="Product image">
+                    </div>
+                  `);
+              };
+              reader.readAsDataURL(files[i]);
+            }
+          }
+        });
+
+        // Form submission
+        $("#addProductForm").submit(function (e) {
+          e.preventDefault();
+
+          // Set description (assuming you have a description field)
+
+          // Sync CKEditor content to textarea
+          if (CKEDITOR.instances["description"]) {
+            CKEDITOR.instances["description"].updateElement();
+          } else {
+            console.error("CKEditor instance not found");
+            alert(
+              "Description editor failed to load. Please refresh the page and try again."
+            );
+            return;
+          }
+          const description = $("#description").val();
+
+          // Collect specifications
+          const specifications = [];
+          $(".specification-row").each(function () {
+            const key = $(this).find(".spec-key").val().trim();
+            const value = $(this).find(".spec-value").val().trim();
+            if (key && value) {
+              specifications.push({ key, value });
+            }
+          });
+          $("#specifications").val(JSON.stringify(specifications));
+
+          // Collect payment methods
+          const acceptedPayment = $('input[name="acceptedPayment"]:checked')
+            .map(function () {
+              return this.value;
+            })
+            .get()
+            .join(",");
+
+          const formData = new FormData(this);
+          formData.set("acceptedPayment", acceptedPayment);
+          formData.set("description", description);
+
+          const submitBtn = $('button[type="submit"]');
+          submitBtn.prop("disabled", true).text("Saving...");
+
+          $.ajax({
+            url: `/admin/user/add-product/${userId}`,
+            method: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              if (response.success) {
+                alert("Product added successfully!");
+                window.location.href = "/user/products";
+              }
+            },
+            error: function (xhr) {
+              submitBtn.prop("disabled", false).text("Save");
+              const errorMsg = xhr.responseJSON?.message || "An error occurred";
+              alert("Error: " + errorMsg);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -255,6 +255,12 @@ const officeLocationValidationSchema = Joi.object({
   streetAddress: Joi.string().trim().min(1).required(),
 });
 
+// Add to existing exports
+const userSubscriptionValidationSchema = Joi.object({
+    subscriptionId: Joi.number().integer().required(),
+});
+
+// Add to module exports
 module.exports = {
   changePasswordValidation,
   completeProfileValidation,
@@ -268,4 +274,5 @@ module.exports = {
   companyDocumentValidationSchema,
   companyRegistrationValidationSchema,
   officeLocationValidationSchema,
+  userSubscriptionValidationSchema
 };

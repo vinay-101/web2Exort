@@ -16,6 +16,11 @@ const { Parser } = require("@json2csv/plainjs");
 const Enquiry = require("../../models/user/Enquiry");
 const SubCategory = require("../../models/product/SubCategory");
 const DownSubCategory = require("../../models/product/DownSubcategory");
+const Lead = require("../../models/user/Lead");
+const { productSchema } = require("../../validators/product.validator");
+const ProductSpecification = require("../../models/product/ProductSpecifiation");
+const ProductImage = require("../../models/product/ProductImage");
+const Subscription = require("../../models/user/Subscription");
 
 const adminPage = async (req, res) => {
   const { admin } = req.cookies;
@@ -70,9 +75,9 @@ const showLoginPage = async (req, res) => {
     let totalUser = await User.count({
       where: {
         userStatus: "Active",
-        roles:{
-            [Op.ne]:"Admin"
-        }
+        roles: {
+          [Op.ne]: "Admin",
+        },
       },
     });
     let totalProduct = await Product.count({
@@ -101,9 +106,9 @@ const unreadCounters = async (req, res) => {
     //   },
     // });
     const response = {
-      feedbackCount:  0,
-      contactUsCount:  0,
-      orderCounter:  0,
+      feedbackCount: 0,
+      contactUsCount: 0,
+      orderCounter: 0,
     };
 
     return res
@@ -117,16 +122,28 @@ const unreadCounters = async (req, res) => {
 const allProducts = async (req, res) => {
   try {
     const { admin } = req.cookies;
-    let products = await Product.findAll({});
-    for (let i = 0; i < products.length; i++) {
-      let category = await Category.findOne({
-        where: {
-          id: products[i].categoryId,
+    let products = await Product.findAll({
+      include: [
+        {
+          model: Category,
+          attributes: ["name"],
+          // include:[
+          //   {
+          //     model: SubCategory
+          //   }
+          // ]
         },
-        attributes: ["name"],
-      });
-      products[i].setDataValue("category", category);
-    }
+      ],
+    });
+    // for (let i = 0; i < products.length; i++) {
+    //   let category = await Category.findOne({
+    //     where: {
+    //       id: products[i].categoryId,
+    //     },
+    //     attributes: ["name"],
+    //   });
+    //   products[i].setDataValue("category", category);
+    // }
     // return res.send(products);
     return res.render("products", { products: products, admin: admin });
     return res.redirect("/admin/products");
@@ -473,8 +490,8 @@ const allUser = async (req, res) => {
     let users = await User.findAll({
       where: {
         roles: {
-            [Op.ne]: "Admin",
-        }
+          [Op.ne]: "Admin",
+        },
       },
     });
     return res.render("users", { users, admin });
@@ -595,7 +612,6 @@ const user = async (req, res) => {
         id: id,
       },
     });
-   
 
     return res.render("user", {
       user,
@@ -1617,12 +1633,10 @@ const downloadQrByRange = async (req, res) => {
     });
 
     if (!rangeQr || rangeQr.length === 0) {
-      return res
-        .status(404)
-        .send({
-          status: 404,
-          message: "No QR codes found in the specified range.",
-        });
+      return res.status(404).send({
+        status: 404,
+        message: "No QR codes found in the specified range.",
+      });
     }
 
     // Update the downloadedAt timestamp for each QR code
@@ -3550,12 +3564,10 @@ let resetPassword = async (req, res) => {
     }
 
     if (newPassword !== confirmPassword) {
-      return res
-        .status(200)
-        .send({
-          status: false,
-          msg: "New password and confirm password should be match!",
-        });
+      return res.status(200).send({
+        status: false,
+        msg: "New password and confirm password should be match!",
+      });
     }
 
     const auth = await bcrypt.compare(oldPassword, adminDetails.password);
@@ -3569,12 +3581,10 @@ let resetPassword = async (req, res) => {
           .status(200)
           .send({ status: true, msg: "Password changed successfully" });
       } else {
-        return res
-          .status(200)
-          .send({
-            status: false,
-            msg: "Something went wrong for update password!",
-          });
+        return res.status(200).send({
+          status: false,
+          msg: "Something went wrong for update password!",
+        });
       }
     }
 
@@ -3585,12 +3595,11 @@ let resetPassword = async (req, res) => {
   }
 };
 
-
 let enquiryAll = async (req, res) => {
   try {
     const { admin } = req.cookies;
     let data = await Enquiry.findAll({
-      order:[['id', "DESC"]]
+      order: [["id", "DESC"]],
     });
     // return res.send(purpose_to_visit)
 
@@ -3619,10 +3628,9 @@ const deleteEnquiry = async (req, res) => {
   }
 };
 
-
-const showCategoryPage = async(req,res)=>{
-  try{
-    const {admin} = req.cookies;
+const showCategoryPage = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
     let categories = await Category.findAll({});
 
     let subCategory = await SubCategory.findAll({});
@@ -3630,69 +3638,655 @@ const showCategoryPage = async(req,res)=>{
 
     // return res.send({categories, subCategory, microCategory})
 
-    return res.render("categories", {admin, categories, subCategory, microCategory});
+    return res.render("categories", {
+      admin,
+      categories,
+      subCategory,
+      microCategory,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+// create category
+const createCategory = async (req, res) => {
+  console.log("Hit create category api's");
+  try {
+    const name = req.body.categoryName;
+    console.log(name, req.files.image[0].filename);
+
+    let createCategory = await Category.create({
+      name,
+      image: `categories/${req.files.image[0].filename}`,
+    });
+    createCategory
+      ? res
+          .status(201)
+          .json({ status: true, msg: "Category created successfully!" })
+      : res.status(400).json({ status: false, msg: "Something went wrong!" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .send({ status: false, msg: "Something went wrong!" });
+  }
+};
+
+const createSubCategory = async (req, res) => {
+  try {
+    const { categoryId, name } = req.body;
+
+    let category = await SubCategory.create({
+      categoryId,
+      name,
+      image: `categories/${req.files.image[0].filename}`,
+    });
+    return res
+      .status(HttpStatus.CREATED.code)
+      .send(
+        new Response(
+          true,
+          `SubCategory ${HttpStatus.CREATED.message}`,
+          category
+        )
+      );
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+const createMicroCategory = async (req, res) => {
+  try {
+    const { name, categoryId, subCategoryId } = req.body;
+
+    let category = await DownSubCategory.create({
+      categoryId,
+      subCategoryId,
+      name,
+      image: `categories/${req.files.image[0].filename}`,
+    });
+    return res
+      .status(HttpStatus.CREATED.code)
+      .send(
+        new Response(
+          true,
+          `SubCategory ${HttpStatus.CREATED.message}`,
+          category
+        )
+      );
+  } catch (error) {
+    return helpers.validationHandler(res, error);
+  }
+};
+
+const showAllCategory = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    let categories = await Category.findAll({});
+    return res.render("allCategory", { admin, categories });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const updateCategory = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let name = req.body.name;
+    let image;
+    if (req.files && req.files.image && req.files.image.length > 0) {
+      image = `categories/${req.files.image[0].filename}`;
+    }
+    let category = await Category.findOne({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (category) {
+      helpers.deleteImageFile(category.image);
+      await category.update({ name, image });
+    }
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const deleteCategory = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let category = await Category.findOne({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (category) {
+      let cat = await category.destroy();
+      if (cat) helpers.deleteImageFile(category.image);
+      // delete sub category
+      await SubCategory.destroy({
+        where: {
+          categoryId: Number(id),
+        },
+      });
+      // delete micro category
+      await DownSubCategory.destroy({
+        where: {
+          categoryId: Number(id),
+        },
+      });
+    }
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+// SubCategory
+const showAllSubCategory = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    let id = req.params.id;
+    let subCategories = await SubCategory.findAll({
+      where: {
+        categoryId: Number(id),
+      },
+    });
+    return res.render("subCategoryList", { admin, subCategories });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const updateSubCategory = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let name = req.body.name;
+    let image;
+    if (req.files && req.files.image && req.files.image.length > 0) {
+      image = `categories/${req.files.image[0].filename}`;
+    }
+    let subCategory = await SubCategory.findOne({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (subCategory) {
+      helpers.deleteImageFile(subCategory.image);
+      await subCategory.update({ name, image });
+    }
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const deleteSubCategory = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let subCategory = await SubCategory.findOne({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (subCategory) {
+      let cat = await subCategory.destroy();
+      if (cat) {
+        helpers.deleteImageFile(subCategory.image);
+
+        // delete micro category
+        await DownSubCategory.destroy({
+          where: {
+            subCategoryId: Number(subCategory.id),
+          },
+        });
+      }
+    }
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+// MicroCategory
+const showAllMicroCategory = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    let id = req.params.id; // sub category id
+    let microCategories = await DownSubCategory.findAll({
+      where: {
+        subCategoryId: Number(id),
+      },
+    });
+    return res.render("microCategoryList", { admin, microCategories });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const updateMicroCategory = async (req, res) => {
+  try {
+    let id = req.params.id; // micro category id
+    let name = req.body.name;
+    let image;
+    if (req.files && req.files.image && req.files.image.length > 0) {
+      image = `categories/${req.files.image[0].filename}`;
+    }
+    let subCategory = await DownSubCategory.findOne({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (subCategory) {
+      helpers.deleteImageFile(subCategory.image);
+      await subCategory.update({ name, image });
+    }
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const deleteMicroCategory = async (req, res) => {
+  try {
+    let id = req.params.id; // micro category id
+    let subCategory = await DownSubCategory.findOne({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (subCategory) {
+      let cat = await subCategory.destroy();
+      if (cat) {
+        helpers.deleteImageFile(subCategory.image);
+      }
+    }
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const createLead = async (req, res) => {
+  try {
+    const lead = await Lead.create(req.body);
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const createLeadPage = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    let categories = await Category.findAll({});
+    let subCategories = await SubCategory.findAll({});
+    let microCategories = await DownSubCategory.findAll({});
+    return res.render("createLead", {
+      admin,
+      categories,
+      subCategories,
+      microCategories,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+const leadList = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    const leads = await Lead.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    return res.render("leads", { admin, leads });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const deleteLead = async (req, res) => {
+  try {
+    const lead = await Lead.findByPk(req.params.id);
+    if (!lead) {
+      return res.render("error", { message: "Lead not found" });
+    }
+    await lead.destroy();
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const updateLead = async (req, res) => {
+  try {
+    const lead = await Lead.findByPk(req.params.id);
+    if (!lead) {
+      return res.render("error", { message: "Lead not found" });
+    }
+
+    await lead.update(req.body);
+    // res.redirect("/leads");
+    return res.redirect(req.get("referer"));
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const updateLeadPage = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    const lead = await Lead.findByPk(req.params.id);
+    if (!lead) {
+      return res.render("error", { message: "Lead not found" });
+    }
+    if (lead) {
+      let category = await Category.findOne({
+        where: {
+          id: Number(lead.category),
+        },
+      });
+
+      // find sub category
+      let subCategory = await SubCategory.findOne({
+        where: {
+          id: Number(lead.subcategory),
+        },
+      });
+
+      // find micro category
+      let microCategory = await DownSubCategory.findOne({
+        where: {
+          id: Number(lead.microCategory),
+        },
+      });
+
+      // set value
+      lead.setDataValue("categoryValue", category.name);
+      lead.setDataValue("subCategoryValue", subCategory.name);
+      lead.setDataValue("microCategoryValue", microCategory.name);
+    }
+    // return res.send(lead);
+    return res.render("updateLead", { admin, lead });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const showLead = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    const lead = await Lead.findByPk(req.params.id);
+    if (!lead) {
+      return res.render("error", { message: "Lead not found" });
+    }
+    return res.render("lead", { admin, lead });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const addProductToUser = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    const { id } = req.params;
+    const user = await User.findOne({
+      where: {
+        id: Number(id),
+      },
+      attributes: ["id"],
+    });
+    if (!user) {
+      return res.render("error", { message: "User not found" });
+    }
+    try {
+      // Validate request body
+      const validationResult = await productSchema.validateAsync(req.body);
+      let {
+        categoryId,
+        subCategoryId,
+        microCategoryId,
+        title,
+        brand,
+        model,
+        material,
+        coi,
+        description,
+        unitType,
+        minQuantity,
+        maxQuantity,
+        price,
+        acceptedPayment,
+        businessType,
+        processLeadTime,
+        processLeadTimeUnit,
+        packageType,
+        packageQuantity,
+        packageUnit,
+        deliveryTime,
+        nearestPort,
+        specifications,
+      } = validationResult;
+
+      // Ensure brochure file is uploaded
+      if (!req.files.brochure || req.files.brochure.length === 0) {
+        return res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(
+            new Response(false, "Product brochure is required, please add.")
+          );
+      }
+
+      // Ensure product images are uploaded
+      if (!req.files.images || req.files.images.length === 0) {
+        return res
+          .status(HttpStatus.FORBIDDEN.code)
+          .send(
+            new Response(false, "Product images are required, please add.")
+          );
+      }
+
+      // Parse specifications if provided
+      if (specifications) {
+        specifications = JSON.parse(specifications);
+      }
+
+      // Create product
+      const product = await Product.create({
+        userId: user.id,
+        categoryId,
+        subCategoryId,
+        microCategoryId,
+        title,
+        brand,
+        model,
+        material,
+        coi,
+        description,
+        unitType,
+        minQuantity,
+        maxQuantity,
+        price,
+        acceptedPayment,
+        businessType,
+        processLeadTime,
+        processLeadTimeUnit,
+        packageType,
+        packageQuantity,
+        packageUnit,
+        deliveryTime,
+        nearestPort,
+        brochure: `brochures/${req.files.brochure[0].filename}`, // Brochure file path
+      });
+
+      // Save product images to ProductImage table
+      if (product) {
+        const productImages = req.files.images.map((file) => ({
+          productId: product.id,
+          image: `products/${file.filename}`, // Image file path
+        }));
+
+        await ProductImage.bulkCreate(productImages);
+      }
+
+      // Save specifications to ProductSpecification table
+      if (product && specifications && Array.isArray(specifications)) {
+        const productSpecifications = specifications.map((spec) => ({
+          productId: product.id,
+          key: spec.key,
+          value: spec.value,
+        }));
+        await ProductSpecification.bulkCreate(productSpecifications);
+      }
+
+      return res
+        .status(HttpStatus.CREATED.code)
+        .send(
+          new Response(true, `Product ${HttpStatus.CREATED.message}`, product)
+        );
+    } catch (error) {
+      return helpers.validationHandler(res, error);
+    }
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const addProductPage = async (req, res) => {
+  try {
+    let userId = req.params.id;
+    const { admin } = req.cookies;
+    const categories = await Category.findAll({});
+    const subCategories = await SubCategory.findAll({});
+    const microCategories = await DownSubCategory.findAll({});
+    return res.render("addProduct", {
+      admin,
+      categories,
+      subCategories,
+      microCategories,
+      userId,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+// Subscription Plan
+const subscriptionCreatePage = async (req, res) => {
+  try {
+    const { admin } = req.cookies;
+    return res.render("createSubscription", { admin });
+  } catch (error) {
+    console.log(error);
+    return res.redirect(req.get("referer"));
+  }
+};
+
+const subscriptionCreate = async (req, res) => {
+  try {
+    const { name, price, duration, features, isActive } = req.body;
+    
+    // Validate required fields
+    if (!name || !price || !duration || !features) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'All fields are required' 
+      });
+    }
+
+    // Create subscription
+    const subscription = await Subscription.create({
+      name,
+      price: parseFloat(price),
+      duration: parseInt(duration),
+      features,
+      isActive: isActive === true || isActive === 'true'
+    });
+
+    return res.status(201).json({ 
+      success: true, 
+      message: 'Subscription created successfully',
+      data: subscription
+    });
+  } catch (error) {
+    console.error('Subscription creation error:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Error creating subscription',
+      error: error.message 
+    });
+  }
+};
+
+const subscriptionList = async(req,res)=>{
+  try{
+    const {admin} = req.cookies;
+    const subscriptions = await Subscription.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    return res.render("subscriptions", {admin, subscriptions});
   }catch(error){
     console.log(error);
     return res.redirect(req.get("referer"));
   }
 }
 
-// create category
-const createCategory = async(req,res)=>{
-  console.log("Hit create category api's")
+const deleteSubscription = async(req,res)=>{
   try{
-    const name = req.body.categoryName;
-    console.log(name, req.files.image[0].filename)
-
-   let createCategory =  await Category.create({name,image:`categories/${req.files.image[0].filename}`});
-   createCategory ? res.status(201).json({status:true, msg:"Category created successfully!"}):
-    res.status(400).json({status:false, msg:"Something went wrong!"});
+    const subscription = await Subscription.findByPk(req.params.id);
+    if (!subscription) {
+      return res.render("error", { message: "Subscription not found" });
+    }
+    await subscription.destroy();
+    return res.redirect(req.get("referer"));
   }catch(error){
     console.log(error);
-   return res.status(500).send({status:false, msg:"Something went wrong!"});
+    return res.redirect(req.get("referer"));
   }
 }
 
-const createSubCategory = async (req, res) => {
-  try {
-    const { categoryId, name } = req.body;
+const updateSubscription = async(req,res)=>{
+  try{
+    const  { id } = req.params;
+    const { name, price, duration, features, isActive } = req.body;
+    let subs = await Subscription.findByPk(id);
+    if (!subs) {
+      return res.render("error", { message: "Subscription not found" });
+    }
+    await subs.update({
+      name,
+      price,
+      duration,
+      features,
+      isActive: isActive === true || isActive === 'true'
+    });
 
-    let category = await SubCategory.create({ categoryId, name, image:`categories/${req.files.image[0].filename}`});
-    return res
-      .status(HttpStatus.CREATED.code)
-      .send(
-        new Response(
-          true,
-          `SubCategory ${HttpStatus.CREATED.message}`,
-          category
-        )
-      );
-  } catch (error) {
-    return helpers.validationHandler(res, error);
+    return res.redirect(req.get("referer"));
+
+  }catch(error){
+    console.log(error);
+    return res.redirect(req.get("referer"));
   }
-};
-
-
-const createMicroCategory = async (req, res) => {
-  try {
-    const { name, categoryId, subCategoryId } = req.body;
-
-    let category = await DownSubCategory.create({ categoryId, subCategoryId, name, image:`categories/${req.files.image[0].filename}`});
-    return res
-      .status(HttpStatus.CREATED.code)
-      .send(
-        new Response(
-          true,
-          `SubCategory ${HttpStatus.CREATED.message}`,
-          category
-        )
-      );
-  } catch (error) {
-    return helpers.validationHandler(res, error);
-  }
-};
-
-
+}
 
 const logout = async (req, res) => {
   res.clearCookie("admin");
@@ -3827,5 +4421,28 @@ module.exports = {
   showCategoryPage,
   createCategory,
   createSubCategory,
-  createMicroCategory
+  createMicroCategory,
+  showAllCategory,
+  updateCategory,
+  deleteCategory,
+  showAllSubCategory,
+  updateSubCategory,
+  deleteSubCategory,
+  showAllMicroCategory,
+  updateMicroCategory,
+  deleteMicroCategory,
+  createLead,
+  createLeadPage,
+  leadList,
+  deleteLead,
+  updateLead,
+  showLead,
+  updateLeadPage,
+  addProductToUser,
+  addProductPage,
+  subscriptionCreatePage,
+  subscriptionCreate,
+  subscriptionList,
+  deleteSubscription,
+  updateSubscription,
 };

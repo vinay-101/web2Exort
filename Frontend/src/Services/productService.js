@@ -60,6 +60,14 @@ const productService = {
         }
     }),
 
+    fetchLeads: (type) => axiosClient.get(`/products/leads/all?type=${type}`, {
+        headers: {
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    fetchHomeLeads: (type) => axiosClient.get(`/products/home/leads/all?type=${type}`),
+
 }
 
 

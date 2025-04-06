@@ -10,6 +10,7 @@ const emailTemplateParialsPath = path.resolve(
   __dirname,
   "../templates/emails/partials"
 );
+const fs = require("fs");
 
 const sendOtp = async (data) => {
   // const otp =  Math.floor(100000 + Math.random() * 900000);
@@ -72,51 +73,73 @@ const sendEmail = async (mailOptions) => {
 };
 
 const validationHandler = (res, error) => {
-    console.error(error); // Log error for debugging purposes
-  
-    // Handle Sequelize validation errors
-    if (error?.name?.includes("Sequelize")) {
-      return res.status(HttpStatus.BAD_REQUEST.code).json({
-        success: false,
-        message: error.errors ? error.errors.map((e) => e.message) : "Database validation error occurred.",
-      });
-    }
-  
-    // Handle Joi validation errors
-    if (error?.isJoi === true) {
-      return res.status(HttpStatus.BAD_REQUEST.code).json({
-        success: false,
-        message: error.details ? error.details.map((e) => e.message).join(", ") : "Invalid input data provided.",
-      });
-    }
-  
-    // Handle custom application errors with user-friendly API messages
-    if (error?.customMessage) {
-      return res.status(error.statusCode || HttpStatus.BAD_REQUEST.code).json({
-        success: false,
-        message: error.customMessage,
-      });
-    }
-  
-    // Handle generic JavaScript errors
-    if (error instanceof Error) {
-      return res.status(HttpStatus.BAD_REQUEST.code).json({
-        success: false,
-        message: error.message || "An unexpected error occurred. Please try again.",
-      });
-    }
-  
-    // Handle unknown or unexpected errors
-    return res.status(HttpStatus.INTERNAL_SERVER_ERROR.code).json({
+  console.error(error); // Log error for debugging purposes
+
+  // Handle Sequelize validation errors
+  if (error?.name?.includes("Sequelize")) {
+    return res.status(HttpStatus.BAD_REQUEST.code).json({
       success: false,
-      message: "An internal server error occurred. Please contact support.",
+      message: error.errors
+        ? error.errors.map((e) => e.message)
+        : "Database validation error occurred.",
     });
-  };
-  
-  
+  }
+
+  // Handle Joi validation errors
+  if (error?.isJoi === true) {
+    return res.status(HttpStatus.BAD_REQUEST.code).json({
+      success: false,
+      message: error.details
+        ? error.details.map((e) => e.message).join(", ")
+        : "Invalid input data provided.",
+    });
+  }
+
+  // Handle custom application errors with user-friendly API messages
+  if (error?.customMessage) {
+    return res.status(error.statusCode || HttpStatus.BAD_REQUEST.code).json({
+      success: false,
+      message: error.customMessage,
+    });
+  }
+
+  // Handle generic JavaScript errors
+  if (error instanceof Error) {
+    return res.status(HttpStatus.BAD_REQUEST.code).json({
+      success: false,
+      message:
+        error.message || "An unexpected error occurred. Please try again.",
+    });
+  }
+
+  // Handle unknown or unexpected errors
+  return res.status(HttpStatus.INTERNAL_SERVER_ERROR.code).json({
+    success: false,
+    message: "An internal server error occurred. Please contact support.",
+  });
+};
+
+// Helper function to delete image file
+const deleteImageFile = (imagePath) => {
+  if (imagePath) {
+    const fullPath = path.join(__dirname, "../uploads", imagePath);
+    console.log("fullPath", fullPath);
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
+    }
+  }
+};
+
+// Add to existing helper functions
+const calculateEndDate = (durationDays) => {
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + parseInt(durationDays));
+  return endDate;
+};
+
+// Add to module exports
 module.exports = {
-  sendOtp,
-  generateRandomString,
-  sendEmail,
   validationHandler,
+  calculateEndDate, // Add this line
+  deleteImageFile,
 };

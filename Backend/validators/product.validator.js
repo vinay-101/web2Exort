@@ -64,6 +64,7 @@ const productSchema = Joi.object({
   deliveryTime: Joi.string().required(),
   nearestPort: Joi.number().integer().required(),
   specifications: Joi.string().optional(), // Add specifications as an optional field
+  microCategoryId: Joi.number().integer().optional(),
 });
 
 
@@ -123,7 +124,8 @@ const productUpdateSchema = Joi.object({
   packageUnit: Joi.string().valid("Pieces", "Kgs", "Litters").optional(),
   deliveryTime: Joi.string().optional(),
   nearestPort: Joi.number().integer().optional(),
-  specifications: Joi.string().optional()
+  specifications: Joi.string().optional(),
+  microCategoryId: Joi.number().integer().optional(),
 });
 
 module.exports = productUpdateSchema;

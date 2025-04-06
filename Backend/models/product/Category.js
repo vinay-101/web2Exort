@@ -24,4 +24,6 @@ const Category = sequelize.define(
   }
 );
 
+
+
 module.exports = Category;
