@@ -854,6 +854,228 @@ const homeLeads = async (req, res) => {
   }
 };
 
+const homeCategoryTab = async(req,res)=>{
+  try{
+    let categoryId =  req.params.id;
+    let subCategories = await Category.findOne({
+      where: {
+        id: categoryId,
+      },
+      include:[
+        {
+          model: SubCategory,
+          attributes: ["id", "name", "image", 'categoryId'],
+          include:[
+            {
+              model: DownSubCategory,
+            }
+          ]
+        }
+      ],
+      limit:4
+    });
+
+    return res.status(HttpStatus.OK.code).send(new Response(true, `Category ${HttpStatus.OK.message}`, subCategories));
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const allMicroCategory = async(req,res)=>{
+  try{
+    let categoryId = req.params.categoryId;
+    // let subCategoryId = req.params.subCategoryId;
+
+    let microCategory = await DownSubCategory.findAll({
+      where: {
+        categoryId,
+        // subCategoryId,
+      },
+      attributes: ["id", "name", "image"],
+    });
+
+    return res.status(HttpStatus.OK.code).send(new Response(true, `Micro Category ${HttpStatus.OK.message}`, microCategory));
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const allMicroCategoryProduct = async(req,res)=>{
+  try{
+    let { page, size } = req.query;
+
+    if (!size) size = 5;
+    else size = parseInt(size);
+    if (!page) page = 1;
+    else page = parseInt(page);
+    let skip = size * (parseInt(page) - 1);
+
+
+    let subCategoryId = req.params.subCategoryId;
+    let microCategoryId = req.params.microCategoryId;
+
+    let products = await Product.findAll({
+      where: {
+        // subCategoryId,
+        microCategoryId,
+      },
+      include: [  
+        {
+          model: ProductImage,
+          attributes: ["id", "image"],
+        }
+        // Removing User association since it's not properly defined
+        // {
+        //   model: User,
+        //   attributes: ["id", "company", "slug", 'country'],
+        // }
+      ],
+      attributes:["id", "title", "price", "minQuantity", "maxQuantity", "unitType", "businessType", "processLeadTime", "processLeadTimeUnit", "packageType", "packageQuantity", "packageUnit", "deliveryTime", "nearestPort", "createdAt", "userId"],
+      limit: size,
+      offset: skip,
+    });
+
+    // Now fetch user information separately for each product
+    // This is a workaround since the association isn't properly defined
+    const productsWithUserInfo = await Promise.all(
+      products.map(async (product) => {
+        const productJson = product.toJSON();
+        
+        if (productJson.userId) {
+          try {
+            const user = await User.findOne({
+              where: { id: productJson.userId },
+              attributes: ["id", "company", "slug", "country"]
+            });
+            
+            if (user) {
+              productJson.User = user.toJSON();
+            }
+          } catch (error) {
+            console.error(`Error fetching user for product ${productJson.id}:`, error);
+          }
+        }
+        
+        return productJson;
+      })
+    );
+
+    let total = await Product.count({
+      where: {
+        // subCategoryId,
+        microCategoryId,
+      },
+    });
+
+    const data = {
+      totalPages: Math.ceil(total / size),
+      totalRecords: total,
+      totalCount: total,
+      products: productsWithUserInfo
+    };
+ 
+    return res.status(HttpStatus.OK.code).send(new Response(true, `Products ${HttpStatus.OK.message}`, data));
+  }catch(error){
+    console.error("Error in allMicroCategoryProduct:", error);
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const allLead = async(req,res)=>{
+  try{
+    console.log("api called=============================")
+    let { page, size, type } = req.query;
+
+    if (!size) size = 5;
+    else size = parseInt(size);
+    if (!page) page = 1;
+    else page = parseInt(page);
+    let skip = size * (parseInt(page) - 1);
+
+    let categoryId = req.params.categoryId;
+    console.log("CategoryId", categoryId, type)
+    // let subCategoryId = req.params.subCategoryId;
+
+
+    let leads;
+    let total;
+    if(type === "Buyer"){
+      leads = await Lead.findAll({
+        where:{
+          category: categoryId,
+          // subcategory: subCategoryId,
+          leadType: "Buyer"
+        }
+      });
+      total = await Product.count({
+        where: {
+          category: categoryId,
+          // subcategory: subCategoryId,
+          leadType: "Seller"
+        },
+      });
+    }else{
+      leads = await Lead.findAll({
+        where:{
+          category: categoryId,
+          // subcategory: subCategoryId,
+          leadType: "Seller"
+        }
+      });
+
+      total = await Product.count({
+        where: {
+          category: categoryId,
+          // subcategory: subCategoryId,
+          leadType: "Seller"
+        },
+      });
+    }
+
+    const data = {
+      totalPages: Math.ceil(total / size),
+      totalRecords: total,
+      totalCount: total,
+      leads
+    };
+
+    return res
+    .status(HttpStatus.OK.code)
+    .send(new Response(true, `Leads ${HttpStatus.OK.message}`, data));
+  }catch(error){
+    return helpers.validationHandler(res, error);
+  }
+}
+
+const productView = async(req,res)=>{
+  try{
+    let productId = req.params.productId;
+
+    let product = await Product.findOne({
+      where:{
+        id: Number(productId)
+      },
+      include:[
+        {
+          model: ProductImage
+        }
+      ]
+    });
+
+    if(!product){
+      return res
+      .status(HttpStatus.BAD_REQUEST.code)
+      .send(new Response(false, `Product not found ${HttpStatus.BAD_REQUEST.message}`, data));
+    }
+
+    return res
+    .status(HttpStatus.OK.code)
+    .send(new Response(true, `Product ${HttpStatus.OK.message}`, product));
+  }catch(error){
+    return helpers.validationHandler(res, error)
+  }
+}
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -870,5 +1092,10 @@ module.exports = {
   dashboard,
   allCatalogue,
   allLeads,
-  homeLeads
+  homeLeads,
+  homeCategoryTab,
+  allMicroCategory,
+  allMicroCategoryProduct,
+  allLead,
+  productView,
 };

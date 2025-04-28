@@ -11,6 +11,8 @@ const emailTemplateParialsPath = path.resolve(
   "../templates/emails/partials"
 );
 const fs = require("fs");
+const { v4: uuidv4 } = require('uuid');
+const Coupon = require("../models/Coupon");
 
 const sendOtp = async (data) => {
   // const otp =  Math.floor(100000 + Math.random() * 900000);
@@ -137,9 +139,88 @@ const calculateEndDate = (durationDays) => {
   return endDate;
 };
 
+// Coupon related functions
+function generateCouponCode() {
+  return uuidv4().split('-')[0].toUpperCase();
+}
+
+async function validateCoupon(code, userId) {
+  const coupon = await Coupon.findOne({ where: { code: code } });
+
+  if (!coupon) {
+      return { error: true, message: 'Coupon not found', status: HttpStatus.BAD_REQUEST.code };
+  }
+
+  if (coupon.usedCount >= coupon.usageLimit) {
+      return { error: true, message: 'Coupon usage limit reached', status: HttpStatus.BAD_REQUEST.code };
+  }
+
+  const customerUsageCount = await UserCoupon.count({ where: { userId: userId, couponId: coupon.id } });
+
+  if (customerUsageCount >= coupon.perCustomerLimit) {
+      return { error: true, message: 'You have already used this coupon', status: HttpStatus.BAD_REQUEST.code };
+  }
+
+  const currentDate = new Date();
+
+  if (currentDate < coupon.startDate || currentDate > coupon.expirationDate) {
+      return { error: true, message: 'Coupon is not valid at this time', status: HttpStatus.BAD_REQUEST.code };
+  }
+
+  return { error: false, coupon: coupon };
+}
+
+
+function calculateDiscountedPrice(originalPrice, coupon) {
+  let discountedPrice = originalPrice;
+
+  if (coupon.discountType === 'percentage') {
+      discountedPrice = originalPrice - (originalPrice * (coupon.discountValue / 100));
+  } else if (coupon.discountType === 'fixed') {
+      discountedPrice = originalPrice - coupon.discountValue;
+  }
+
+  return discountedPrice > 0 ? discountedPrice : 0;
+}
+
+
+// Function to calculate the expiration date
+const calculateExpirationDate = (startDate) => {
+  const date = new Date(startDate);
+
+  // Add one year to the current date
+  date.setFullYear(date.getFullYear() + 1);
+  
+  // Subtract one day
+  date.setDate(date.getDate() - 1);
+  return date;
+};
+
+function calculateDaysUsed(createdAt) {
+  // Convert createdAt to a Date object
+  const planStartDate = new Date(createdAt);
+  
+  // Get the current date
+  const currentDate = new Date();
+  
+  // Calculate the difference in time (in milliseconds)
+  const timeDifference = currentDate - planStartDate;
+  
+  // Convert milliseconds to days
+  const daysUsed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  
+  return daysUsed;
+}
+
+
 // Add to module exports
 module.exports = {
   validationHandler,
   calculateEndDate, // Add this line
   deleteImageFile,
+  generateCouponCode,
+  validateCoupon,
+  calculateDiscountedPrice,
+  calculateExpirationDate,
+  calculateDaysUsed,
 };

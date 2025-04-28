@@ -35,4 +35,19 @@ productRouter.route("/catalogue/member/:slug").get(requireAuth, product_controll
 productRouter.route("/leads/all").get(requireAuth, product_controller.allLeads);
 productRouter.route("/home/leads/all").get(product_controller.homeLeads);
 
+// Home page category tabs
+productRouter.route("/home/category/all/:id").get(product_controller.homeCategoryTab);
+
+// View all Micro category
+productRouter.route("/micro-category/:categoryId").get(product_controller.allMicroCategory);
+
+// View all Product
+productRouter.route("/all/:categoryId/:microCategoryId").get(product_controller.allMicroCategoryProduct);
+
+// lead / suppliers
+productRouter.route("/all/lead/:categoryId").get(product_controller.allLead)
+
+// view product
+productRouter.route('/micro-category/product/view/:productId').get(product_controller.productView)
+
 module.exports = {productRouter}

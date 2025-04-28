@@ -1,8 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import "../assets/style.scss"
 import "../assets/style.css";
 import "../assets/Js/profile.js"
+// Remove LanguageSelector import
+// import LanguageSelector from './LanguageSelector' 
+import { useTranslation } from 'react-i18next'
+
 const TopHeader = () => {
+  const { t } = useTranslation();
+  
+  // Add useEffect for Google Translate initialization
+  useEffect(() => {
+    // Define the initialization function if it doesn't exist
+    if (!window.googleTranslateElementInit) {
+      window.googleTranslateElementInit = function() {
+        new google.translate.TranslateElement(
+          { pageLanguage: 'en' },
+          'google_translate_element'
+        );
+      };
+    }
+
+    // Check if the Google Translate script is already added
+    const existingScript = document.querySelector('script[src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]');
+    if (!existingScript) {
+      // Create and append the Google Translate script
+      const script = document.createElement('script');
+      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      script.async = true;
+      document.body.appendChild(script);
+    } else {
+        // If script exists, call the init function directly if needed
+        // This might be necessary if the component re-renders
+        if (window.google && window.google.translate && window.google.translate.TranslateElement) {
+             window.googleTranslateElementInit();
+        }
+      }
+
+  }, []); // Empty dependency array ensures this runs only once on mount
+  
   return (
     <div className="header-top " style={{ backgroundColor: "#000" }}>
     <div className="container-fluid">
@@ -32,30 +68,14 @@ const TopHeader = () => {
                 <i className="fa fa-youtube fa-2x" style={{ color: "white" }} />
               </a>
             </div>
+            {/* Remove the LanguageSelector div */}
+            {/* 
             <div className="currency-bar lang-bar pull-right">
-              <ul>
-                <li>
-                  <a href="#" style={{ color: "#f7f7f7" }}>
-                    <img
-                      src="assets/images/icons/gb.png"
-                      alt=""
-                      style={{ color: "white" }}
-                    />
-                    English <i className="fa fa-angle-down" />
-                  </a>
-                  <ul>
-                    <li>
-                      <a href="#">French</a>
-                    </li>
-                    <li>
-                      <a href="#">Chinese</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <span className="br">|</span>
-                </li>
-              </ul>
+              <LanguageSelector />
+            </div> 
+            */}
+            <div className="currency-bar lang-bar pull-right" style={{ maxWidth: '120px', marginRight: '10px' }}>
+               <div id="google_translate_element"></div>
             </div>
             <div className="currency-bar pull-right">
               <ul>

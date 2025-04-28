@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import SliderAreaTop from "./SliderAreaTop";
 import SliderAreaMiddleProduct from "./SliderAreaMiddleProduct";
@@ -12,22 +12,12 @@ import TopArea from "../pages/TopArea";
 import CategorySlider from "./CategorySlider";
 import EnquiryReloadHome from "./EnquiryReloadHome";
 import LeadSlider from "./LeadSlider";
+import productService from "../Services/productService";
+import SaleModal from "./SaleModal";
 
-
-// Category data for the selector
-const categories = [
-  { id: 1, name: "Agriculture", heading: "Discover premium agricultural products for your farming needs", description: "Connect with trusted suppliers of seeds, equipment, fertilizers, and more. Agriculture forms the backbone of our global food supply." },
-  { id: 2, name: "Apparel and fashion accessories", heading: "Explore trendy wholesale fashion and accessories", description: "Source the latest styles from verified manufacturers and exporters. Stay ahead in the competitive fashion industry." },
-  { id: 5, name: "Construction & real estate" },
-  { id: 6, name: "Electronic & Electrical" },
-  { id: 8, name: "Food & Beverages", heading: "Premium wholesale food and beverage supplies", description: "From ingredients to finished products, find quality F&B items from certified producers worldwide." },
-  { id: 10, name: "Home furnishing & supplies" },
-  { id: 15, name: "Industrial goods & chemical" },
-  { id: 18, name: "Minerals & metals" }
-];
 
 // Component to select a category
-const CategorySelector = ({ onSelectCategory }) => {
+const CategorySelector = ({ categories, selectedCategoryId, onSelectCategory }) => {
   return (
     <div className="category-selector mb-4">
       <h3 className="mb-3">Browse by Category</h3>
@@ -35,7 +25,7 @@ const CategorySelector = ({ onSelectCategory }) => {
         {categories.map(category => (
           <button 
             key={category.id}
-            className="btn btn-outline-primary"
+            className={`btn ${selectedCategoryId === category.id ? 'btn-primary' : 'btn-outline-primary'}`}
             onClick={() => onSelectCategory(category)}
           >
             {category.name}
@@ -47,13 +37,67 @@ const CategorySelector = ({ onSelectCategory }) => {
 };
 
 const Home = () => {
-  const [currentCategory, setCurrentCategory] = useState(categories[0]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoryProducts, setCategoryProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Fetch categories on component mount
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        setError(null);
+        const response = await productService.fetchCategories();
+        if (response && response.data && response.data.data) {
+          setCategories(response.data.data);
+          // Select first category by default
+          if (response.data.data.length > 0) {
+            setSelectedCategory(response.data.data[0]);
+            fetchCategoryProducts(response.data.data[0].id);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setError("Failed to load categories. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchCategories();
+  }, []);
+  
+  // Fetch category products when selected category changes
+  const fetchCategoryProducts = async (categoryId) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await productService.fetchHomeCategory(categoryId);
+      console.log("API Response:", response.data); // Debug log
+      if (response && response.data && response.data.data) {
+        setCategoryProducts(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching category products:", error);
+      setError(`Failed to load products for ${selectedCategory?.name}. Please try again later.`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Handle category selection
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    fetchCategoryProducts(category.id);
+  };
   
   return (
     <>
       {/* <Navbar /> */}
       {/* <SliderAreaTop /> */}
       <EnquiryReloadHome />
+      <SaleModal />
       <TopArea/>
       <CategorySlider />
       <LeadSlider />
@@ -62,18 +106,31 @@ const Home = () => {
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-12">
-            <CategorySelector onSelectCategory={setCurrentCategory} />
+            {loading && <p>Loading categories...</p>}
+            {error && <div className="alert alert-danger">{error}</div>}
+            {!loading && !error && categories.length > 0 && (
+              <CategorySelector 
+                categories={categories} 
+                selectedCategoryId={selectedCategory?.id} 
+                onSelectCategory={handleCategorySelect} 
+              />
+            )}
           </div>
         </div>
       </div>
       
       {/* Single Product Category Component */}
-      <SliderAreaMiddleProduct 
-        type={currentCategory.name}
-        categoryId={currentCategory.id}
-        heading={currentCategory.heading}
-        description={currentCategory.description}
-      />
+      {selectedCategory && (
+        <SliderAreaMiddleProduct 
+          type={selectedCategory.name}
+          categoryId={selectedCategory.id}
+          heading={selectedCategory.heading || `Discover premium ${selectedCategory.name} products`}
+          description={selectedCategory.description || `Browse our selection of high-quality ${selectedCategory.name} products from verified suppliers`}
+          data={categoryProducts}
+          loading={loading}
+          error={error}
+        />
+      )}
       {/* <SliderAreaDownProductOne /> */}
       <Testimonial />
       <BrandPartner />

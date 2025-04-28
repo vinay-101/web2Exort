@@ -21,6 +21,8 @@ import MyRequirementPage from "./Pages/MyRequirementPage";
 import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute component
 import CataloguePage from "./pages/CataloguePage";
 import LeadHome from "./pages/LeadHome";
+import HomePageCategoryListing from "./pages/HomePageCategoryListing";
+import ProductListingByCategory from "./pages/ProductListingByCategory";
 
 const App = () => {
   return (
@@ -37,6 +39,8 @@ const App = () => {
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="member/:slug" element={<CataloguePage />}/>
           <Route path="lead-home" element={<LeadHome/>}/>
+          <Route path="categories/:categoryId" element={<HomePageCategoryListing/>}/>
+          <Route path="products/:categoryId/:microCategoryId" element={<ProductListingByCategory/>}/>
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="user/profile" element={<DashboardPage />} />

@@ -1,0 +1,24 @@
+{
+  "navbar": {
+    "allDepartments": "Todos los Departamentos",
+    "computer": "Computadora",
+    "tv": "TV y Smart Box",
+    "shopPage": "Página de Tienda",
+    "featured": "Destacados",
+    "productsBlockTop": "Bloque de Productos Superior",
+    "productsBlockBottom": "Bloque de Productos Inferior",
+    "thumbnailsLeft": "Miniaturas a la Izquierda",
+    "thumbnailsRight": "Miniaturas a la Derecha"
+  },
+  "auth": {
+    "signup": "Registrarse",
+    "login": "Iniciar Sesión",
+    "forgotPassword": "Olvidé mi Contraseña",
+    "resetPassword": "Restablecer Contraseña"
+  },
+  "language": {
+    "english": "Inglés",
+    "french": "Francés",
+    "spanish": "Español"
+  }
+} 

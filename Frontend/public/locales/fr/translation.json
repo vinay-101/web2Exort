@@ -1,0 +1,24 @@
+{
+  "navbar": {
+    "allDepartments": "Tous les Départements",
+    "computer": "Ordinateur",
+    "tv": "TV & Box Smart",
+    "shopPage": "Page Boutique",
+    "featured": "En Vedette",
+    "productsBlockTop": "Bloc Produits Haut",
+    "productsBlockBottom": "Bloc Produits Bas",
+    "thumbnailsLeft": "Vignettes à Gauche",
+    "thumbnailsRight": "Vignettes à Droite"
+  },
+  "auth": {
+    "signup": "S'inscrire",
+    "login": "Connexion",
+    "forgotPassword": "Mot de Passe Oublié",
+    "resetPassword": "Réinitialiser le Mot de Passe"
+  },
+  "language": {
+    "english": "Anglais",
+    "french": "Français",
+    "spanish": "Espagnol"
+  }
+} 

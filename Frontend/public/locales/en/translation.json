@@ -1,0 +1,24 @@
+{
+  "navbar": {
+    "allDepartments": "All Departments",
+    "computer": "Computer",
+    "tv": "TV & Smart box",
+    "shopPage": "Shop Page",
+    "featured": "Featured",
+    "productsBlockTop": "Products Block Top",
+    "productsBlockBottom": "Products Block Bottom",
+    "thumbnailsLeft": "Thumbnails Left",
+    "thumbnailsRight": "Thumbnails Right"
+  },
+  "auth": {
+    "signup": "Signup",
+    "login": "Login",
+    "forgotPassword": "Forgot Password",
+    "resetPassword": "Reset Password"
+  },
+  "language": {
+    "english": "English",
+    "french": "French",
+    "spanish": "Spanish"
+  }
+} 

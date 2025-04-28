@@ -21,6 +21,11 @@ const { productSchema } = require("../../validators/product.validator");
 const ProductSpecification = require("../../models/product/ProductSpecifiation");
 const ProductImage = require("../../models/product/ProductImage");
 const Subscription = require("../../models/user/Subscription");
+const TermCondition = require("../../models/admin/TermCondition");
+const PrivacyPolicy = require("../../models/admin/PrivacyPolicy");
+const Faq = require("../../models/admin/Faq");
+const TestimonialCms = require("../../models/admin/Testimonial");
+const Coupon = require("../../models/Coupon");
 
 const adminPage = async (req, res) => {
   const { admin } = req.cookies;
@@ -2369,18 +2374,14 @@ const updateTestimonial = async (req, res) => {
 
     if (req.file) {
       let image = `testimonial/${req.file.filename}`;
-      let name = req.body.name;
       let title = req.body.title;
       let desc = req.body.text;
-      let lang = req.body.lang;
 
-      await testimonial.update({ image, name, title, desc, lang });
+    await testimonial.update({ image, title, desc });
     } else {
-      let name = req.body.name;
       let title = req.body.title;
       let desc = req.body.text;
-      let lang = req.body.lang;
-      await testimonial.update({ name, title, desc, lang });
+      await testimonial.update({ title, desc });
     }
     // return res.redirect(req.get('referer'));
     return res.redirect("/admin/list/testimonials");
@@ -2393,18 +2394,13 @@ const updateTestimonial = async (req, res) => {
 const createTestimonial = async (req, res) => {
   try {
     let image = req.file ? `testimonial/${req.file.filename}` : null;
-    let name = req.body.name;
     let title = req.body.title;
     let desc = req.body.text;
-    let lang = req.body.lang;
 
     await TestimonialCms.create({
       image,
-      name,
       title,
       desc,
-      type: "Testimonial",
-      lang,
     });
 
     // res.redirect(req.get('referer'));

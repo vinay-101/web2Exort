@@ -1,5 +1,6 @@
 const { DataTypes, Sequelize, literal } = require("sequelize");
 const sequelize = require("../../helper/db.config");
+const DownSubCategory = require("./DownSubcategory");
 
 const SubCategory = sequelize.define(
   "subCategories",
@@ -27,5 +28,9 @@ const SubCategory = sequelize.define(
     timestamps: true,
   }
 );
+
+// SubCategory.belongsTo(DownSubCategory, {foreignKey: 'categoryId'});
+SubCategory.hasMany(DownSubCategory, {foreignKey: 'subCategoryId'});
+// DownSubCategory.belongsTo(SubCategory, {foreignKey: 'subCategoryId'});
 
 module.exports = SubCategory;

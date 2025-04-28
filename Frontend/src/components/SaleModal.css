@@ -1,0 +1,197 @@
+.modal-backdrop.show {
+    opacity: 0.7;
+  }
+  
+  .sale-modal-content {
+    border-radius: 10px !important; /* Use !important cautiously */
+    overflow: hidden !important;
+    border: none !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    background-color: transparent !important; /* Make modal content background transparent */
+  }
+
+  .sale-modal-body {
+    padding: 0 !important; /* Ensure no padding on body */
+  }
+  
+  .sale-content {
+    position: relative;
+    background: #f5f5f5;
+    padding: 0;
+    border-radius: 10px; /* Apply radius here */
+    overflow: hidden; /* Keep overflow hidden here */
+  }
+  
+  .sale-overlay {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: #f5f5f5;
+    /* Add overflow hidden if decorative elements might peek out */
+    overflow: hidden;
+    border-radius: 10px; /* Ensure overlay also respects border radius */
+
+  }
+  
+  .special-offer-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FF6B35;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    z-index: 5; /* Ensure text is above decorative elements */
+  }
+  
+  .sale-title {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #2D7DD2;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-transform: uppercase;
+    z-index: 5; /* Ensure text is above decorative elements */
+  }
+  
+  .discount-text {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #2D7DD2;
+    margin-bottom: 20px;
+    z-index: 5; /* Ensure text is above decorative elements */
+  }
+  
+  .percentage {
+    color: #FF6B35;
+    font-weight: 900;
+  }
+  
+  .sale-btn {
+    background-color: #FF6B35 !important;
+    border: none !important;
+    padding: 10px 30px !important;
+    font-weight: bold !important;
+    border-radius: 30px !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease !important;
+    z-index: 5; /* Ensure button is above decorative elements */
+  }
+  
+  .sale-btn:hover {
+    background-color: #e55a25 !important;
+    transform: translateY(-2px) !important;
+  }
+  
+  .sale-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    background-color: white !important; /* Ensure visibility */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    opacity: 0.8;
+    border: none; /* Remove default button border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Reset padding */
+  }
+
+  .sale-close span {
+    color: #333; /* Adjust color if needed */
+    font-size: 1.5rem; /* Adjust size if needed */
+    line-height: 1; /* Center the 'x' */
+  }
+  
+  .sale-close:hover {
+    opacity: 1;
+  }
+  
+  /* Decorative elements - position them relative to sale-overlay */
+  .decorative-element {
+    position: absolute;
+    width: 40px;
+    height: 8px;
+    border-radius: 10px;
+    z-index: 1; /* Ensure they are behind content */
+  }
+  
+  .element-1 {
+    background-color: #FF6B35;
+    transform: rotate(-45deg);
+    top: 20%;
+    left: 15%;
+  }
+  
+  .element-2 {
+    background-color: #2D7DD2;
+    transform: rotate(45deg);
+    bottom: 20%;
+    right: 15%;
+  }
+  
+  .element-3 {
+    background-color: #3BCEAC;
+    transform: rotate(-30deg);
+    bottom: 30%;
+    left: 20%;
+  }
+  
+  .element-4 {
+    background-color: #FFD166;
+    transform: rotate(30deg);
+    top: 30%;
+    right: 20%;
+  }
+  
+  .star {
+    position: absolute;
+    color: #ccc;
+    font-size: 16px;
+    z-index: 1; /* Ensure they are behind content */
+  }
+  
+  .star-1 { top: 15%; left: 35%; }
+  .star-2 { top: 25%; right: 25%; }
+  .star-3 { bottom: 25%; left: 30%; }
+  .star-4 { bottom: 20%; right: 40%; }
+  .star-5 { top: 40%; right: 15%; }
+  
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    background-color: #eee;
+    z-index: 1; /* Ensure they are behind content */
+  }
+  
+  .circle-1 { width: 20px; height: 20px; top: 15%; left: 25%; }
+  .circle-2 { width: 15px; height: 15px; bottom: 20%; right: 20%; }
+  .circle-3 { width: 10px; height: 10px; top: 30%; right: 35%; }
+  
+  /* Responsive adjustments */
+  @media (max-width: 767px) {
+    .sale-title {
+      font-size: 3rem;
+    }
+    
+    .special-offer-text {
+      font-size: 1.2rem;
+    }
+    
+    .discount-text {
+      font-size: 1.5rem;
+    }
+    
+    .decorative-element {
+      width: 30px;
+      height: 6px;
+    }
+  } 

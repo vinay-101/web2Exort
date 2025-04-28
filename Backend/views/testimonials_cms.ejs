@@ -58,15 +58,9 @@
                                         <thead>
                                             <tr>
                                                 <th style="width: 20%">
-                                                    Name
-                                                </th>
-                                                <th style="width: 20%">
-                                                    Language
-                                                </th>
-                                                <th style="width: 20%">
                                                     title
                                                 </th>
-                                                <th style="width: 8%" class="text-center">
+                                                <th style="width: 20%" class="">
                                                     Created On
                                                 </th>
                                                 <th style="width: 20%">
@@ -76,20 +70,6 @@
                                         <tbody>
                                             <% testimonial.forEach((value)=>{ %>
                                                 <tr>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            <%= value?.name %>
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            <% if(value?.lang === 'hi'){ %>
-                                                                <%="Hindi" %>
-                                                            <% }else{ %>
-                                                                <%="English" %>
-                                                                <% } %>
-                                                        </span>
                                                     </td>
                                                     <td>
                                                         <span>

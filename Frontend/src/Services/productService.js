@@ -1,4 +1,3 @@
-
 import axiosClient from '../api/axiosClient';
 import AuthService from './authService';
 
@@ -68,6 +67,19 @@ const productService = {
 
     fetchHomeLeads: (type) => axiosClient.get(`/products/home/leads/all?type=${type}`),
 
+    fetchHomeCategory: (id) => axiosClient.get(`/products/home/category/all/${id}`),
+
+    // Fetch micro categories
+    fetchMicroCategories: (categoryId) => 
+        axiosClient.get(`/products/micro-category/${categoryId}`),
+
+    // Fetch products by micro category
+    fetchProductsByMicroCategory: (categoryId, microCategoryId, page = 1, size = 10) =>
+        axiosClient.get(`/products/all/${categoryId}/${microCategoryId}?page=${page}&size=${size}`),
+
+    // Fetch leads by category (for buyer and supplier tabs)
+    fetchLeadsByCategory: (categoryId, type, page = 1, size = 5) =>
+        axiosClient.get(`/products/all/lead/${categoryId}?type=${type}&page=${page}&size=${size}`),
 }
 
 
