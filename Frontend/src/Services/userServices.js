@@ -147,6 +147,48 @@ const userService = {
         Authorization: `Bearer ${AuthService.getAccessToken()}`,
       },
     }),
+
+  // get term condition
+  getTermCondition: () =>
+    axiosClient.get("/admin/term/condition/show", {
+      headers: {
+        Authorization: `Bearer ${AuthService.getAccessToken()}`,
+      },
+    }),
+
+  // Privacy Policy
+  getPrivacyPolicy: () =>
+    axiosClient.get("/admin/privacy-policy/show", {
+      headers: {
+        Authorization: `Bearer ${AuthService.getAccessToken()}`,
+      },
+    }),
+
+  // About Us
+  getAboutUs: () =>
+    axiosClient.get("/admin/about/us/show", {
+      headers: {
+        Authorization: `Bearer ${AuthService.getAccessToken()}`,
+      },
+    }),
+
+  // FAQ
+  getFaq: () =>
+    axiosClient.get("/admin/faq/all", {
+      headers: {
+        Authorization: `Bearer ${AuthService.getAccessToken()}`,
+      },
+    }),
+
+    // Testimonial
+    getTestimonial: () =>
+    axiosClient.get("/admin/testimonial/all", {
+      headers: {
+        Authorization: `Bearer ${AuthService.getAccessToken()}`,
+      },
+    }),
+
+
 };
 
 export default userService;

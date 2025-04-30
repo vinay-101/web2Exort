@@ -101,11 +101,15 @@
                                                     </td>
                                                     <td>
                                                         <span>
-                                                            <% if(about?.about.length > 30){ %>
-                                                                <%- about?.about.substring(0,30) + "..." %>
+                                                            <% if(about?.about?.length > 30){ %>
+                                                                <%- about?.about?.substring(0,30) + "..." %>
                                                                 <% }else{ %>
+                                                                    <% if(about?.about){ %>
                                                                     <%- about?.about %>
+                                                                    <% }else{ %>
+                                                                        <%="N /A" %>
                                                                     <% } %>
+                                                                <% } %>
                                                            
                                                         </span>
                                                     </td>

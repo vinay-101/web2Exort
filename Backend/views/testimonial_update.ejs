@@ -1,75 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("partials/_headerLinks.ejs", {title: 'Update Testimonial' }) %>
+<%- include("partials/_headerLinks.ejs", { title: 'Update Testimonial' }) %>
 
-  <body class="hold-transition sidebar-mini">
-    <!-- Site wrapper -->
-    <div class="wrapper">
-      <!-- Navbar -->
-      <%- include("partials/_headerNavbar.ejs") %>
-        <!-- /.navbar -->
+<head>
+  <style>
+    .media-preview {
+      margin-top: 10px;
+    }
 
-        <!-- Main Sidebar Container -->
-        <%- include("partials/_sidebar.ejs") %>
+    .media-preview img,
+    .media-preview video {
+      max-width: 100%;
+      max-height: 300px;
+    }
 
-          <!-- Content Wrapper. Contains page content -->
-          <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-              <div class="container-fluid">
-                <h3 class="display-5 my-2">Update Testimonial</h3>
-                <form enctype="multipart/form-data" method="POST" action="/admin/testimonial/update/<%=testimonial?.id %>">
-                  <div class="form-group">
-                    <label for="language">Language:</label>
-                    <select class="form-control" id="language" name="lang" required>
-                        <% if(testimonial.lang === 'en') { %>
-                          <option value="en" selected>English</option>
-                        <option value="hi">Hindi</option>
-                        <% }else{ %>
-                        <option value="en">English</option>
-                        <option value="hi"selected>Hindi</option>
-                        <% } %>
-                    </select>
-                </div>
-                  <div class="form-group">
-                    <label for="file">Name</label>
-                    <input type="text" class="form-control" id="name" value="<%=testimonial?.name %>" name="name">
-                  </div>
-                  <div class="form-group">
-                    <label for="file">Title</label>
-                    <input type="text" class="form-control" id="title" value="<%=testimonial?.title %>" name="title">
-                  </div>
-                  <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" id="description" name="text" rows="20"><%=testimonial?.desc %></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label for="file">Image</label>
-                    <input type="file" class="form-control" id="image" name="image">
-                    <img style="margin-top: 10px; width: 200px;" src="http://scanzubackend.dignitech.com/<%=testimonial?.image%>" alt="img">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Update</button>
-                </form>
+    .media-preview video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
 
-              </div><!-- /.container-fluid -->
-            </section>
-          </div>
-          <!-- /.content-wrapper -->
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
 
-          <!-- footer  -->
-          <%- include("partials/_footer.ejs") %>
+    <!-- Navbar -->
+    <%- include("partials/_headerNavbar.ejs") %>
 
-            <!-- Control Sidebar -->
-            <aside class="control-sidebar control-sidebar-dark">
-              <!-- Control sidebar content goes here -->
-            </aside>
-            <!-- /.control-sidebar -->
+    <!-- Sidebar -->
+    <%- include("partials/_sidebar.ejs") %>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <section class="content-header">
+        <div class="container-fluid">
+          <h3 class="display-5 my-2">Update Testimonial</h3>
+
+          <!-- Form -->
+          <form enctype="multipart/form-data" method="POST" action="/admin/testimonial/update/<%= testimonial?.id %>">
+
+            <!-- Title -->
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" class="form-control" id="title" name="title" value="<%= testimonial?.title || '' %>">
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea class="form-control" id="description" name="text" rows="5"><%= testimonial?.desc || '' %></textarea>
+            </div>
+
+            <!-- Media Upload -->
+            <div class="form-group">
+              <label for="media">Media File (Image or Video)</label>
+              <input type="file" class="form-control" id="media" name="image">
+
+              <!-- Preview Existing Media -->
+              <div class="media-preview mt-2">
+                <% 
+                  const imageUrl = testimonial?.image || '';
+                  const isVideo = /\.(mp4|webm|ogg)$/i.test(imageUrl);
+                %>
+
+                <% if (isVideo) { %>
+                  <video controls>
+                    <source src="/<%= imageUrl %>" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                <% } else if (imageUrl) { %>
+                  <img src="/<%= imageUrl %>" alt="Current Media" />
+                <% } else { %>
+                  <p>No media available.</p>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Update</button>
+
+          </form>
+        </div>
+      </section>
     </div>
-    <!-- ./wrapper -->
 
+    <!-- Footer -->
+    <%- include("partials/_footer.ejs") %>
 
-    <%- include("partials/_scripts.ejs") %>
-      <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
-  </body>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+  </div>
 
+  <!-- Scripts -->
+  <%- include("partials/_scripts.ejs") %>
+  <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+
+  <!-- Live Preview Script -->
+  <script>
+    const mediaInput = document.getElementById('media');
+    const previewContainer = document.querySelector('.media-preview');
+
+    mediaInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      previewContainer.innerHTML = '';
+
+      const fileType = file.type.split('/')[0];
+
+      if (fileType === 'image') {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '300px';
+        previewContainer.appendChild(img);
+      } else if (fileType === 'video') {
+        const video = document.createElement('video');
+        video.controls = true;
+        video.style.maxWidth = '100%';
+        video.style.maxHeight = '300px';
+
+        const source = document.createElement('source');
+        source.src = URL.createObjectURL(file);
+        source.type = file.type;
+        video.appendChild(source);
+
+        previewContainer.appendChild(video);
+      } else {
+        const warning = document.createElement('p');
+        warning.textContent = 'Unsupported file type.';
+        warning.style.color = 'red';
+        previewContainer.appendChild(warning);
+      }
+    });
+  </script>
+
+</body>
 </html>

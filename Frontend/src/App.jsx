@@ -23,6 +23,11 @@ import CataloguePage from "./pages/CataloguePage";
 import LeadHome from "./pages/LeadHome";
 import HomePageCategoryListing from "./pages/HomePageCategoryListing";
 import ProductListingByCategory from "./pages/ProductListingByCategory";
+import TermConditionPage from "./pages/TermConditionPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import AboutUsPage from "./pages/AboutUsPage";
+import FaqPage from "./pages/FaqPage";
+import TestimonialsPage from "./pages/TestimonialsPage";
 
 const App = () => {
   return (
@@ -41,6 +46,11 @@ const App = () => {
           <Route path="lead-home" element={<LeadHome/>}/>
           <Route path="categories/:categoryId" element={<HomePageCategoryListing/>}/>
           <Route path="products/:categoryId/:microCategoryId" element={<ProductListingByCategory/>}/>
+          <Route path="term-condition" element={<TermConditionPage/>}/>
+          <Route path="privacy-policy" element={<PrivacyPolicyPage/>}/>
+          <Route path="about-us" element={<AboutUsPage/>}/>
+          <Route path="faq" element={<FaqPage/>}/>
+          <Route path="testimonials" element={<TestimonialsPage/>}/>
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="user/profile" element={<DashboardPage />} />

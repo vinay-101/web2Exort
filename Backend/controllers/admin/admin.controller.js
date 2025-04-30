@@ -26,6 +26,7 @@ const PrivacyPolicy = require("../../models/admin/PrivacyPolicy");
 const Faq = require("../../models/admin/Faq");
 const TestimonialCms = require("../../models/admin/Testimonial");
 const Coupon = require("../../models/Coupon");
+const AboutUs = require("../../models/admin/AboutUs");
 
 const adminPage = async (req, res) => {
   const { admin } = req.cookies;
@@ -2011,6 +2012,16 @@ let PrivacyPolicyList = async (req, res) => {
   }
 };
 
+const PrivacyPolicyView = async(req,res)=>{
+  try{
+    let policy= await PrivacyPolicy.findOne({});
+    policy ? res.status(200).json({status:true, message: "Privacy Policy fetched successfully", data: policy}) : 
+    res.status(404).json({status:false, message: "Privacy Policy not found"});
+  }catch(error){
+    console.log(error);
+    return res.status(500).json({status:false, message: error.message});
+  }
+}
 let termConditionList = async (req, res) => {
   try {
     const { admin } = req.cookies;
@@ -2023,6 +2034,19 @@ let termConditionList = async (req, res) => {
     return res.redirect(req.get("referer"));
   }
 };
+
+const termConditionView = async(req,res)=>{
+  try{
+    let term= await TermCondition.findOne({});
+    
+    term ? res.status(200).json({status:true, message: "Term and Condition fetched successfully", data: term}) : 
+    res.status(404).json({status:false, message: "Term and Condition not found"});
+
+  }catch(error){
+    console.log(error);
+    return res.status(500).json({status:false, message: error.message});
+  }
+}
 
 const showFaqPage = async (req, res) => {
   try {
@@ -2145,6 +2169,17 @@ const updateFaq = async (req, res) => {
     return res.redirect(req.get("referer"));
   }
 };
+
+const faqAll = async(req,res)=>{
+  try{
+    let faq= await Faq.findAll({});
+    faq ? res.status(200).json({status:true, message: "FAQ fetched successfully", data: faq}) : 
+    res.status(404).json({status:false, message: "FAQ not found"});
+  }catch(error){
+    console.log(error);
+    return res.status(500).json({status:false, message: error.message});
+  }
+}
 
 let getBanners = async (req, res) => {
   try {
@@ -2390,6 +2425,17 @@ const updateTestimonial = async (req, res) => {
     return res.redirect(req.get("referer"));
   }
 };
+
+const testimonialAll = async(req,res)=>{
+  try{
+    let testimonial= await TestimonialCms.findAll({});
+    testimonial ? res.status(200).json({status:true, message: "Testimonial fetched successfully", data: testimonial}) : 
+    res.status(404).json({status:false, message: "Testimonial not found"});
+  }catch(error){
+    console.log(error);
+    return res.status(500).json({status:false, message: error.message});
+  }
+}
 
 const createTestimonial = async (req, res) => {
   try {
@@ -3264,6 +3310,17 @@ let showAboutUs = async (req, res) => {
     return res.redirect(req.get("referer"));
   }
 };
+
+const aboutUs = async(req,res)=>{
+  try{
+    let about= await AboutUs.findOne({});
+    about ? res.status(200).json({status:true, message: "About Us fetched successfully", data: about}) : 
+    res.status(404).json({status:false, message: "About Us not found"});
+  }catch(error){
+    console.log(error)
+    return res.status(500).json({status:false, message: error.message});
+  }
+}
 
 let footerList = async (req, res) => {
   try {
@@ -4332,11 +4389,13 @@ module.exports = {
   getPrivacyPolicy,
   getPrivacyAndPolicy,
   PrivacyPolicyList,
+  PrivacyPolicyView,
   termConditionList,
+  termConditionView,
   showFaqPage,
   createFaq,
   faq,
-  allFaq,
+  faqAll,
   deleteFaq,
   viewFaq,
   updateFaq,
@@ -4370,6 +4429,7 @@ module.exports = {
   createSection,
   getSection,
   createTestimonial,
+  testimonialAll,
   createTestimonialHeader,
   getTestimonial,
   createHowItWork,
@@ -4405,6 +4465,7 @@ module.exports = {
   unreadCounters,
   aboutList,
   footerList,
+  aboutUs,
   viewFooter,
   updateFooter,
   userAllQr,

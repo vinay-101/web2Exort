@@ -5,6 +5,7 @@ const { ensureAdmin } = require("../middlewares/admin.middleware");
 const { uploadFiles } = require("../middlewares/uploadFiles.middleware");
 const { uploadMiddleware } = require("../middlewares/upload.middleware");
 const { testimonialUpload } = require("../middlewares/uploadTestimonial.middleware");
+const { howItWorkUpload } = require("../middlewares/uploadHow_it_work.middleware");
 // const { imageUpload } = require("../middlewares/uploadImage.middleware");
 // const { productImages } = require("../middlewares/uploadCoverImage.middleware");
 // const { bannerUpload } = require("../middlewares/uploadBanner.middleware");
@@ -72,21 +73,24 @@ adminRouter.route("/term/condition/:id").post(ensureAdmin,admin_controller.termC
 adminRouter.route("/get/term/condition/:id").get(ensureAdmin,admin_controller.getTermCondition);
 adminRouter.route("/show/term/condition").get(admin_controller.termAndCondition);
 adminRouter.route("/term-condition").get(admin_controller.termConditionList);
+adminRouter.route("/term/condition/show").get(admin_controller.termConditionView); // api for term and condition
 
 // //Privacy Policy
 adminRouter.route("/create/privacy/policy/:id").post(ensureAdmin,admin_controller.privacyPolicy);
 adminRouter.route("/privacy/policy/:id").get(ensureAdmin,admin_controller.getPrivacyPolicy);
 adminRouter.route("/get/privacy/policy").get(admin_controller.getPrivacyAndPolicy);
 adminRouter.route("/privacy-policy").get(admin_controller.PrivacyPolicyList);
+adminRouter.route("/privacy-policy/show").get(admin_controller.PrivacyPolicyView); // api for privacy policy
 
 // //FAQ
 adminRouter.route("/faq/page").get(ensureAdmin,admin_controller.showFaqPage);
 adminRouter.route("/create/faq").post(ensureAdmin,admin_controller.createFaq);
 adminRouter.route("/faq").get(ensureAdmin,admin_controller.faq);
-adminRouter.route("/all/faq").get(admin_controller.allFaq);
+// adminRouter.route("/all/faq").get(admin_controller.allFaq);
 adminRouter.route("/delete/faq/:id").get(ensureAdmin,admin_controller.deleteFaq);
 adminRouter.route("/view/faq/:id").get(ensureAdmin,admin_controller.viewFaq);
 adminRouter.route("/faq/update/:id").post(ensureAdmin,admin_controller.updateFaq);
+adminRouter.route("/faq/all").get(admin_controller.faqAll); // api for all faq
 
 
 // // HOME BANNER
@@ -115,6 +119,7 @@ adminRouter.route("/list/testimonials").get(ensureAdmin,admin_controller.listTes
 adminRouter.route("/delete/testimonial/:id").get(ensureAdmin,admin_controller.deleteTestimonial);
 adminRouter.route("/view/testimonial/:id").get(ensureAdmin,admin_controller.viewTestimonial);
 adminRouter.route("/testimonial/update/:id").post(ensureAdmin,testimonialUpload,admin_controller.updateTestimonial);
+adminRouter.route("/testimonial/all").get(admin_controller.testimonialAll); // api for all testimonial
 
 // // HOW IT WORK
 // adminRouter.route("/show/how-it-work/:id").get(ensureAdmin,admin_controller.showHowItWork);
@@ -167,10 +172,11 @@ adminRouter.route("/testimonial/update/:id").post(ensureAdmin,testimonialUpload,
 // adminRouter.route("/contact-us/delete/:id").get(ensureAdmin,admin_controller.deleteContactUs)
 // adminRouter.route("/view/contact-us/:id").get(ensureAdmin,admin_controller.contactUsView);
 
-// // About us
-// adminRouter.route("/about/list").get(ensureAdmin,admin_controller.aboutList);
-// adminRouter.route("/create/About/us/:id").post(howItWorkUpload, admin_controller.createAboutUs);
-// adminRouter.route("/about-us/:id").get(ensureAdmin,admin_controller.showAboutUs);
+// About us
+adminRouter.route("/about/list").get(ensureAdmin,admin_controller.aboutList);
+adminRouter.route("/create/About/us/:id").post(ensureAdmin, howItWorkUpload ,admin_controller.createAboutUs);
+adminRouter.route("/about-us/:id").get(ensureAdmin,admin_controller.showAboutUs);
+adminRouter.route("/about/us/show").get(admin_controller.aboutUs); // api for all about us
 
 // // FOOTER
 // adminRouter.route("/footer/list").get(ensureAdmin,admin_controller.footerList);
@@ -197,9 +203,9 @@ adminRouter.route("/coupon/all").get(ensureAdmin,admin_controller.couponAll);
 // adminRouter.route("/transaction").get(ensureAdmin,admin_controller.transactionAll);
 
 
-// // CHANGE PASSWORD
-// adminRouter.route("/reset/password").get(ensureAdmin,admin_controller.getChangePassword);
-// adminRouter.route("/reset/password").post(ensureAdmin,admin_controller.resetPassword);
+// CHANGE PASSWORD
+adminRouter.route("/reset/password").get(ensureAdmin,admin_controller.getChangePassword);
+adminRouter.route("/reset/password").post(ensureAdmin,admin_controller.resetPassword);
 
 // Enquiry
 adminRouter.route("/enquiry/all").get(ensureAdmin,admin_controller.enquiryAll);
