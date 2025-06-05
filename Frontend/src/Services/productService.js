@@ -80,6 +80,22 @@ const productService = {
     // Fetch leads by category (for buyer and supplier tabs)
     fetchLeadsByCategory: (categoryId, type, page = 1, size = 5) =>
         axiosClient.get(`/products/all/lead/${categoryId}?type=${type}&page=${page}&size=${size}`),
+        
+    // Fetch banner data
+    fetchBanners: () => axiosClient.get('/admin/banner/all'),
+
+    // Fetch company details
+    fetchCompanyDetails: (slug) => axiosClient.get(`/products/catalogue/company/details/${slug}`, {
+        headers: {
+            Authorization: `Bearer ${AuthService.getAccessToken()}`
+        }
+    }),
+
+    // Fetch all category with subcategories and with micro categories
+    fetchAllCategorySubCategoryMicroCategory: (categoryId) => axiosClient.get(`/products/all/${categoryId}/subcategory/microcategory`),
+
+    // Search micro categories
+    searchMicroCategory: (term) => axiosClient.get(`/products/search/micro-category/${term}`)
 }
 
 

@@ -15,29 +15,38 @@ const SliderAreaMiddleProduct = ({
   
   // Process API data when it changes
   useEffect(() => {
-    console.log("SliderAreaMiddleProduct received data:", data);
     if (data) {
       // Check different possible response structures
       if (data.subCategories) {
-        console.log("Using data.subCategories");
         setSubCategories(data.subCategories);
       } else if (data.SubCategories) {
-        console.log("Using data.SubCategories");
         setSubCategories(data.SubCategories);
       } else {
-        console.log("No subcategories found in data");
         setSubCategories([]);
       }
     }
   }, [data]);
 
-  console.log("Rendering with subCategories:", subCategories);
+  // Helper for image alt text
+  const getAltText = (name) => name ? `${name} category image` : 'Category image';
+
+  // Helper for subcategory name fallback
+  const getSubcatName = (name) => name && name.trim() ? name : 'Unnamed Category';
 
   return (
     <div className="container-fluid product_wrapper mt-4">
-      <h1 className="section-header">{type}</h1>
+      <div className="d-flex flex-column flex-md-row align-items-md-end justify-content-between mb-2">
+        <div>
+          <h1 className="section-header mb-1" aria-label={`${type} categories`}>{type}</h1>
+          <div className="text-muted mb-3" style={{fontSize: '1rem', fontWeight: 400}}>{heading}</div>
+        </div>
+        {/* View All as prominent link on right for desktop */}
+        <div className="d-none d-md-block mb-3 mb-md-0">
+          <Link to={`/categories/${categoryId}`} className="btn btn-view-all" aria-label="View all products in this category">View All</Link>
+        </div>
+      </div>
       {/* Hero Banner */}
-      <div className="hero-section">
+      <section className="hero-section mb-4" aria-label="Category highlight">
         <div className="hero-content">
           <h2 className="hero-title">
             {heading}
@@ -45,10 +54,12 @@ const SliderAreaMiddleProduct = ({
           <p className="hero-text">
             {description}
           </p>
-          <button className="btn btn-view-all">View All</button>
+          {/* View All for mobile */}
+          <div className="d-block d-md-none mt-2">
+            <Link to={`/categories/${categoryId}`} className="btn btn-view-all w-100" aria-label="View all products in this category">View All</Link>
+          </div>
         </div>
-      </div>
-      
+      </section>
       {/* Product Categories */}
       <div className="row">
         {loading ? (
@@ -66,37 +77,37 @@ const SliderAreaMiddleProduct = ({
             <p>No subcategories found for this category.</p>
           </div>
         ) : (
-          subCategories.map((subcat) => {
-            console.log("Rendering subcategory:", subcat);
+          subCategories.map((subcat, idx) => {
             // Check both possible property names
             const downSubCats = subcat.downSubCategories || subcat.DownSubCategories || [];
             return (
-              <div key={subcat.id} className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card">
-                  <div className="card-img-container">
-                    <img style={{width: '100%', height: '100%', objectFit: 'cover', backgroundSize: 'cover', backgroundPosition: 'center'}}
+              <div key={subcat.id || idx} className="col-lg-3 col-md-6 col-sm-6 mb-4 fade-in-card">
+                <div className="card h-100 d-flex flex-column">
+                  <div className="card-img-container" style={{boxShadow: '0 2px 8px rgba(20,103,193,0.08)', borderRadius: '12px', border: '1px solid #e3eaf3'}}>
+                    <img
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform 0.3s' }}
                       src={subcat.image ? `http://localhost:5000/${subcat.image}` : '/images/placeholder.png'}
                       className="card-img-top"
-                      alt={subcat.name}
+                      alt={getAltText(subcat.name)}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = '/images/placeholder.png';
                       }}
                     />
                   </div>
-                  <div className="card-body">
-                    <h5 className="card-title">{subcat.name}</h5>
+                  <div className="card-body d-flex flex-column justify-content-between">
+                    <h5 className="card-title">{getSubcatName(subcat.name)}</h5>
                     <p className="category-items">
-                      {downSubCats.length > 0 
+                      {downSubCats.length > 0
                         ? downSubCats.slice(0, 5).map(item => item.name).join(', ')
                         : 'No items available'}
                       {downSubCats.length > 5 && '...'}
                     </p>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <Link to={`categories/${subcat.categoryId}`} className="see-more-link">
+                    <div className="d-flex justify-content-between align-items-center mt-auto">
+                      <Link to={`categories/${subcat.categoryId}`} className="see-more-link" aria-label={`See more in ${getSubcatName(subcat.name)}`}>
                         See More
                       </Link>
-                      <i className="fa fa-arrow-right icon-arrow" />
+                      <i className="fa fa-arrow-right icon-arrow" aria-hidden="true" />
                     </div>
                   </div>
                 </div>

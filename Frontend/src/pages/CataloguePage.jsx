@@ -7,7 +7,7 @@ const CataloguePage = () => {
   return (
     <div>
       <TopHeader/>
-      <Navbar/>
+      {/* <Navbar/> */}
       <Catalogue/>
     </div>
   )

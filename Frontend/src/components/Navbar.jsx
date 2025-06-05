@@ -88,10 +88,10 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-      <div className="header-auth">
+      {/* <div className="header-auth">
         <Link to="/signup" className="mr-2">{t('auth.signup')}</Link>
         <Link to="/login">{t('auth.login')}</Link>
-      </div>
+      </div> */}
     </div>
   );
 };

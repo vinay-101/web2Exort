@@ -45,8 +45,8 @@ const HomePageCategoryListing = () => {
   return (
     <>
       <TopHeader />
-      <Navbar />
-      <HomeMicroCategoryListing />
+      {/* <Navbar /> */}
+      <HomeMicroCategoryListing/>
       <Footer/>
     </>
   )

@@ -94,47 +94,48 @@ const Home = () => {
   
   return (
     <>
-      {/* <Navbar /> */}
-      {/* <SliderAreaTop /> */}
       <EnquiryReloadHome />
       <SaleModal />
-      <TopArea/>
-      <CategorySlider />
-      <LeadSlider />
-      
-      {/* Category Selector */}
-      <div className="container-fluid mt-4">
-        <div className="row">
-          <div className="col-12">
-            {loading && <p>Loading categories...</p>}
-            {error && <div className="alert alert-danger">{error}</div>}
-            {!loading && !error && categories.length > 0 && (
-              <CategorySelector 
-                categories={categories} 
-                selectedCategoryId={selectedCategory?.id} 
-                onSelectCategory={handleCategorySelect} 
-              />
-            )}
+      <div className="home-container" style={{ width: '100%', overflow: 'hidden', margin: 0, padding: 0, fontSize: 0 }}>
+        <TopArea/>
+        <div style={{ fontSize: '1rem' }}>
+          <CategorySlider />
+          <LeadSlider />
+          
+          {/* Category Selector */}
+          <div className="container-fluid mt-4">
+            <div className="row">
+              <div className="col-12">
+                {loading && <p>Loading categories...</p>}
+                {error && <div className="alert alert-danger">{error}</div>}
+                {!loading && !error && categories.length > 0 && (
+                  <CategorySelector 
+                    categories={categories} 
+                    selectedCategoryId={selectedCategory?.id} 
+                    onSelectCategory={handleCategorySelect} 
+                  />
+                )}
+              </div>
+            </div>
           </div>
+          
+          {/* Single Product Category Component */}
+          {selectedCategory && (
+            <SliderAreaMiddleProduct 
+              type={selectedCategory.name}
+              categoryId={selectedCategory.id}
+              heading={selectedCategory.heading || `Discover premium ${selectedCategory.name} products`}
+              description={selectedCategory.description || `Browse our selection of high-quality ${selectedCategory.name} products from verified suppliers`}
+              data={categoryProducts}
+              loading={loading}
+              error={error}
+            />
+          )}
+          {/* <Testimonial /> */}
+          {/* <BrandPartner /> */}
+          <Footer />
         </div>
       </div>
-      
-      {/* Single Product Category Component */}
-      {selectedCategory && (
-        <SliderAreaMiddleProduct 
-          type={selectedCategory.name}
-          categoryId={selectedCategory.id}
-          heading={selectedCategory.heading || `Discover premium ${selectedCategory.name} products`}
-          description={selectedCategory.description || `Browse our selection of high-quality ${selectedCategory.name} products from verified suppliers`}
-          data={categoryProducts}
-          loading={loading}
-          error={error}
-        />
-      )}
-      {/* <SliderAreaDownProductOne /> */}
-      <Testimonial />
-      <BrandPartner />
-      <Footer />
     </>
   );
 };

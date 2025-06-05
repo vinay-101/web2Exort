@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
 import productService from '../Services/productService';
+import userService from '../Services/userServices';
 
 const ProductListingByCategory = () => {
   const { categoryId, microCategoryId } = useParams();
@@ -32,6 +33,18 @@ const ProductListingByCategory = () => {
   const [buyerLeadsError, setBuyerLeadsError] = useState(null);
   const [sellerLeadsError, setSellerLeadsError] = useState(null);
   const [activeTab, setActiveTab] = useState('product');
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [enquiryForm, setEnquiryForm] = useState({
+    requirement: '',
+    fullname: '',
+    email: '',
+    phoneNumber: '',
+    companyName: '',
+    userType: 'Seller'
+  });
+  const [loadingEnquiry, setLoadingEnquiry] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   // Fetch category information for breadcrumbs
   useEffect(() => {
@@ -195,10 +208,54 @@ const ProductListingByCategory = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  // Handle enquiry form input changes
+  const handleEnquiryInputChange = (e) => {
+    const { name, value } = e.target;
+    setEnquiryForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle enquiry form submission
+  const handleEnquirySubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoadingEnquiry(true);
+      setError(null);
+      const response = await userService.createEnquiry(enquiryForm);
+      if (response.data && response.data.success) {
+        setSuccessMessage('Enquiry submitted successfully!');
+        setShowEnquiryModal(false);
+        // Reset form
+        setEnquiryForm({
+          requirement: '',
+          fullname: '',
+          email: '',
+          phoneNumber: '',
+          companyName: '',
+          userType: 'Seller'
+        });
+      } else {
+        setError('Failed to submit enquiry. Please try again.');
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || 'An error occurred while submitting the enquiry');
+    } finally {
+      setLoadingEnquiry(false);
+    }
+  };
+
+  // Function to open modal with product details
+  const handleContactClick = (product) => {
+    setSelectedProduct(product);
+    setShowEnquiryModal(true);
+  };
+
   return (
     <>
       <TopHeader />
-      <Navbar />
+      {/* <Navbar /> */}
       
       <>
   <meta charSet="UTF-8" />
@@ -216,60 +273,463 @@ const ProductListingByCategory = () => {
   />
   <style
     dangerouslySetInnerHTML={{
-      __html:
-        "\n        :root {\n            --primary-color: #3498db;\n            --secondary-color: #f8f9fa;\n            --accent-color: #e74c3c;\n            --text-color: #333;\n            --light-text: #6c757d;\n            --border-color: #e0e0e0;\n        }\n        \n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            color: var(--text-color);\n            background-color: #f5f7fa;\n            padding-top: 20px;\n        }\n        \n        .product-header {\n            background-color: white;\n            padding: 15px 0;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.05);\n            margin-bottom: 30px;\n            border-radius: 8px;\n        }\n        \n        .content-container {\n            max-width: 900px;\n            margin: 0 auto;\n            padding: 0 15px;\n        }\n        \n        .nav-tabs {\n            margin-bottom: 20px;\n        }\n        \n        .nav-tabs .nav-link {\n            color: var(--light-text);\n            font-weight: 500;\n            border: none;\n            border-bottom: 2px solid transparent;\n            padding: 10px 20px;\n        }\n        \n        .nav-tabs .nav-link.active {\n            color: var(--primary-color);\n            border-bottom-color: var(--primary-color);\n            background: none;\n        }\n        \n        .product-card {\n            background: white;\n            border-radius: 8px;\n            box-shadow: 0 4px 12px rgba(0,0,0,0.05);\n            margin-bottom: 25px;\n            transition: transform 0.3s ease, box-shadow 0.3s ease;\n            overflow: hidden;\n            display: flex;\n            flex-direction: column;\n        }\n        \n        .product-card:hover {\n            transform: translateY(-5px);\n            box-shadow: 0 8px 20px rgba(0,0,0,0.1);\n        }\n        \n        .product-image {\n            height: 180px;\n            background-color: #f8f9fa;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: var(--light-text);\n            border-top-left-radius: 8px;\n            border-top-right-radius: 8px;\n        }\n        \n        .product-title {\n            font-weight: 600;\n            color: var(--primary-color);\n            margin-bottom: 10px;\n            font-size: 1.2rem;\n        }\n        \n        .product-details {\n            padding: 20px;\n            flex-grow: 1;\n        }\n        \n        .product-meta {\n            font-size: 0.9rem;\n            color: var(--light-text);\n            margin-bottom: 15px;\n            display: none;\n        }\n        \n        .product-meta span {\n            margin-right: 15px;\n        }\n        \n        .product-meta i {\n            margin-right: 5px;\n            width: 16px;\n            text-align: center;\n        }\n        \n        .supplier-info {\n            border-top: 1px solid var(--border-color);\n            padding: 15px 20px;\n            background-color: var(--secondary-color);\n            border-bottom-left-radius: 8px;\n            border-bottom-right-radius: 8px;\n        }\n        \n        .supplier-name {\n            font-weight: 600;\n            margin-bottom: 5px;\n            font-size: 1.1rem;\n        }\n        \n        .badge-tag {\n            background-color: #e8f4fd;\n            color: var(--primary-color);\n            padding: 5px 10px;\n            border-radius: 4px;\n            font-size: 0.8rem;\n            margin-right: 8px;\n            margin-bottom: 8px;\n            display: inline-block;\n        }\n        \n        .show-more {\n            color: var(--primary-color);\n            font-size: 0.9rem;\n            cursor: pointer;\n            text-decoration: underline;\n        }\n        \n        .member-badge {\n            font-size: 0.8rem;\n            padding: 3px 8px;\n            background-color: #e0e0e0;\n            color: var(--light-text);\n            border-radius: 4px;\n        }\n        \n        .btn-contact {\n            background-color: var(--primary-color);\n            color: white;\n            border-radius: 4px;\n            font-weight: 500;\n            padding: 8px 20px;\n            transition: all 0.3s;\n            font-size: 0.9rem;\n        }\n        \n        .btn-contact:hover {\n            background-color: #2980b9;\n            transform: translateY(-2px);\n            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);\n        }\n        \n        .pagination {\n            justify-content: center;\n            margin-top: 20px;\n        }\n\n        .search-container {\n            background-color: white;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.05);\n            margin-bottom: 20px;\n        }\n\n        .search-input {\n            border-radius: 30px;\n            padding: 10px 20px;\n            border: 1px solid var(--border-color);\n            box-shadow: none;\n            transition: all 0.3s;\n        }\n\n        .search-input:focus {\n            border-color: var(--primary-color);\n            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);\n        }\n\n        .search-btn {\n            border-radius: 30px;\n            padding: 10px 20px;\n            background-color: var(--primary-color);\n            border: none;\n            color: white;\n            transition: all 0.3s;\n        }\n\n        .search-btn:hover {\n            background-color: #2980b9;\n            transform: translateY(-2px);\n        }\n\n        .lead-card {\n            background: white;\n            border-radius: 8px;\n            padding: 16px;\n            margin-bottom: 16px;\n            box-shadow: 0 2px 8px rgba(0,0,0,0.05);\n            transition: all 0.3s ease;\n        }\n\n        .lead-card:hover {\n            transform: translateY(-3px);\n            box-shadow: 0 6px 15px rgba(0,0,0,0.1);\n        }\n\n        .lead-title {\n            font-weight: 600;\n            font-size: 1.1rem;\n            margin-bottom: 8px;\n            color: var(--primary-color);\n        }\n\n        .lead-meta {\n            display: flex;\n            justify-content: space-between;\n            margin-bottom: 12px;\n            font-size: 0.85rem;\n            color: var(--light-text);\n        }\n\n        .lead-country {\n            display: inline-flex;\n            align-items: center;\n        }\n\n        .lead-country i {\n            margin-right: 5px;\n        }\n\n        .lead-date {\n            display: inline-flex;\n            align-items: center;\n        }\n\n        .lead-date i {\n            margin-right: 5px;\n        }\n\n        .lead-action {\n            text-align: right;\n            margin-top: 10px;\n        }\n\n        .empty-message {\n            text-align: center;\n            padding: 30px 20px;\n            background: white;\n            border-radius: 8px;\n            box-shadow: 0 2px 8px rgba(0,0,0,0.05);\n        }\n\n        .empty-message i {\n            font-size: 3rem;\n            color: #e0e0e0;\n            margin-bottom: 15px;\n            display: block;\n        }\n    "
+      __html: `
+        :root {
+          --primary-color: #3498db;
+          --secondary-color: #f8f9fa;
+          --accent-color: #e74c3c;
+          --text-color: #333;
+          --light-text: #6c757d;
+          --border-color: #e0e0e0;
+        }
+        
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          color: var(--text-color);
+          background-color: #f5f7fa;
+          padding-top: 20px;
+        }
+        
+        .product-header {
+          background-color: white;
+          padding: 15px 0;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+          margin-bottom: 30px;
+          border-radius: 8px;
+        }
+        
+        .content-container {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 0 15px;
+        }
+        
+        .nav-tabs {
+          margin-bottom: 20px;
+        }
+        
+        .nav-tabs .nav-link {
+          color: var(--light-text);
+          font-weight: 500;
+          border: none;
+          border-bottom: 2px solid transparent;
+          padding: 10px 20px;
+        }
+        
+        .nav-tabs .nav-link.active {
+          color: var(--primary-color);
+          border-bottom-color: var(--primary-color);
+          background: none;
+        }
+        
+        .product-card {
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+          margin-bottom: 20px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #eee;
+        }
+        
+        .product-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        
+        .product-image {
+          height: 220px;
+          background-color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 15px;
+          position: relative;
+          border-bottom: 1px solid #eee;
+        }
+        
+        .product-image img {
+          max-height: 100%;
+          max-width: 100%;
+          object-fit: contain;
+          transition: transform 0.3s ease;
+        }
+        
+        .product-image:hover img {
+          transform: scale(1.05);
+        }
+        
+        .product-title {
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 10px;
+          font-size: 1.1rem;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .product-details {
+          padding: 15px;
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .badge-tag {
+          background-color: #f8f9fa;
+          color: #666;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 0.85rem;
+          margin-right: 6px;
+          margin-bottom: 6px;
+          display: inline-block;
+          border: 1px solid #e0e0e0;
+        }
+        
+        .badge-tag i {
+          color: #999;
+          margin-right: 4px;
+        }
+        
+        .supplier-info {
+          border-top: 1px solid #eee;
+          padding: 12px 15px;
+          background-color: #fcfcfc;
+        }
+        
+        .supplier-name {
+          font-weight: 500;
+          margin-bottom: 4px;
+          font-size: 1rem;
+          color: #444;
+        }
+        
+        .btn-contact {
+          background-color: #2979ff;
+          color: white;
+          border-radius: 4px;
+          font-weight: 500;
+          padding: 6px 16px;
+          transition: all 0.2s;
+          font-size: 0.9rem;
+          border: none;
+        }
+        
+        .btn-contact:hover {
+          background-color: #2962ff;
+          color: white;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(41, 121, 255, 0.3);
+        }
+        
+        .product-list {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 20px;
+          margin-bottom: 30px;
+        }
+        
+        .product-meta {
+          margin-top: auto;
+          padding-top: 10px;
+        }
+        
+        .price-tag {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2979ff;
+          margin-bottom: 8px;
+        }
+        
+        .moq-tag {
+          font-size: 0.85rem;
+          color: #666;
+          margin-bottom: 12px;
+        }
+        
+        .pagination {
+          justify-content: center;
+          margin-top: 20px;
+        }
+
+        .header-actions {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .search-container {
+          background-color: transparent;
+          padding: 0;
+          border-radius: 0;
+          box-shadow: none;
+          margin-bottom: 0;
+          display: flex;
+          align-items: center;
+        }
+
+        .search-input {
+          border-radius: 4px;
+          padding: 10px 12px;
+          border: 1px solid var(--border-color);
+          box-shadow: none;
+          transition: all 0.3s;
+          background-color: transparent;
+          height: 36px;
+        }
+
+        .search-btn {
+          height: 36px;
+          display: flex;
+          align-items: center;
+          padding: 0 15px;
+          margin-left: 10px;
+        }
+
+        .nav-tabs {
+          margin-top: 20px;
+        }
+
+        .product-header .container {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .product-header .row {
+          width: 100%;
+          margin: 0;
+        }
+
+        .breadcrumb {
+          margin: 0;
+          padding: 0;
+          background: transparent;
+        }
+
+        .lead-card {
+          background: white;
+          border-radius: 8px;
+          padding: 16px;
+          margin-bottom: 16px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+          transition: all 0.3s ease;
+        }
+
+        .lead-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .lead-title {
+          font-weight: 600;
+          font-size: 1.1rem;
+          margin-bottom: 8px;
+          color: var(--primary-color);
+        }
+
+        .lead-meta {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 12px;
+          font-size: 0.85rem;
+          color: var(--light-text);
+        }
+
+        .lead-country {
+          display: inline-flex;
+          align-items: center;
+        }
+
+        .lead-country i {
+          margin-right: 5px;
+        }
+
+        .lead-date {
+          display: inline-flex;
+          align-items: center;
+        }
+
+        .lead-date i {
+          margin-right: 5px;
+        }
+
+        .lead-action {
+          text-align: right;
+          margin-top: 10px;
+        }
+
+        .empty-message {
+          text-align: center;
+          padding: 30px 20px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .empty-message i {
+          font-size: 3rem;
+          color: #e0e0e0;
+          margin-bottom: 15px;
+          display: block;
+        }
+
+        /* Enquiry Modal Styles */
+        .modal-content {
+          border: none;
+          border-radius: 8px;
+          box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+          border-bottom: 1px solid #eee;
+          padding: 1rem 1.5rem;
+          background-color: #fff;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+
+        .modal-title {
+          font-weight: 600;
+          color: #333;
+          font-size: 1.25rem;
+        }
+
+        .modal-body {
+          padding: 1.5rem;
+        }
+
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-control {
+          border: 1px solid #e0e0e0;
+          border-radius: 4px;
+          padding: 0.75rem 1rem;
+          font-size: 0.95rem;
+          transition: all 0.2s;
+        }
+
+        .form-control:focus {
+          border-color: #2979ff;
+          box-shadow: 0 0 0 0.2rem rgba(41, 121, 255, 0.15);
+        }
+
+        .form-control::placeholder {
+          color: #999;
+        }
+
+        .btn-primary {
+          background-color: #2979ff;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          font-weight: 500;
+          transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+          background-color: #2962ff;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(41, 121, 255, 0.3);
+        }
+
+        .btn-primary:disabled {
+          background-color: #2979ff;
+          opacity: 0.7;
+        }
+
+        .close {
+          font-size: 1.5rem;
+          color: #666;
+          opacity: 0.7;
+          transition: opacity 0.2s;
+        }
+
+        .close:hover {
+          opacity: 1;
+        }
+
+        .alert {
+          border-radius: 4px;
+          padding: 0.75rem 1rem;
+          margin-bottom: 1rem;
+          border: none;
+        }
+
+        .alert-success {
+          background-color: #e8f5e9;
+          color: #2e7d32;
+        }
+
+        .alert-danger {
+          background-color: #ffebee;
+          color: #c62828;
+        }
+
+        .modal-backdrop.show {
+          opacity: 0.5;
+        }
+
+        @media (max-width: 576px) {
+          .modal-dialog {
+            margin: 1rem;
+          }
+        }
+      `
     }}
   />
   <header className="product-header">
     <div className="container">
       <div className="row align-items-center">
         <div className="col-md-6">
-          {/* <h2 className="mb-0">Products Marketplace</h2> */}
+          <h4 className="mb-0">{categoryInfo.microCategoryName || 'Products'}</h4>
         </div>
-        <div className="col-md-6 text-right">
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb justify-content-end mb-0 bg-transparent">
-              <li className="breadcrumb-item">
-                <a href="/">Home</a>
-              </li>
-              <li className="breadcrumb-item">
-                <a href={`/categories/${categoryId}`}>{categoryInfo.categoryName || 'Categories'}</a>
-              </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                {categoryInfo.microCategoryName || 'Products'}
-              </li>
-            </ol>
-          </nav>
+        <div className="col-md-6">
+          <div className="d-flex align-items-center justify-content-end">
+            <div className="search-container">
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control search-input"
+                  placeholder="Search products by name, supplier, type..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+                <div className="input-group-append">
+                  <button className="btn btn-primary search-btn" type="button">
+                    <i className="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <nav aria-label="breadcrumb">
+              <ol className="breadcrumb justify-content-end mb-0 bg-transparent">
+                <li className="breadcrumb-item">
+                  <a href="/">Home</a>
+                </li>
+                <li className="breadcrumb-item">
+                  <a href={`/categories/${categoryId}`}>{categoryInfo.categoryName || 'Categories'}</a>
+                </li>
+                <li className="breadcrumb-item active" aria-current="page">
+                  {categoryInfo.microCategoryName || 'Products'}
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
   </header>
   <div className="content-container">
-    {/* Search box - only show on products tab */}
-    {activeTab === 'product' && (
-      <div className="search-container">
-        <div className="row">
-          <div className="col-md-12">
-            <h4 className="mb-3">{categoryInfo.microCategoryName || 'Products'}</h4>
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control search-input"
-                placeholder="Search products by name, supplier, type..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <div className="input-group-append">
-                <button className="btn search-btn" type="button">
-                  <i className="fas fa-search mr-2"></i>Search
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )}
-
+    {/* Tabs navigation */}
     <ul className="nav nav-tabs" id="myTab" role="tablist">
       <li className="nav-item">
         <a
@@ -345,64 +805,146 @@ const ProductListingByCategory = () => {
                 </small>
               </div>
             )}
-            <div className="product-list">
+            <div className="product-list" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '20px',
+              marginBottom: '30px'
+            }}>
               {filteredProducts.map((product) => (
-                <div className="product-card" key={product.id}>
-                  <div className="product-image">
-                    {product.ProductImages && product.ProductImages.length > 0 ? (
+                <div className="product-card" style={{
+                  background: 'white',
+                  borderRadius: '8px',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                  border: '1px solid #eee',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                }} key={product.id}>
+                  <div style={{
+                    height: '220px',
+                    backgroundColor: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '15px',
+                    borderBottom: '1px solid #eee'
+                  }}>
+                    {product.productImages && product.productImages.length > 0 ? (
                       <img 
-                        src={`http://localhost:5000/${product.ProductImages[0].image}`} 
-                        alt={product.title} 
-                        style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+                        src={`http://localhost:5000/${product.productImages[0].image}`}
+                        alt={product.title}
+                        style={{
+                          maxHeight: '100%',
+                          maxWidth: '100%',
+                          objectFit: 'contain',
+                          transition: 'transform 0.3s ease'
+                        }}
                       />
                     ) : (
-                      <i className="fas fa-box fa-4x" />
+                      <i className="fas fa-box fa-3x text-muted" />
                     )}
                   </div>
-                  <div className="product-details">
-                    <h4 className="product-title">{product.title}</h4>
-                    <div className="mb-3">
+                  <div style={{padding: '15px', flexGrow: 1}}>
+                    <h4 style={{
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      color: '#333',
+                      marginBottom: '10px',
+                      lineHeight: 1.4,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}>{product.title}</h4>
+                    
+                    <div style={{
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      color: '#2979ff',
+                      marginBottom: '8px'
+                    }}>
+                      Rs {product.price ? product.price.toFixed(2) : '0.00'} / {product.unitType || 'piece'}
+                    </div>
+                    
+                    {product.minQuantity && (
+                      <div style={{fontSize: '0.85rem', color: '#666', marginBottom: '12px'}}>
+                        MOQ: {product.minQuantity} {product.unitType || 'pieces'}
+                      </div>
+                    )}
+                    
+                    <div style={{marginTop: 'auto', paddingTop: '10px'}}>
                       {product.packageQuantity && product.packageUnit && (
-                        <span className="badge-tag">
-                          <i className="fas fa-box-open" /> {product.packageQuantity} {product.packageUnit}
+                        <span className="badge-tag" style={{
+                          backgroundColor: '#f8f9fa',
+                          color: '#666',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          fontSize: '0.85rem',
+                          marginRight: '6px',
+                          marginBottom: '6px',
+                          display: 'inline-block',
+                          border: '1px solid #e0e0e0'
+                        }}>
+                          <i className="fas fa-box-open" style={{color: '#999', marginRight: '4px'}}></i>
+                          {product.packageQuantity} {product.packageUnit}
                         </span>
                       )}
                       {product.User && product.User.country && (
-                        <span className="badge-tag">
-                          <i className="fas fa-map-marker-alt" /> {product.User.country}
-                        </span>
-                      )}
-                      {product.minQuantity && (
-                        <span className="badge-tag">
-                          <i className="fas fa-cubes" /> MOQ: {product.minQuantity} {product.unitType || 'pieces'}
-                        </span>
-                      )}
-                      {product.price && (
-                        <span className="badge-tag">
-                          <i className="fas fa-tag" /> ${product.price}
+                        <span className="badge-tag" style={{
+                          backgroundColor: '#f8f9fa',
+                          color: '#666',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          fontSize: '0.85rem',
+                          marginRight: '6px',
+                          marginBottom: '6px',
+                          display: 'inline-block',
+                          border: '1px solid #e0e0e0'
+                        }}>
+                          <i className="fas fa-map-marker-alt" style={{color: '#999', marginRight: '4px'}}></i>
+                          {product.User.country}
                         </span>
                       )}
                     </div>
-                    <p className="show-more">
-                      <i className="fas fa-chevron-down" /> Show more details
-                    </p>
                   </div>
-                  <div className="supplier-info">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
+                  <div style={{
+                    borderTop: '1px solid #eee',
+                    padding: '12px 15px',
+                    backgroundColor: '#fcfcfc'
+                  }}>
+                    <div className="d-flex justify-content-between align-items-center">
                       <div>
-                        <h5 className="supplier-name mb-0">
+                        <h5 style={{
+                          fontWeight: 500,
+                          marginBottom: '4px',
+                          fontSize: '1rem',
+                          color: '#444'
+                        }}>
                           {product.User ? product.User.company : 'Unknown Supplier'}
                         </h5>
                         <small className="text-muted">
-                          <i className="fas fa-map-marker-alt" /> {product.User ? product.User.country : 'Unknown Location'}
+                          <i className="fas fa-shield-alt"></i> Verified Supplier
                         </small>
                       </div>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span className="badge-tag">
-                        <i className="fas fa-store" /> {product.businessType || 'Distributor | Wholesaler'}
-                      </span>
-                      <button className="btn btn-contact btn-sm">Contact Now</button>
+                      {/* import modal for enquiry */}
+                      <button 
+                        className="btn" 
+                        style={{
+                          backgroundColor: '#2979ff',
+                          color: 'white',
+                          borderRadius: '4px',
+                          fontWeight: 500,
+                          padding: '6px 16px',
+                          fontSize: '0.9rem',
+                          border: 'none',
+                          transition: 'all 0.2s'
+                        }}
+                        onClick={() => handleContactClick(product)}
+                      >
+                        Contact
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -572,6 +1114,221 @@ const ProductListingByCategory = () => {
 
       
       <Footer />
+
+      {/* Enquiry Modal */}
+      <div className={`modal fade ${showEnquiryModal ? 'show' : ''}`} 
+           style={{ 
+             display: showEnquiryModal ? 'block' : 'none',
+             backgroundColor: 'rgba(0,0,0,0.5)'
+           }}
+           tabIndex="-1" 
+           role="dialog"
+           aria-labelledby="enquiryModalLabel"
+           aria-hidden="true">
+        <div className="modal-dialog" style={{ 
+          margin: '1.75rem auto',
+          maxWidth: '400px',
+          width: '95%'
+        }}>
+          <div className="modal-content" style={{ 
+            border: 'none',
+            borderRadius: '8px',
+            boxShadow: '0 2px 20px rgba(0,0,0,0.1)'
+          }}>
+            <div className="modal-header" style={{
+              borderBottom: '1px solid #eee',
+              padding: '1rem 1.5rem',
+              backgroundColor: '#fff',
+              borderTopLeftRadius: '8px',
+              borderTopRightRadius: '8px'
+            }}>
+              <h5 className="modal-title" style={{
+                fontWeight: 600,
+                color: '#333',
+                fontSize: '1.25rem'
+              }}>Post Enquiry</h5>
+              <button type="button" 
+                      className="close" 
+                      onClick={() => setShowEnquiryModal(false)}
+                      style={{
+                        fontSize: '1.5rem',
+                        color: '#666',
+                        opacity: 0.7,
+                        border: 'none',
+                        background: 'none',
+                        padding: '0',
+                        cursor: 'pointer'
+                      }}
+                      aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body" style={{ padding: '1.5rem' }}>
+              {error && (
+                <div style={{
+                  backgroundColor: '#ffebee',
+                  color: '#c62828',
+                  padding: '0.75rem 1rem',
+                  marginBottom: '1rem',
+                  borderRadius: '4px'
+                }} role="alert">
+                  {error}
+                </div>
+              )}
+              {successMessage && (
+                <div style={{
+                  backgroundColor: '#e8f5e9',
+                  color: '#2e7d32',
+                  padding: '0.75rem 1rem',
+                  marginBottom: '1rem',
+                  borderRadius: '4px'
+                }} role="alert">
+                  {successMessage}
+                </div>
+              )}
+              <form onSubmit={handleEnquirySubmit}>
+                <div style={{ marginBottom: '1rem' }}>
+                  <input
+                    type="text"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.95rem',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '4px',
+                      transition: 'all 0.2s'
+                    }}
+                    placeholder="Enter Requirement"
+                    name="requirement"
+                    value={enquiryForm.requirement}
+                    onChange={handleEnquiryInputChange}
+                    required
+                  />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <input
+                    type="text"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.95rem',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '4px',
+                      transition: 'all 0.2s'
+                    }}
+                    placeholder="Full Name"
+                    name="fullname"
+                    value={enquiryForm.fullname}
+                    onChange={handleEnquiryInputChange}
+                    required
+                  />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <input
+                    type="email"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.95rem',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '4px',
+                      transition: 'all 0.2s'
+                    }}
+                    placeholder="name@company.com"
+                    name="email"
+                    value={enquiryForm.email}
+                    onChange={handleEnquiryInputChange}
+                    required
+                  />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <input
+                    type="tel"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.95rem',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '4px',
+                      transition: 'all 0.2s'
+                    }}
+                    placeholder="Phone No"
+                    name="phoneNumber"
+                    value={enquiryForm.phoneNo}
+                    onChange={handleEnquiryInputChange}
+                    required
+                  />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <input
+                    type="text"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.95rem',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '4px',
+                      transition: 'all 0.2s'
+                    }}
+                    placeholder="Company Name"
+                    name="companyName"
+                    value={enquiryForm.companyName}
+                    onChange={handleEnquiryInputChange}
+                    required
+                  />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <select
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.95rem',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '4px',
+                      transition: 'all 0.2s',
+                      backgroundColor: '#fff'
+                    }}
+                    name="userType"
+                    value={enquiryForm.type}
+                    onChange={handleEnquiryInputChange}
+                    required
+                  >
+                    <option value="Seller">Seller</option>
+                    <option value="Buyer">Buyer</option>
+                  </select>
+                </div>
+                <button 
+                  type="submit" 
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#2979ff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.95rem',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  disabled={loadingEnquiry}
+                >
+                  {loadingEnquiry ? (
+                    <span>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      {' '}Submitting...
+                    </span>
+                  ) : 'Submit'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal backdrop */}
+      {showEnquiryModal && (
+        <div className="modal-backdrop fade show"></div>
+      )}
     </>
   );
 };

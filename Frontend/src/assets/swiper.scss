@@ -1,78 +1,226 @@
 .mySwiper {
-    width: 100%;
-    padding: 20px 0;
-    --swiper-navigation-color: #007bff;
-    --swiper-navigation-size: 40px;
+  width: 100% !important;
+  padding: 20px 0;
+  --swiper-navigation-color: #007bff;
+  --swiper-navigation-size: 40px;
+  margin: 0 !important;
+}
+
+.category-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100% !important;
+  height: 100%;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100% !important;
+  margin: 0 auto;
+  height: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
   
-  .category-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
+  img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+    border-radius: 6px;
   }
   
-  .category-card {
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 20px 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 120px; /* Fixed minimum height */
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.category-label {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  width: 100%;
+}
+
+.category-slider-section {
+  padding: 30px 0;
+  background-color: #f8f9fa;
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
   }
   
-  .category-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    background: #f8f9fa;
-  }
-  
-  .category-icon {
-    font-size: 2.5rem;
-    color: #007bff;
+  .section-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
     margin-bottom: 10px;
-    transition: color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
   
-  .category-card:hover .category-icon {
-    color: #0056b3;
+  .section-underline {
+    height: 3px;
+    width: 80px;
+    background-color: #007bff;
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+  
+  .row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0;
+  }
+  
+  .col-lg-2 {
+    @media (min-width: 992px) {
+      flex: 0 0 16.666%;
+      max-width: 16.666%;
+      padding: 0 8px;
+    }
+  }
+}
+
+.category-swiper {
+  padding: 0 65px;
+  position: relative;
+  overflow: visible !important;
+  
+  .swiper-button-next {
+    right: 10px;
+  }
+  
+  .swiper-button-prev {
+    left: 10px;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    margin-top: 0;
+    
+    &:after {
+      font-size: 18px;
+    }
+  }
+}
+
+/* Ensure swiper navigation buttons are visible */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #333 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .category-card {
+    padding: 12px;
+    
+    img {
+      width: 70px;
+      height: 70px;
+      border-radius: 6px;
+    }
+  }
+  
+  .section-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-card {
+    padding: 10px;
+    
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+    }
   }
   
   .category-label {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #333;
-    text-align: center;
-    word-break: break-word;
+    font-size: 20px !important;
   }
   
-  /* Ensure swiper navigation buttons are visible */
-  .swiper-button-next,
-  .swiper-button-prev {
-    color: #007bff !important;
+  .section-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .category-card {
+    padding: 8px;
+    
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+    }
   }
   
-  /* Responsive adjustments */
+  .category-label {
+    font-size: 12px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+  
+  .section-underline {
+    width: 60px;
+  }
+}
+
+// Fix for swiper container
+swiper-container {
+  overflow: visible !important;
+  width: 100% !important;
+  display: block;
+}
+
+swiper-slide {
+  padding: 0 10px;
+  width: 100% !important;
+}
+
+.container-fluid {
+  width: 100%;
+  padding-right: 80px;
+  padding-left: 80px;
+  margin-right: auto;
+  margin-left: auto;
+  
   @media (max-width: 768px) {
-    .category-card {
-      padding: 15px 10px;
-      min-height: 100px;
-    }
-  
-    .category-icon {
-      font-size: 2rem;
-    }
-  
-    .category-label {
-      font-size: 0.9rem;
-    }
+    padding-right: 60px;
+    padding-left: 60px;
   }
-  
-  @media (max-width: 576px) {
-    .category-card {
-      min-height: 90px;
-    }
-  }
+}

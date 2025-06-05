@@ -2,13 +2,14 @@
 import "../assets/style.css";
 import "../assets/Js/profile.js"
 import TopHeader from '../components/TopHeader'
-import Navbar from '../components/Navbar'
 import Banner from '../components/Banner'
+
 const TopArea = () => {
   return (
-    <div>
-      <TopHeader/>
-      <Navbar/>
+    <div className="top-area-wrapper">
+      <div style={{ marginBottom: 0, padding: 0 }}>
+        <TopHeader/>
+      </div>
       <Banner />
     </div>
   )
